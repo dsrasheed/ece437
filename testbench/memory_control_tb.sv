@@ -229,6 +229,15 @@ program test(input logic CLK, output logic nRST, caches_if.caches ccif, system_i
       read_instr(4, 437);
     join
 
+    testcase = "Keep iREN high";
+    ccif.iREN = 1'b1;
+    ccif.iaddr = '0;
+    for (int i = 0; i < 16; i += 4)
+    begin
+      ccif.iaddr = i;
+      
+    end
+
     testcase = "Dump Memory";
     dump_memory();
 
