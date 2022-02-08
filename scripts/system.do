@@ -20,8 +20,9 @@ add wave -noupdate -expand -group {Request Unit} /system_tb/DUT/CPU/DP/rqif/irea
 add wave -noupdate -expand -group {Request Unit} /system_tb/DUT/CPU/DP/rqif/drreq
 add wave -noupdate -expand -group {Request Unit} /system_tb/DUT/CPU/DP/rqif/dwreq
 add wave -noupdate -expand -group {Request Unit} /system_tb/DUT/CPU/DP/rqif/ireq
+add wave -noupdate -expand -group {Request Unit} /system_tb/DUT/CPU/DP/req_unit/state
 add wave -noupdate -expand -group {Request Unit} /system_tb/DUT/CPU/DP/rqif/stall
-add wave -noupdate -expand /system_tb/DUT/CPU/DP/reg_file/registers
+add wave -noupdate /system_tb/DUT/CPU/DP/reg_file/registers
 add wave -noupdate -expand -group {Control Unit} /system_tb/DUT/CPU/DP/ctrl_unit/cuif/opcode
 add wave -noupdate -expand -group {Control Unit} /system_tb/DUT/CPU/DP/ctrl_unit/cuif/funct
 add wave -noupdate -expand -group {Control Unit} /system_tb/DUT/CPU/DP/ctrl_unit/cuif/PCSrc
@@ -44,7 +45,7 @@ add wave -noupdate -expand -group {PC Unit} /system_tb/DUT/CPU/DP/pcif/jr_addr
 add wave -noupdate -expand -group {PC Unit} /system_tb/DUT/CPU/DP/pcif/iaddr
 add wave -noupdate -expand -group {PC Unit} /system_tb/DUT/CPU/DP/pcif/b_offset
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {739282 ps} 0}
+WaveRestoreCursors {{Cursor 1} {51143 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -60,4 +61,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {600 ns} {1600 ns}
+WaveRestoreZoom {0 ps} {1 us}

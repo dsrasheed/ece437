@@ -29,13 +29,13 @@ module datapath (
   // pc init
   parameter PC_INIT = 0;
 
-  request_unit_if rqif ();
+  request_unit_if ruif ();
   control_unit_if cuif ();
   pc_if pcif ();
   register_file_if rfif ();
   alu_if aluif ();
 
-  request_unit req_unit(CLK, nRST, rqif.ru);
+  request_unit req_unit(CLK, nRST, ruif.ru);
   pc #(.PC_INIT(PC_INIT)) PC(CLK, nRST, pcif.pc);
   control_unit ctrl_unit(cuif.cu);
   register_file reg_file(CLK, nRST, rfif.rf);
@@ -98,21 +98,30 @@ module datapath (
   assign cuif.opcode = rinstr.opcode;
   assign cuif.funct = rinstr.funct;
   assign cuif.equal = aluif.zero;
-  assign cuif.stall = rqif.stall;
+  assign cuif.stall = ruif.stall;
 
   // Request Unit Assignments
-  assign rqif.dREN = cuif.MemRd;
-  assign rqif.dWEN = cuif.MemWr;
-  assign rqif.dready = dpif.dhit;
-  assign rqif.iready = dpif.ihit;
+  assign ruif.dREN = cuif.MemRd;
+  assign ruif.dWEN = cuif.MemWr;
+  assign ruif.dready = dpif.dhit;
+  assign ruif.iready = dpif.ihit;
 
   // Cache Assignments
-  assign dpif.halt = cuif.halt;
-  assign dpif.imemREN = rqif.ireq;
+  assign dpif.imemREN = ruif.ireq;
   assign dpif.imemaddr = pcif.iaddr;
-  assign dpif.dmemREN = rqif.drreq;
-  assign dpif.dmemWEN = rqif.dwreq;
+  assign dpif.dmemREN = ruif.drreq;
+  assign dpif.dmemWEN = ruif.dwreq;
   assign dpif.dmemstore = rfif.rdat2;
   assign dpif.dmemaddr = aluif.out;
+
+  always_ff @ (posedge CLK, negedge nRST)
+  begin
+      if (nRST == 0)
+        dpif.halt <= 0;
+      else if (cuif.halt == 1)
+        dpif.halt <= 1;
+      else
+        dpif.halt <= dpif.halt;
+  end
 
 endmodule

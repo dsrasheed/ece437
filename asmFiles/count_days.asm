@@ -6,7 +6,9 @@ main:
   ori   $29, $29, 0xFFFC
 
   // Current Year
-  ori   $1, $0, 2022
+  lui   $1, 2022
+  ori   $2, $0, 16
+  srlv  $1, $1, $2
   addi  $1, $1, -2000
   ori   $2, $0, 365
   push  $1
