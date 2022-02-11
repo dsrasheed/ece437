@@ -22,15 +22,29 @@ begin
     pcif.iaddr <= nxt_iaddr;
 end
 
-always_comb begin
-  nxt_iaddr = pcif.iaddr;
-  iaddrplus4 = pcif.iaddr + 4;
-  casez(pcif.PCSrc)
-    NEXT:   nxt_iaddr = iaddrplus4;
-    BRANCH: nxt_iaddr = iaddrplus4 + pcif.b_offset;
-    JUMP:   nxt_iaddr = {iaddrplus4[31:28], pcif.j_offset, 2'b0};
-    JUMPR:  nxt_iaddr = pcif.jr_addr;
-  endcase
+//always_comb begin
+//  nxt_iaddr = pcif.iaddr;
+//  iaddrplus4 = pcif.iaddr + 4;
+//  casez(pcif.PCSrc)
+//    NEXT:   nxt_iaddr = iaddrplus4;
+//    BRANCH: nxt_iaddr = iaddrplus4 + pcif.b_offset;
+//    JUMP:   nxt_iaddr = {iaddrplus4[31:28], pcif.j_offset, 2'b0};
+//    JUMPR:  nxt_iaddr = pcif.jr_addr;
+//  endcase
+//end
+
+always_comb 
+begin
+	nxt_iaddr = pcif.addr;
+	iaddrplus4 = pcif.iaddr + 4;
+	if(control == 1)
+	begin
+		nxt_iaddr = nxt_pc;
+	end	
+	else
+	begin
+		nxt_addr = iaddrplus4;
+	end
 end
 
 endmodule
