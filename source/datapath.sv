@@ -29,26 +29,29 @@ module datapath (
   // pc init
   parameter PC_INIT = 0;
 
-  request_unit_if ruif ();
-  control_unit_if cuif ();
-  pc_if pcif ();
-  register_file_if rfif ();
-  alu_if aluif ();
+  fetch_latch_if flif ();
+  decode_latch_if dlif ();
+  exec_latch_if elif ();
+  mem_latch_if mlif ();
+  decode_stage_if dsif ();
+  exec_stage_if esif ();
+  mem_stage_if msif ();
 
-  request_unit req_unit(CLK, nRST, ruif.ru);
-  pc #(.PC_INIT(PC_INIT)) PC(CLK, nRST, pcif.pc);
-  control_unit ctrl_unit(cuif.cu);
-  register_file reg_file(CLK, nRST, rfif.rf);
-  alu ALU(aluif.alu);
+  fetch_latch(CLK, nRST, flif);
 
-  // GLUE WIRES
-  r_t rinstr;
-  i_t iinstr;
-  j_t jinstr;
-  word_t extOut;
-  word_t imm_value;
+  decode_stage d_stage(CLK, nRST, dsif);
+  assign dsif.in = flif.out;
+  assign dsif.out = dlif.in;
 
-  // INSTRUCTION ASSIGNMENTS FOR CONVENIENCE
+  decode_latch(CLK, nRST, dlif);
+
+  exec_latch(CLK, nRST, elif);
+
+  mem_latch(CLK, nRST, mlif);
+
+  
+
+  /*// INSTRUCTION ASSIGNMENTS FOR CONVENIENCE
   always_comb begin
     rinstr = dpif.imemload;
     iinstr = dpif.imemload;
@@ -122,6 +125,6 @@ module datapath (
         dpif.halt <= 1;
       else
         dpif.halt <= dpif.halt;
-  end
+  end*/
 
 endmodule

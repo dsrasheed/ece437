@@ -184,5 +184,72 @@ package cpu_types_pkg;
 	word_t data;
   } icache_frame;
 
+  typedef struct packed {
+    word_t instr;
+    word_t ihit;
+    word_t pc;
+  } fetch_latch_t;
+
+  typedef struct packed {
+    // Control Output
+    logic halt;
+    logic [REG_W-1:0] wsel;
+    logic RegWr;
+    logic MemToReg;
+    logic WrLinkReg;
+    logic MemRd;
+    logic MemWr;
+    pcsrc_t PCSrc;
+    aluop_t ALUOp;
+    logic ALUSrc;
+    // Extender Block Output
+    word_t extOut;
+    // Register File Output
+    word_t rdat1;
+    word_t rdat2;
+    // Jump Addr Forwarding
+    logic [ADDR_W-1:0] j_offset;
+    // PC Forwarding
+    word_t pc;
+  } decode_latch_t;
+
+  typedef struct packed {
+    // Control Output
+    logic halt;
+    logic [REG_W-1:0] wsel;
+    logic RegWr;
+    logic MemToReg;
+    logic WrLinkReg;
+    logic MemRd;
+    logic MemWr;
+    pcsrc_t PCSrc;
+    // ALU Output
+    word_t aluOut;
+    logic zero;
+    // Register File Output
+    word_t rdat1;
+    word_t rdat2;
+    // Next PC Logic
+    word_t b_addr;
+    word_t j_addr;
+    // PC Forwarding
+    word_t pc;
+  } exec_latch_t;
+
+  typedef struct packed {
+    // Control Output
+    logic halt;
+    logic [REG_W-1:0] wsel;
+    logic RegWr;
+    logic MemToReg;
+    logic WrLinkReg;
+    // ALU Output
+    word_t aluOut;
+    // DCache Output
+    word_t dmemload;
+    // PC Forwarding
+    word_t pc;
+  } mem_latch_t;
+
 endpackage
 `endif //CPU_TYPES_PKG_VH
