@@ -5,7 +5,6 @@
 import cpu_types_pkg::*;
 
 module nxt_pc (
-  input logic CLK, nRST, 
   npc_if.npc npcif
 );
 
