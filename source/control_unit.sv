@@ -55,11 +55,11 @@ always_comb begin
         end
         BEQ: begin
             ALUg = ALUG_SUB;
-            cuif.PCSrc = cuif.equal ? BRANCH : NEXT;
+            cuif.PCSrc = BREQ;
         end
         BNE: begin
             ALUg = ALUG_SUB;
-            cuif.PCSrc = cuif.equal ? NEXT : BRANCH;
+            cuif.PCSrc = BRNE;
         end
         ADDI,
         ADDIU: begin
@@ -120,11 +120,6 @@ always_comb begin
             cuif.PCSrc = KEEP;
         end
     endcase
-
-    if (cuif.stall) begin
-        cuif.RegWr = 1'b0;
-        cuif.PCSrc = KEEP;
-    end
 end
 
 always_comb begin

@@ -12,13 +12,13 @@ interface control_unit_if;
   funct_t             funct;
   pcsrc_t             PCSrc;
   aluop_t             ALUOp;
-  logic               equal, stall, WrLinkReg, ShiftUp, MemRd,
+  logic               WrLinkReg, ShiftUp, MemRd,
                       ExtOp, ALUSrc, MemToReg, MemWr, RegWr,
                       RegDst, halt;
 
   // control unit device
   modport cu (
-    input   opcode, funct, equal, stall,
+    input   opcode, funct,
     output  WrLinkReg, ShiftUp, MemRd, ExtOp, PCSrc,
             ALUSrc, MemToReg, MemWr, RegWr, RegDst,
             halt, ALUOp
@@ -29,7 +29,7 @@ interface control_unit_if;
     input  WrLinkReg, ShiftUp, MemRd, ExtOp, PCSrc,
            ALUSrc, MemToReg, MemWr, RegWr, RegDst,
            halt, ALUOp,
-    output opcode, funct, equal, stall
+    output opcode, funct
   );
 
 endinterface

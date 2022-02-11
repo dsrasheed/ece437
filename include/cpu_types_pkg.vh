@@ -162,7 +162,8 @@ package cpu_types_pkg;
 // PC Src
   typedef enum logic [2:0] {
     NEXT,
-    BRANCH,
+    BREQ,
+    BRNE,
     JUMP,
     JUMPR,
     KEEP
