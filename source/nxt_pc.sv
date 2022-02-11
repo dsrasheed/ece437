@@ -1,12 +1,12 @@
 // memory types
 `include "cpu_types_pkg.vh"
-`include "pc_if.vh"
+`include "npc_if.vh"
 
 import cpu_types_pkg::*;
 
 module nxt_pc (
   input logic CLK, nRST, 
-  pc_if.pc pcif
+  npc_if.npc npcif
 );
 
 // pc_src 0, 1: pc+4
@@ -16,43 +16,43 @@ module nxt_pc (
 //        6, 7: beq
 
 always_comb
-pc_control = 0;
-nxt_pc = '0;
+npcif.pc_control = 0;
+npcif.nxt_pc = '0;
 begin
-	if(PCSrc[2] == 1)
+	if(npcif.PCSrc[2] == 1)
 	begin
-		if(PCSrc[1] == 1)
+		if(npcif.PCSrc[1] == 1)
 		begin
-			if(zero == 1)
+			if(npcif.zero == 1)
 			begin
-				pc_control = 1;
-				nxt_pc = b_addr;
+				npcif.pc_control = 1;
+				npcif.nxt_pc = npcif.b_addr;
 			end
 		end
 		else
 		begin
-			if(zero == 0)
+			if(npcif.zero == 0)
 			begin
-				pc_control = 1;
-				nxt_pc = b_addr;
+				npcif.pc_control = 1;
+				npcif.nxt_pc = npcif.b_addr;
 			end
 		end
 	end
-	else if(PCSrc[1] == 1)
+	else if(npcif.PCSrc[1] == 1)
 	begin
-		pc_control = 1;
-		if(PCSrc[0] == 1)
+		npcif.pc_control = 1;
+		if(npcif.PCSrc[0] == 1)
 		begin
-			nxt_pc = jr_addr;
+			npcif.nxt_pc = npcif.jr_addr;
 		end
 		else
 		begin
-			nxt_pc = j_addr;
+			npcif.nxt_pc = npcif.j_addr;
 		end
 	end
 	else
 	begin
-		pc_control = 0;
+		npcif.pc_control = 0;
 	end
 end
 
