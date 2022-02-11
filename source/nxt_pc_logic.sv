@@ -1,6 +1,6 @@
 // memory types
 `include "cpu_types_pkg.vh"
-`include "pc_if.vh"
+`include "npcl_if.vh"
 
 import cpu_types_pkg::*;
 
