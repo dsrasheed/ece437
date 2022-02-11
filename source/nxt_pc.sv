@@ -19,36 +19,31 @@ always_comb
 npcif.pc_control = 0;
 npcif.nxt_pc = '0;
 begin
-	if(npcif.PCSrc[2] == 1)
+	if(npcif.PCSrc == BREQ)
 	begin
-		if(npcif.PCSrc[1] == 1)
+		if(npcif.zero == 1)
 		begin
-			if(npcif.zero == 1)
-			begin
-				npcif.pc_control = 1;
-				npcif.nxt_pc = npcif.b_addr;
-			end
-		end
-		else
-		begin
-			if(npcif.zero == 0)
-			begin
-				npcif.pc_control = 1;
-				npcif.nxt_pc = npcif.b_addr;
-			end
+			npcif.pc_control = 1;
+			npcif.nxt_pc = npcif.b_addr;
 		end
 	end
-	else if(npcif.PCSrc[1] == 1)
+	else if(npcif.PCSrc == BRNE)
+	begin
+		if(npcif.zero == 0)
+		begin
+			npcif.pc_control = 1;
+			npcif.nxt_pc = npcif.b_addr;
+		end
+	end
+	else if(npcif.PCSrc == JUMPR)
 	begin
 		npcif.pc_control = 1;
-		if(npcif.PCSrc[0] == 1)
-		begin
-			npcif.nxt_pc = npcif.jr_addr;
-		end
-		else
-		begin
-			npcif.nxt_pc = npcif.j_addr;
-		end
+		npcif.nxt_pc = npcif.jr_addr;
+	end
+	else if(npcif.PCSrc == JUMP)
+	begin
+		npcif.pc_control = 1;
+		npcif.nxt_pc = npcif.j_addr;
 	end
 	else
 	begin
