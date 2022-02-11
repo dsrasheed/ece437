@@ -9,7 +9,7 @@ module nxt_pc (
   pc_if.pc pcif
 );
 
-assign j_addr = {pc[31:28], imemload.addr, 2'b00};
-assign b_addr = (pc + 4) + ext_out;
+assign j_addr = {pc[31:28], j_offset, 2'b00};
+assign b_addr = (pc + 4) + b_offset;
 
 endmodule

@@ -19,9 +19,9 @@ always_comb
 pc_control = 0;
 nxt_pc = '0;
 begin
-	if(pcSRC[2] == 1)
+	if(PCSrc[2] == 1)
 	begin
-		if(pcSRC[1] == 1)
+		if(PCSrc[1] == 1)
 		begin
 			if(zero == 1)
 			begin
@@ -38,10 +38,10 @@ begin
 			end
 		end
 	end
-	else if(pcSRC[1] == 1)
+	else if(PCSrc[1] == 1)
 	begin
 		pc_control = 1;
-		if(pcSRC[0] == 1)
+		if(PCSrc[0] == 1)
 		begin
 			nxt_pc = jr_addr;
 		end
