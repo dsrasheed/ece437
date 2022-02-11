@@ -14,8 +14,8 @@ interface decode_stage_if;
 
   // decode stage device
   modport fs (
-    input   in, stall, RegWr, wsel, wdat,
-    output  out
+    input   stall, imemload, ihit, pc_control, nxt_pc,
+    output  out, imemaddr
   );
 
 endinterface

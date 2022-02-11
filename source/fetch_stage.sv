@@ -6,7 +6,7 @@
 
 module fetch_stage (
   input CLK, nRST,
-  fetch_stage.es fif
+  fetch_stage.fs fif
 );
 
 import cpu_types_pkg::*;
