@@ -11,6 +11,9 @@ module fetch_stage (
 
 import cpu_types_pkg::*;
 
+pc_if pcif();
+pc PC(CLK, nRST, pcif);
+
 assign fif.pc = pcif.iaddr;
 
 assign pcif.pc_en = fif.ihit;
