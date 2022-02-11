@@ -187,6 +187,7 @@ package cpu_types_pkg;
   typedef struct packed {
     word_t instr;
     word_t ihit;
+    word_t pc;
   } fetch_latch_t;
 
   typedef struct packed {
@@ -206,8 +207,8 @@ package cpu_types_pkg;
     // Register File Output
     word_t rdat1;
     word_t rdat2;
-    // Instruction Forwarding
-    word_t instr;
+    // Jump Addr Forwarding
+    logic [ADDR_W-1:0] j_offset;
     // PC Forwarding
     word_t pc;
   } decode_latch_t;
@@ -222,7 +223,6 @@ package cpu_types_pkg;
     logic MemRd;
     logic MemWr;
     pcsrc_t PCSrc;
-    aluop_t ALUOp;
     // ALU Output
     word_t aluOut;
     logic zero;

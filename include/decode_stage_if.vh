@@ -1,23 +1,26 @@
-`ifndef DECODE_LATCH_IF_VH
-`define DECODE_LATCH_IF_VH
+`ifndef DECODE_STAGE_IF_VH
+`define DECODE_STAGE_IF_VH
 
 // typedefs
 `include "cpu_types_pkg.vh"
 
-interface decode_latch_if;
+interface decode_stage_if;
   // import types
   import cpu_types_pkg::*;
 
   fetch_latch_t in;
-  decode_latch_t out;
-  logic stall;
+  logic stall, RegWr;
+  logic [REG_W-1:0] wsel;
+  word_t wdat;
 
-  // decode latch device
-  modport dl (
-    input   in, stall,
+  decode_latch_t out;
+
+  // decode stage device
+  modport ds (
+    input   in, stall, RegWr, wsel, wdat,
     output  out
   );
 
 endinterface
 
-`endif //DECODE_LATCH_IF_VH
+`endif //DECODE_STAGE_IF_VH

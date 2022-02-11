@@ -1,12 +1,14 @@
 // interface include
 `include "decode_stage_if.vh"
+`include "control_unit_if.vh"
+`include "register_file_if.vh"
 
 // memory types
 `include "cpu_types_pkg.vh"
 
 module decode_stage (
   input CLK, nRST,
-  decode_stage.ds dsif
+  decode_stage_if.ds dsif
 );
 
 import cpu_types_pkg::*;
@@ -39,6 +41,10 @@ always_comb begin
         extOut = {iinstr.imm[IMM_W-1:0], 16'h0};
 end
 
+// Control Unit Input Assignments
+assign cuif.opcode = rinstr.opcode;
+assign cuif.funct = rinstr.funct;
+
 // Register File Input Assignments
 assign rfif.rsel1 = rinstr.rs;
 assign rfif.rsel2 = rinstr.rt;
@@ -61,7 +67,7 @@ assign dsif.out.ALUSrc = cuif.ALUSrc;
 assign dsif.out.extOut = extOut;
 assign dsif.out.rdat1 = rfif.rdat1;
 assign dsif.out.rdat2 = rfif.rdat2;
-assign dsif.out.instr = dsif.instr;
-assign dsif.out.pc = dsif.pc;
+assign dsif.out.j_offset = jinstr.addr;
+assign dsif.out.pc = dsif.in.pc;
 
 endmodule
