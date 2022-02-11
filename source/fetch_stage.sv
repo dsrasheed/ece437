@@ -6,10 +6,13 @@
 
 module fetch_stage (
   input CLK, nRST,
-  fetch_stage.es fif
+  fetch_stage.fs fif
 );
 
 import cpu_types_pkg::*;
+
+pc_if pcif();
+pc PC(CLK, nRST, pcif);
 
 assign fif.pc = pcif.iaddr;
 
