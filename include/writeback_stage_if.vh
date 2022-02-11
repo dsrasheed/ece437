@@ -4,12 +4,12 @@
 // typedefs
 `include "cpu_types_pkg.vh"
 
-interface decode_stage_if;
+interface writeback_stage_if;
   // import types
   import cpu_types_pkg::*;
 
   word_t out;
-  logic ;
+  logic MemToReg;
   word_t nxt_pc, imemaddr, imemload;
 
   // decode stage device

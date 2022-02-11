@@ -1,10 +1,10 @@
-`ifndef DECODE_STAGE_IF_VH
-`define DECODE_STAGE_IF_VH
+`ifndef FETCH_STAGE_IF_VH
+`define FETCH_STAGE_IF_VH
 
 // typedefs
 `include "cpu_types_pkg.vh"
 
-interface decode_stage_if;
+interface fetch_stage_if;
   // import types
   import cpu_types_pkg::*;
 
@@ -20,4 +20,4 @@ interface decode_stage_if;
 
 endinterface
 
-`endif //DECODE_STAGE_IF_VH
+`endif //FETCH_STAGE_IF_VH

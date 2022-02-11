@@ -13,6 +13,8 @@ import cpu_types_pkg::*;
 
 word_t mux_out;
 
+
+
 always_comb
 begin
 	if(wbsif.MemToReg == 1)
