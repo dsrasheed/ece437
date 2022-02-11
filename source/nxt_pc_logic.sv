@@ -6,10 +6,10 @@ import cpu_types_pkg::*;
 
 module nxt_pc (
   input logic CLK, nRST, 
-  pc_if.pc pcif
+  npcl_if.pc npclif
 );
 
-assign j_addr = {pc[31:28], j_offset, 2'b00};
-assign b_addr = (pc + 4) + b_offset;
+assign npclif.j_addr = {pc[31:28], npclif.j_offset, 2'b00};
+assign npclif.b_addr = (pc + 4) + npclif.b_offset;
 
 endmodule

@@ -35,11 +35,11 @@ end
 
 always_comb 
 begin
-	nxt_iaddr = pcif.addr;
+	nxt_iaddr = pcif.iaddr;
 	iaddrplus4 = pcif.iaddr + 4;
-	if(control == 1)
+	if(pcif.pc_control == 1)
 	begin
-		nxt_iaddr = nxt_pc;
+		nxt_iaddr = pcif.nxt_pc;
 	end	
 	else
 	begin
