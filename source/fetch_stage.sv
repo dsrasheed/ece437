@@ -14,7 +14,8 @@ import cpu_types_pkg::*;
 assign fif.pc = pcif.iaddr;
 
 assign pcif.pc_en = fif.ihit;
-assign pcif.pc_control
+assign pcif.pc_control = fif.pc_control;
+assign pcif.nxt_pc = fif.nxt_pc;
 
 
 
