@@ -248,6 +248,7 @@ package cpu_types_pkg;
     word_t aluOut;
     // DCache Output
     word_t dmemload;
+    logic  dhit;
     // PC Forwarding
     word_t pc;
   } mem_latch_t;

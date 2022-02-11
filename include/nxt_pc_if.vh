@@ -4,7 +4,7 @@
 // typedefs
 `include "cpu_types_pkg.vh"
 
-interface npc_if;
+interface nxt_pc_if;
   // import types
   import cpu_types_pkg::*;
 

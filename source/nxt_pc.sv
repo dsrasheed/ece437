@@ -1,11 +1,11 @@
 // memory types
 `include "cpu_types_pkg.vh"
-`include "npc_if.vh"
+`include "nxt_pc_if.vh"
 
 import cpu_types_pkg::*;
 
 module nxt_pc (
-  npc_if.npc npcif
+  nxt_pc_if.npc npcif
 );
 
 // pc_src 0, 1: pc+4
@@ -15,9 +15,9 @@ module nxt_pc (
 //        6, 7: beq
 
 always_comb
-npcif.pc_control = 0;
-npcif.nxt_pc = '0;
 begin
+	npcif.pc_control = 0;
+	npcif.nxt_pc = '0;
 	if(npcif.PCSrc == BREQ)
 	begin
 		if(npcif.zero == 1)

@@ -10,11 +10,10 @@ interface exec_stage_if;
 
   decode_latch_t in;
   exec_latch_t out;
-  logic stall;
 
   // exec stage device
   modport es (
-    input   in, stall,
+    input   in,
     output  out
   );
 
