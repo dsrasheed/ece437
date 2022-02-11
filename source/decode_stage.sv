@@ -48,8 +48,7 @@ assign rfif.wsel = dsif.wsel;
 
 // Outputs to Decode Latch
 assign dsif.out.halt = cuif.halt;
-assign dsif.out.wsel = cuif.WrLinkReg == 1 ? 31 :
-                         cuif.RegDst == 1 ? rinstr.rd : rinstr.rt;
+assign dsif.out.wsel = cuif.WrLinkReg == 1 ? 31 : cuif.RegDst == 1 ? rinstr.rd : rinstr.rt;
 assign dsif.out.RegWr = cuif.RegWr;
 assign dsif.out.MemToReg = cuif.MemToReg;
 assign dsif.out.WrLinkReg = cuif.WrLinkReg;

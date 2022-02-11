@@ -19,7 +19,7 @@ begin
   if (nRST == 1'b0)
     pcif.iaddr <= PC_INIT;
   else
-    pcif.iaddr <= nxt_iaddr;
+	pcif.iaddr <= nxt_iaddr;
 end
 
 //always_comb begin
@@ -37,13 +37,16 @@ always_comb
 begin
 	nxt_iaddr = pcif.iaddr;
 	iaddrplus4 = pcif.iaddr + 4;
-	if(pcif.pc_control == 1)
-	begin
-		nxt_iaddr = pcif.nxt_pc;
-	end	
-	else
-	begin
-		nxt_addr = iaddrplus4;
+	if(pcif.pc_en == 1)
+	begin	
+		if(pcif.pc_control == 1)
+		begin
+			nxt_iaddr = pcif.nxt_pc;
+		end	
+		else
+		begin
+			nxt_addr = iaddrplus4;
+		end
 	end
 end
 

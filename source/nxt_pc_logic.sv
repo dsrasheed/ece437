@@ -12,4 +12,3 @@ module nxt_pc (
 assign npclif.j_addr = {pc[31:28], npclif.j_offset, 2'b00};
 assign npclif.b_addr = (pc + 4) + npclif.b_offset;
 
-endmodule
