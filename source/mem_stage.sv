@@ -12,9 +12,6 @@ import cpu_types_pkg::*;
 
 nxt_pc NXT_PC();
 
-alu ALU(aluif);
-nxt_pc_logic NXT_PC_LOGIC(npclif);
-
 // ALU Input Assignments
 assign aluif.ra = esif.in.rdat1;
 assign aluif.rb = esif.in.ALUSrc == 1 ? esif.in.extOut : esif.in.rdat2;
