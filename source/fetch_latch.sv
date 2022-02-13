@@ -18,7 +18,7 @@ begin
     else if (flif.stall == 1'b0)
         flif.out <= flif.in;
     else
-        flif.out <= '0;
+	flif.out <= '0;
 end
 
 endmodule

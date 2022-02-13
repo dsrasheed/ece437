@@ -18,7 +18,7 @@ begin
     else if (dlif.stall == 1'b0)
         dlif.out <= dlif.in;
     else
-        dlif.out <= '0;
+	dlif.out <= dlif.out;
 end
 
 endmodule

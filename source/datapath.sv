@@ -87,6 +87,7 @@ module datapath (
   assign dsif.RegWr = mlif.out.RegWr;
   assign dsif.wsel = mlif.out.wsel;
   assign dsif.wdat = write_back;
+  assign dsif.stall = mem_wait;
   assign dlif.in = dsif.out;
 
   decode_latch DLATCH(CLK, nRST, dlif);

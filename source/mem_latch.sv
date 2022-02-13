@@ -18,7 +18,7 @@ begin
     else if (mlif.stall == 1'b0)
         mlif.out <= mlif.in;
     else
-        mlif.out <= '0;
+	mlif.out <= mlif.out;
 end
 
 endmodule

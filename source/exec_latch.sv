@@ -18,7 +18,7 @@ begin
     else if (elif.stall == 1'b0)
         elif.out <= elif.in;
     else
-        elif.out <= '0;
+	elif.out <= elif.out;
 end
 
 endmodule
