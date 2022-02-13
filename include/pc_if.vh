@@ -9,7 +9,7 @@ interface pc_if;
   import cpu_types_pkg::*;
 
   logic pc_control;
-  word_t nxt_pc;
+  word_t iaddr, nxt_pc;
   
   // pc device
   modport pc (

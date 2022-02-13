@@ -17,7 +17,7 @@ interface mem_stage_if;
   // mem stage device
   modport ms (
     input   in,
-    output  out, dcache_store, dcache_daddr, dcache_dREN, dcache_dWEN;
+    output  out, dcache_store, dcache_daddr, dcache_dREN, dcache_dWEN
   );
 
 endinterface

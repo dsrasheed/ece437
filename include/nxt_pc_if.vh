@@ -11,7 +11,7 @@ interface nxt_pc_if;
   
   logic [2:0] PCSrc;
   logic zero, pc_control;
-  word_t j_addr, b_addr, jr_addr;
+  word_t nxt_pc, j_addr, b_addr, jr_addr;
   
   // pc device
   modport pc (

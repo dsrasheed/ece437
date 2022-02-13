@@ -7,7 +7,6 @@
 `include "cpu_types_pkg.vh"
 
 module exec_stage (
-  input CLK, nRST,
   exec_stage_if.es esif
 );
 

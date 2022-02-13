@@ -5,7 +5,7 @@
 import cpu_types_pkg::*;
 
 module nxt_pc (
-  nxt_pc_if.npc npcif
+  nxt_pc_if.pc npcif
 );
 
 // pc_src 0, 1: pc+4
