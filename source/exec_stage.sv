@@ -1,6 +1,8 @@
 // interface include
 `include "exec_stage_if.vh"
+//`include "alu.sv"
 `include "alu_if.vh"
+//`include "nxt_pc_logic.sv"
 `include "nxt_pc_logic_if.vh"
 
 // memory types

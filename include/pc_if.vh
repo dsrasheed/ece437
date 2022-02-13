@@ -8,19 +8,19 @@ interface pc_if;
   // import types
   import cpu_types_pkg::*;
 
-  logic pc_control;
+  logic pc_control, pc_en;
   word_t iaddr, nxt_pc;
   
   // pc device
   modport pc (
-    input   pc_control, nxt_pc,
+    input   pc_control, nxt_pc, pc_en,
     output  iaddr
   );
 
   // testbench
   modport tb (
     input    iaddr,
-    output   pc_control, nxt_pc
+    output   pc_control, nxt_pc, pc_en
   );
 
 endinterface

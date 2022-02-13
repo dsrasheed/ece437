@@ -9,12 +9,12 @@ interface fetch_stage_if;
   import cpu_types_pkg::*;
 
   fetch_latch_t out;
-  logic stall, pc_control, pc_en;
-  word_t nxt_pc;
+  logic stall, pc_control, ihit;
+  word_t nxt_pc, instr;
 
   // decode stage device
   modport fs (
-    input   stall, pc_en, pc_control, nxt_pc,
+    input   stall, ihit, pc_control, nxt_pc, instr,
     output  out
   );
 

@@ -8,20 +8,20 @@
 
 // data path interface
 `include "datapath_cache_if.vh"
-`include "fetch_stage.sv"
-`include "fetch_latch.sv"
+//`include "fetch_stage.sv"
+//`include "fetch_latch.sv"
 `include "fetch_stage_if.vh"
 `include "fetch_latch_if.vh"
-`include "decode_stage.sv"
-`include "decode_latch.sv"
+//`include "decode_stage.sv"
+//`include "decode_latch.sv"
 `include "decode_stage_if.vh"
 `include "decode_latch_if.vh"
-`include "exec_stage.sv"
-`include "exec_latch.sv"
+//`include "exec_stage.sv"
+//`include "exec_latch.sv"
 `include "exec_stage_if.vh"
 `include "exec_latch_if.vh"
-`include "mem_stage.sv"
-`include "mem_latch.sv"
+//`include "mem_stage.sv"
+//`include "mem_latch.sv"
 `include "mem_stage_if.vh"
 `include "mem_latch_if.vh"
 /*`include "request_unit_if.vh"
@@ -56,13 +56,12 @@ module datapath (
   mem_stage_if msif ();
 
   fetch_stage FSTAGE(CLK, nRST, fsif);
-  assign fsif.pc_en = dpif.ihit;
+  assign fsif.ihit = dpif.ihit;
   assign fsif.pc_control = msif.pc_control;
-  assign fisf.nxt_pc = msif.nxt_pc;
+  assign fsif.nxt_pc = msif.nxt_pc;
   assign dpif.imemaddr = fsif.out.pc;
   assign dpif.imemREN = 1'b1;
-  assign fsif.out.instr = dpif.imemload;
-  assign fsif.out.ihit = dpif.ihit;
+  assign fsif.instr = dpif.imemload;
   assign flif.in = fsif.out;
 
   fetch_latch FLATCH(CLK, nRST, flif);
@@ -82,17 +81,16 @@ module datapath (
 
   exec_latch ELATCH(CLK, nRST, elif);
 
-  mem_stage MSTAGE(CLK, nRST, msif);
+  mem_stage MSTAGE(msif);
   assign msif.in = elif.out;
   assign dpif.dmemaddr = msif.dcache_daddr;
   assign dpif.dmemstore = msif.dcache_store;
   assign dpif.dmemREN = msif.dcache_dREN;
   assign dpif.dmemWEN = msif.dcache_dWEN;
+  assign msif.dmemload = dpif.dmemload;
   assign mlif.in = msif.out;
 
-
-  mem_latch MLATCH(CLK, nRST, mlif);
-  
+  mem_latch MLATCH(CLK, nRST, mlif);  
 
 always_comb
 begin
@@ -105,7 +103,7 @@ begin
 		mux_out = mlif.out.aluOut;
 	end
 	
-	if(mlif.out.WriteLinkReg == 1)
+	if(mlif.out.WrLinkReg == 1)
 	begin
 		write_back = mlif.out.pc + 4;
 	end

@@ -45,7 +45,7 @@ begin
 		end	
 		else
 		begin
-			nxt_addr = iaddrplus4;
+			nxt_iaddr = iaddrplus4;
 		end
 	end
 end

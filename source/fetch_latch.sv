@@ -6,7 +6,7 @@
 
 module fetch_latch (
   input CLK, nRST,
-  fetch_latch.fl flif
+  fetch_latch_if.fl flif
 );
 
 import cpu_types_pkg::*;

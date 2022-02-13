@@ -6,7 +6,7 @@
 
 module exec_latch (
   input CLK, nRST,
-  exec_latch.el elif
+  exec_latch_if.el elif
 );
 
 import cpu_types_pkg::*;

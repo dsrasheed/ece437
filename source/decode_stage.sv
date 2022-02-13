@@ -1,7 +1,9 @@
 // interface include
 `include "decode_stage_if.vh"
 `include "control_unit_if.vh"
+//`include "control_unit.sv"
 `include "register_file_if.vh"
+//`include "register_file.sv"
 
 // memory types
 `include "cpu_types_pkg.vh"

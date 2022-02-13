@@ -6,7 +6,7 @@
 
 module decode_latch (
   input CLK, nRST,
-  decode_latch.dl dlif
+  decode_latch_if.dl dlif
 );
 
 import cpu_types_pkg::*;

@@ -6,7 +6,7 @@
 
 module mem_latch (
   input CLK, nRST,
-  mem_latch.ml mlif
+  mem_latch_if.ml mlif
 );
 
 import cpu_types_pkg::*;
