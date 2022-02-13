@@ -18,7 +18,6 @@ pc PC(CLK, nRST, pcif);
 
 assign fsif.out.pc = pcif.iaddr;
 assign fsif.out.instr = fsif.instr;
-assign fsif.out.ihit = fsif.ihit;
 
 assign pcif.pc_en = fsif.ihit;
 assign pcif.pc_control = fsif.pc_control;

@@ -187,7 +187,6 @@ package cpu_types_pkg;
 
   typedef struct packed {
     word_t instr;
-    word_t ihit;
     word_t pc;
   } fetch_latch_t;
 

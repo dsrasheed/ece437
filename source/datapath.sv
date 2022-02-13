@@ -45,6 +45,7 @@ module datapath (
   // pc init
   parameter PC_INIT = 0;
   word_t mux_out, write_back;
+  logic fetch_halt, decode_halt, exec_halt, mem_halt, mem_wait;
 
   fetch_latch_if flif ();
   decode_latch_if dlif ();
@@ -55,6 +56,8 @@ module datapath (
   exec_stage_if esif ();
   mem_stage_if msif ();
 
+  assign mem_wait = (msif.dcache_dREN | msif.dcache_dWEN) & ~dpif.dhit;
+
   fetch_stage FSTAGE(CLK, nRST, fsif);
   assign fsif.ihit = dpif.ihit;
   assign fsif.pc_control = msif.pc_control;
@@ -64,7 +67,20 @@ module datapath (
   assign fsif.instr = dpif.imemload;
   assign flif.in = fsif.out;
 
-  fetch_latch FLATCH(CLK, nRST, flif);
+  fetch_latch FLATCH(CLK, nRST, flif); 
+  assign flif.stall = fetch_halt | ~dpif.ihit | mem_wait;
+  
+  always_ff @(posedge CLK, negedge nRST)
+  begin
+	if(nRST == 0)
+	begin
+	  fetch_halt <= 0;
+	end
+	else if(dlif.out.halt == 1)
+	begin
+	  fetch_halt <= 1;
+	end
+  end
 
   decode_stage DSTAGE(CLK, nRST, dsif);
   assign dsif.in = flif.out;
@@ -74,12 +90,39 @@ module datapath (
   assign dlif.in = dsif.out;
 
   decode_latch DLATCH(CLK, nRST, dlif);
+  assign dlif.stall = decode_halt | mem_wait;
+
+  always_ff @(posedge CLK, negedge nRST)
+  begin
+	if(nRST == 0)
+	begin
+	  decode_halt <= 0;
+	end
+	else if(dlif.out.halt == 1)
+	begin
+	  decode_halt <= 1;
+	end
+  end
 
   exec_stage ESTAGE(esif);
   assign esif.in = dlif.out;
   assign elif.in = esif.out;
 
   exec_latch ELATCH(CLK, nRST, elif);
+  assign elif.stall = exec_halt | mem_wait;
+
+  always_ff @(posedge CLK, negedge nRST)
+  begin
+	if(nRST == 0)
+	begin
+	  exec_halt <= 0;
+	end
+	else if(elif.out.halt == 1)
+	begin
+	  exec_halt <= 1;
+	end
+  end
+
 
   mem_stage MSTAGE(msif);
   assign msif.in = elif.out;
@@ -90,7 +133,33 @@ module datapath (
   assign msif.dmemload = dpif.dmemload;
   assign mlif.in = msif.out;
 
-  mem_latch MLATCH(CLK, nRST, mlif);  
+  mem_latch MLATCH(CLK, nRST, mlif);
+  assign mlif.stall = mem_halt | mem_wait; 
+
+  always_ff @(posedge CLK, negedge nRST)
+  begin
+	if(nRST == 0)
+	begin
+	  mem_halt <= 0;
+	end
+	else if(mlif.out.halt == 1)
+	begin
+	  mem_halt <= 1;
+	end
+  end
+ 
+  always_ff @(posedge CLK, negedge nRST)
+  begin
+	if(nRST == 0)
+	begin
+	  dpif.halt <= 0;
+	end
+	else if(mem_halt == 1)
+	begin
+	  dpif.halt <= 1;
+	end
+  end
+  
 
 always_comb
 begin
