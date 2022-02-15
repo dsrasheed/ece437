@@ -251,6 +251,26 @@ package cpu_types_pkg;
     // PC Forwarding
     word_t pc;
   } mem_latch_t;
+  
+  typedef struct packed {
+    logic RegWr;
+    funct_t funct;
+    opcode_t opcode;
+    regbits_t rs;
+    regbits_t rt;
+    word_t wsel;
+    word_t instr;
+    word_t pc;
+    word_t nxt_pc;
+    logic [IMM_W-1:0] lui;
+    logic [SHAM_W-1:0] shamt;
+    word_t imm;
+    logic WrLinkReg;
+    word_t branch;
+    word_t daddr;
+    word_t dstore;
+    word_t writeback;
+  } cpu_tracker_t;
 
 endpackage
 `endif //CPU_TYPES_PKG_VH

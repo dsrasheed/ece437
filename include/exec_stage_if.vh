@@ -10,11 +10,12 @@ interface exec_stage_if;
 
   decode_latch_t in;
   exec_latch_t out;
+  cpu_tracker_t track_in, track_out;
 
   // exec stage device
   modport es (
-    input   in,
-    output  out
+    input   in, track_in,
+    output  out, track_out
   );
 
 endinterface

@@ -15,6 +15,26 @@ nxt_pc_if npcif ();
 
 nxt_pc NXT_PC(npcif);
 
+// Track
+assign msif.track_out.daddr = msif.in.aluOut;
+assign msif.track_out.dstore = msif.in.rdat2;
+assign msif.track_out.nxt_pc = (npcif.pc_control) ? npcif.nxt_pc : msif.track_in.pc + 4;
+assign msif.track_out.pc = msif.track_in.pc;
+assign msif.track_out.instr = msif.track_in.instr;
+assign msif.track_out.opcode = msif.track_in.opcode;
+assign msif.track_out.funct = msif.track_in.funct;
+assign msif.track_out.rs = msif.track_in.rs;
+assign msif.track_out.rt = msif.track_in.rt;
+assign msif.track_out.wsel = msif.track_in.wsel;
+assign msif.track_out.RegWr = msif.track_in.RegWr;
+assign msif.track_out.WrLinkReg = msif.track_in.WrLinkReg;
+assign msif.track_out.lui = msif.track_in.lui;
+assign msif.track_out.shamt = msif.track_in.shamt;
+assign msif.track_out.imm = msif.track_in.imm;
+assign msif.track_out.branch = msif.track_in.branch;
+assign msif.track_out.writeback = msif.track_in.writeback;
+
+
 // NXT PC Inputs
 assign npcif.PCSrc = msif.in.PCSrc;
 assign npcif.j_addr = msif.in.j_addr;

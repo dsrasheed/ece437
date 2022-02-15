@@ -10,12 +10,13 @@ interface mem_latch_if;
 
   mem_latch_t in;
   mem_latch_t out;
+  cpu_tracker_t track_in, track_out;
   logic stall;
 
   // mem latch device
   modport ml (
-    input   in, stall,
-    output  out
+    input   in, track_in, stall,
+    output  out, track_out
   );
 
 endinterface

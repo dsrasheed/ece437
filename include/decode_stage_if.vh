@@ -9,6 +9,7 @@ interface decode_stage_if;
   import cpu_types_pkg::*;
 
   fetch_latch_t in;
+  cpu_tracker_t track_in, track_out;
   logic stall, RegWr;
   logic [REG_W-1:0] wsel;
   word_t wdat;
@@ -17,8 +18,8 @@ interface decode_stage_if;
 
   // decode stage device
   modport ds (
-    input   in, stall, RegWr, wsel, wdat,
-    output  out
+    input   in, track_in, stall, RegWr, wsel, wdat,
+    output  out, track_out
   );
 
 endinterface

@@ -20,6 +20,9 @@ npcl_if npclif ();
 alu ALU(aluif);
 nxt_pc_logic NXT_PC_LOGIC(npclif);
 
+// Track
+assign esif.track_out = esif.track_in;
+
 // ALU Input Assignments
 assign aluif.ra = esif.in.rdat1;
 assign aluif.rb = esif.in.ALUSrc == 1 ? esif.in.extOut : esif.in.rdat2;

@@ -46,6 +46,7 @@ module datapath (
   parameter PC_INIT = 0;
   word_t mux_out, write_back;
   logic fetch_halt, decode_halt, exec_halt, mem_halt, mem_wait;
+  cpu_tracker_t track;
 
   fetch_latch_if flif ();
   decode_latch_if dlif ();
@@ -65,6 +66,7 @@ module datapath (
   assign dpif.imemaddr = fsif.out.pc;
   assign dpif.imemREN = 1'b1;
   assign fsif.instr = dpif.imemload;
+  assign flif.track_in = fsif.track_out;
   assign flif.in = fsif.out;
 
   fetch_latch FLATCH(CLK, nRST, flif); 
@@ -84,10 +86,12 @@ module datapath (
 
   decode_stage DSTAGE(CLK, nRST, dsif);
   assign dsif.in = flif.out;
+  assign dsif.track_in = flif.track_out;
   assign dsif.RegWr = mlif.out.RegWr;
   assign dsif.wsel = mlif.out.wsel;
   assign dsif.wdat = write_back;
   assign dsif.stall = mem_wait;
+  assign dlif.track_in = dsif.track_out;
   assign dlif.in = dsif.out;
 
   decode_latch DLATCH(CLK, nRST, dlif);
@@ -107,6 +111,8 @@ module datapath (
 
   exec_stage ESTAGE(esif);
   assign esif.in = dlif.out;
+  assign esif.track_in = dlif.track_out;
+  assign elif.track_in = esif.track_out;
   assign elif.in = esif.out;
 
   exec_latch ELATCH(CLK, nRST, elif);
@@ -127,15 +133,35 @@ module datapath (
 
   mem_stage MSTAGE(msif);
   assign msif.in = elif.out;
+  assign msif.track_in = elif.track_out;
   assign dpif.dmemaddr = msif.dcache_daddr;
   assign dpif.dmemstore = msif.dcache_store;
   assign dpif.dmemREN = msif.dcache_dREN;
   assign dpif.dmemWEN = msif.dcache_dWEN;
   assign msif.dmemload = dpif.dmemload;
+  assign mlif.track_in = msif.track_out;
   assign mlif.in = msif.out;
 
   mem_latch MLATCH(CLK, nRST, mlif);
-  assign mlif.stall = mem_halt | mem_wait; 
+  assign mlif.stall = mem_halt | mem_wait;
+ 
+  assign track.daddr = mlif.track_out.daddr;
+  assign track.dstore = mlif.track_out.dstore;
+  assign track.nxt_pc = mlif.track_out.nxt_pc;
+  assign track.pc = mlif.track_out.pc;
+  assign track.instr = mlif.track_out.instr;
+  assign track.opcode = mlif.track_out.opcode;
+  assign track.funct = mlif.track_out.funct;
+  assign track.rs = mlif.track_out.rs;
+  assign track.rt = mlif.track_out.rt;
+  assign track.wsel = mlif.track_out.wsel;
+  assign track.RegWr = mlif.track_out.RegWr;
+  assign track.WrLinkReg = mlif.track_out.WrLinkReg;
+  assign track.lui = mlif.track_out.lui;
+  assign track.shamt = mlif.track_out.shamt;
+  assign track.imm = mlif.track_out.imm;
+  assign track.branch = mlif.track_out.branch;
+  assign track.writeback = write_back;
 
   always_ff @(posedge CLK, negedge nRST)
   begin

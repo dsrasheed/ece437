@@ -27,6 +27,25 @@ i_t iinstr;
 j_t jinstr;
 word_t extOut;
 
+//Track
+assign dsif.track_out.pc = dsif.track_in.pc;
+assign dsif.track_out.instr = dsif.in.instr;
+assign dsif.track_out.opcode = rinstr.opcode;
+assign dsif.track_out.funct = rinstr.funct;
+assign dsif.track_out.rs = rinstr.rs;
+assign dsif.track_out.rt = rinstr.rt;
+assign dsif.track_out.wsel = cuif.WrLinkReg == 1 ? 31 : cuif.RegDst == 1 ? rinstr.rd : rinstr.rt;
+assign dsif.track_out.RegWr = cuif.RegWr;
+assign dsif.track_out.WrLinkReg = cuif.WrLinkReg;
+assign dsif.track_out.lui = iinstr.imm;
+assign dsif.track_out.shamt = rinstr.shamt;
+assign dsif.track_out.imm = extOut;
+assign dsif.track_out.branch = (iinstr.imm[15]) ? {16'hffff, iinstr.imm} : {16'h0000, iinstr.imm};
+assign dsif.track_out.daddr = dsif.track_in.daddr;
+assign dsif.track_out.dstore = dsif.track_in.dstore;
+assign dsif.track_out.nxt_pc = dsif.track_in.nxt_pc;
+assign dsif.track_out.writeback = dsif.track_in.writeback;
+
 // INSTRUCTION ASSIGNMENTS FOR CONVENIENCE
 always_comb begin
     rinstr = dsif.in.instr;
@@ -51,7 +70,8 @@ assign cuif.funct = rinstr.funct;
 assign rfif.rsel1 = rinstr.rs;
 assign rfif.rsel2 = rinstr.rt;
 assign rfif.wdat = dsif.wdat;
-assign rfif.WEN = dsif.stall == 1'b1 ? 0 : dsif.RegWr;
+assign rfif.WEN = dsif.RegWr;
+//assign rfif.WEN = dsif.stall == 1'b1 ? 0 : dsif.RegWr;
 assign rfif.wsel = dsif.wsel;
 
 // Outputs to Decode Latch

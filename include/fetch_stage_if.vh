@@ -11,11 +11,12 @@ interface fetch_stage_if;
   fetch_latch_t out;
   logic stall, pc_control, ihit;
   word_t nxt_pc, instr;
+  cpu_tracker_t track_out;
 
   // decode stage device
   modport fs (
     input   stall, ihit, pc_control, nxt_pc, instr,
-    output  out
+    output  out, track_out
   );
 
 endinterface

@@ -11,7 +11,7 @@ module register_file (
 word_t registers[2**REG_W];
 word_t nxt_registers[2**REG_W];
 
-always_ff @ (posedge CLK, negedge nRST) 
+always_ff @ (negedge CLK, negedge nRST) 
 begin
     if (nRST == 1'b0)
         for (int i = 0; i < 2**REG_W; i++)

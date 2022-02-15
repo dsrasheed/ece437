@@ -10,12 +10,13 @@ interface exec_latch_if;
 
   exec_latch_t in;
   exec_latch_t out;
+  cpu_tracker_t track_in, track_out;
   logic stall;
 
   // exec latch device
   modport el (
-    input   in, stall,
-    output  out
+    input   in, track_in, stall,
+    output  out, track_out
   );
 
 endinterface

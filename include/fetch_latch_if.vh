@@ -11,11 +11,12 @@ interface fetch_latch_if;
   fetch_latch_t in;
   fetch_latch_t out;
   logic stall;
+  cpu_tracker_t track_in, track_out;
 
   // fetch latch device
   modport fl (
-    input   in, stall,
-    output  out
+    input   in, track_in, stall,
+    output  out, track_out
   );
 
 endinterface
