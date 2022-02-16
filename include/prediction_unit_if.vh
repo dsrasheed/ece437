@@ -3,26 +3,30 @@
 
 // typedefs
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
+
 
 interface prediction_unit_if;
   // import types
   import cpu_types_pkg::*;
+  import datapath_types_pkg::*;
  
   word_t pred_branch, pc, b_offset;
-  logic pred_control, pred_success, pred_fail;
+  logic pred_control;
+  pred_t pred_result;
   pcsrc_t PCSrc;
   
 
-  // request unit device
+  // prediction unit device
   modport pu (
-    input   pc, PCSrc, pred_success, pred_fail, b_offset,
+    input   pc, PCSrc, pred_result, b_offset,
     output  pred_control, pred_branch
   );
 
   // testbench
   modport tb (
     input    pred_control, pred_branch,
-    output   pc, PCSrc, pred_success, pred_fail, b_offset
+    output   pc, PCSrc, pred_result, b_offset
   );
 
 endinterface

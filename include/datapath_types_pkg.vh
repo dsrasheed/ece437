@@ -3,9 +3,16 @@
 
 `include "cpu_types_pkg.vh"
 
-package cpu_types_pkg_ext;
+package datapath_types_pkg;
 
   import cpu_types_pkg::*;
+
+// Predicition Result
+  typedef enum logic [1:0] {
+    RIGHT_PRED,
+    WRONG_PRED,
+    NA
+  } pred_t;
 
 // PC Src
   typedef enum logic [2:0] {
