@@ -17,6 +17,9 @@
   sw    $6, 0($2)
   sw    $7, 4($2)
   sw    $8, 8($2)
+  nop
+  nop
+  nop
   halt      # that's all
 
   org   0x00F0
