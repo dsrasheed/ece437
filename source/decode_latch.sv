@@ -1,15 +1,10 @@
 // interface include
 `include "decode_latch_if.vh"
 
-// memory types
-`include "cpu_types_pkg.vh"
-
 module decode_latch (
   input CLK, nRST,
   decode_latch_if.dl dlif
 );
-
-import cpu_types_pkg::*;
 
 always_ff @ (posedge CLK, negedge nRST)
 begin
