@@ -6,7 +6,6 @@
 `include "datapath_types_pkg.vh"
 
 module hazard_unit (
-  input CLK, nRST,
   hazard_unit_if.hu huif
 );
 
@@ -38,7 +37,7 @@ begin
 end
 
 // LW DATA HAZARD
-assign huif.insert_nop = huif.exec_MemRd & (huif.exec_wsel == huif.rs | huif.exec_wsel == huif.rt);
+assign huif.insert_nop = huif.exec_MemRd & (huif.exec_wsel == huif.rs | huif.exec_wsel == huif.rt) & ~(huif.exec_wsel == 0);
 // Mem Stage: instr = msif.insert_nop ? '0 : msif.in.instr;
 
 endmodule

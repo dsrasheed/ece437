@@ -86,6 +86,15 @@ integer test_case_num = 0;
 
 initial begin
 	
+	nRST = 0;
+	set_values(32'd0, NEXT, NA, 32'd0);
+	#(PERIOD);
+	nRST = 1;
+
+	@(posedge CLK);
+
+	
+
 	
 $finish;
 end

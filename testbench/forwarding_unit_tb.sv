@@ -16,12 +16,12 @@ module forwarding_unit_tb;
 	always #(PERIOD/2) CLK++;
 
 	// interface
-	forwarding_unit_if fuif ();
+	forwarding_unit_if fuif();
 	// test program
 	test PROG (CLK, nRST, fuif);
 	// DUT
 	`ifndef MAPPED
-	forwarding_unit DUT(CLK, nRST, fuif);
+	forwarding_unit DUT(fuif);
 	`else
 	forwarding_unit DUT(
 	    	.\fuif.new_rdat1 (fuif.new_rdat1),
@@ -56,8 +56,8 @@ integer test_case_num = 0;
 	task set_values;
 	input logic mem_regwr_tb;
 	input logic wr_regwr_tb;
-	input word_t mem_wsel_tb;
-	input word_t wr_wsel_tb;
+	input regbits_t mem_wsel_tb;
+	input regbits_t wr_wsel_tb;
 	input word_t writeback_tb;
 	input word_t aluout_tb;
 	input regbits_t rs_tb;
@@ -87,7 +87,7 @@ integer test_case_num = 0;
 			$display("Test Case #%0d RDAT1 ERROR", test_case_num);
 		end
 
-		if(expected_override1 == tbru.override_rdat1)
+		if(expected_override1 == tbfu.override_rdat1)
 		begin		
 			$display("Test Case #%0d, Override1 Success", test_case_num);
 		end
@@ -111,7 +111,7 @@ integer test_case_num = 0;
 			$display("Test Case #%0d RDAT2 ERROR", test_case_num);
 		end
 
-		if(expected_override2 == tbru.override_rdat2)
+		if(expected_override2 == tbfu.override_rdat2)
 		begin		
 			$display("Test Case #%0d, Override2 Success", test_case_num);
 		end
@@ -124,7 +124,51 @@ integer test_case_num = 0;
 
 initial begin
 	
+	nRST = 0;
+	set_values(0, 0, 5'd0, 5'd0, 32'd0, 32'd0, 5'd0, 5'd0);
+	#(PERIOD);
+	nRST = 1;
+
+	@(posedge CLK);
+
+	test_case_num += 1;
+	set_values(0, 0, 5'd0, 5'd0, 32'd23, 32'd55, 5'd0, 5'd0);
+	@(posedge CLK);
+	check_values1(32'd0, 0);
+	check_values2(32'd0, 0);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(1, 1, 5'd5, 5'd6, 32'd12, 32'd62, 5'd5, 5'd6);
+	@(posedge CLK);
+	check_values1(32'd62, 1);
+	check_values2(32'd12, 1);
 	
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(1, 1, 5'd5, 5'd5, 32'd12, 32'd62, 5'd5, 5'd5);
+	@(posedge CLK);
+	check_values1(32'd62, 1);
+	check_values2(32'd62, 1);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(1, 1, 5'd3, 5'd4, 32'd12, 32'd62, 5'd7, 5'd8);
+	@(posedge CLK);
+	check_values1(32'd0, 0);
+	check_values2(32'd0, 0);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(1, 0, 5'd5, 5'd6, 32'd12, 32'd62, 5'd5, 5'd6);
+	@(posedge CLK);
+	check_values1(32'd62, 1);
+	check_values2(32'd0, 0);
+
 $finish;
 end
 

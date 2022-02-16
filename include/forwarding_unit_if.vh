@@ -8,8 +8,8 @@ interface forwarding_unit_if;
   // import types
   import cpu_types_pkg::*;
  
-  word_t new_rdat1, new_rdat2, aluOut, writeback, mem_wsel, wr_wsel;
-  regbits_t rs, rt;
+  word_t new_rdat1, new_rdat2, aluOut, writeback;
+  regbits_t rs, rt, mem_wsel, wr_wsel;
   logic override_rdat1, override_rdat2, mem_RegWr, wr_RegWr;
 
   // forwarding unit device

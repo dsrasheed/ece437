@@ -16,9 +16,9 @@ import datapath_types_pkg::*;
 logic [1:0] state, nxt_state;
 
 parameter TAKE1    = 2'b00,
-	  TAKE2    = 2'b01,
-	  NO_TAKE1 = 2'b10,
-	  NO_TAKE2 = 2'b11;
+	      TAKE2    = 2'b01,
+	      NO_TAKE1 = 2'b10,
+	      NO_TAKE2 = 2'b11;
 	  
 
 always_ff @(posedge CLK, negedge nRST)

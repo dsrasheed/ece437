@@ -11,7 +11,7 @@ import cpu_types_pkg::*;
 
 always_comb begin
     fuif.new_rdat1 = '0;
-    fuif.override_rdat1 = 1'b1;
+    fuif.override_rdat1 = 1'b0;
     if (fuif.mem_RegWr && fuif.mem_wsel == fuif.rs) begin
         fuif.new_rdat1 = fuif.aluOut;
         fuif.override_rdat1 = 1'b1;
@@ -22,7 +22,7 @@ always_comb begin
     end
 
     fuif.new_rdat2 = '0;
-    fuif.override_rdat2 = 1'b1;
+    fuif.override_rdat2 = 1'b0;
     if (fuif.wr_RegWr && fuif.mem_wsel == fuif.rt) begin
         fuif.new_rdat2 = fuif.aluOut;
         fuif.override_rdat2 = 1'b1;

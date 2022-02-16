@@ -21,7 +21,7 @@ module hazard_unit_tb;
 	test PROG (CLK, nRST, huif);
 	// DUT
 	`ifndef MAPPED
-	hazard_unit DUT(CLK, nRST, huif);
+	hazard_unit DUT(huif);
 	`else
 	hazard_unit DUT(
 	    .\huif.exec_MemRd (huif.exec_MemRd),
@@ -56,7 +56,7 @@ integer test_case_num = 0;
 	input logic zero_tb;
 	input logic pred_taken_tb;
 	input logic exec_memrd_tb;
-	input word_t exec_wsel_tb;
+	input regbits_t exec_wsel_tb;
 	input regbits_t rs_tb;
 	input regbits_t rt_tb;
 	begin
@@ -70,10 +70,8 @@ integer test_case_num = 0;
 	end
 	endtask
 
-	task check_values;
+	task check_values_struct;
 	input logic expected_nop;
-	input logic expected_flush;
-	input pred_t expected_result;
 	begin
 		if(expected_nop == tbhu.insert_nop)
 		begin
@@ -83,7 +81,13 @@ integer test_case_num = 0;
 		begin
 			$display("Test Case #%0d NOP ERROR", test_case_num);
 		end
+	end
+	endtask
 
+	task check_values_control;
+	input logic expected_flush;
+	input pred_t expected_result;
+	begin
 		if(expected_flush == tbhu.flush)
 		begin		
 			$display("Test Case #%0d, Flush Success", test_case_num);
@@ -105,8 +109,120 @@ integer test_case_num = 0;
 
 initial begin
 
+	nRST = 0;
+	set_values(NEXT, 0, 0, 0, 5'b0, 5'b0, 5'b0);
+	#(PERIOD);
+	nRST = 1;
 
-	
+    test_case_num += 1;
+	set_values(BREQ, 1, 0, 0, 5'b0, 5'b0, 5'b0);
+	@(posedge CLK);
+	check_values_control(1, WRONG_PRED);
+  
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 0, 0, 0, 5'b0, 5'b0, 5'b0);
+	@(posedge CLK);
+	check_values_control(0, RIGHT_PRED);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 0, 1, 0, 5'b0, 5'b0, 5'b0);
+	@(posedge CLK);
+	check_values_control(1, WRONG_PRED);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 0, 5'b0, 5'b0, 5'b0);
+	@(posedge CLK);
+	check_values_control(0, RIGHT_PRED);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BRNE, 1, 0, 0, 5'b0, 5'b0, 5'b0);
+	@(posedge CLK);
+	check_values_control(0, RIGHT_PRED);
+  
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BRNE, 0, 0, 0, 5'b0, 5'b0, 5'b0);
+	@(posedge CLK);
+	check_values_control(1, WRONG_PRED);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BRNE, 0, 1, 0, 5'b0, 5'b0, 5'b0);
+	@(posedge CLK);
+	check_values_control(0, RIGHT_PRED);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BRNE, 1, 1, 0, 5'b0, 5'b0, 5'b0);
+	@(posedge CLK);
+	check_values_control(1, WRONG_PRED);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 1, 5'd12, 5'd0, 5'd0);
+	@(posedge CLK);
+	check_values_struct(0);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 1, 5'd12, 5'd12, 5'd0);
+	@(posedge CLK);
+	check_values_struct(1);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 1, 5'd6, 5'd0, 5'd6);
+	@(posedge CLK);
+	check_values_struct(1);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 1, 5'd16, 5'd16, 5'd16);
+	@(posedge CLK);
+	check_values_struct(1);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 0, 5'd31, 5'd31, 5'd0);
+	@(posedge CLK);
+	check_values_struct(0);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 0, 5'd23, 5'd0, 5'd23);
+	@(posedge CLK);
+	check_values_struct(0);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 0, 5'd20, 5'd20, 5'd20);
+	@(posedge CLK);
+	check_values_struct(0);
+
+	#(PERIOD);
+
+	test_case_num += 1;
+	set_values(BREQ, 1, 1, 1, 5'd0, 5'd0, 5'd0);
+	@(posedge CLK);
+	check_values_struct(0);
 	
 $finish;
 end

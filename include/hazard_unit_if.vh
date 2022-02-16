@@ -10,9 +10,8 @@ interface hazard_unit_if;
   import cpu_types_pkg::*;
   import datapath_types_pkg::*;
  
-  word_t exec_wsel;
   pcsrc_t PCSrc;
-  regbits_t rs, rt;
+  regbits_t rs, rt, exec_wsel;
   pred_t br_pred_result;
   logic zero, flush, pred_taken, taken, insert_nop, exec_MemRd;
 
