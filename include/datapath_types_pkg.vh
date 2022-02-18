@@ -50,6 +50,7 @@ package datapath_types_pkg;
     logic [ADDR_W-1:0] j_offset;
     // PC Forwarding
     word_t pc;
+    regbits_t rs, rt;
   } decode_latch_t;
 
   typedef struct packed {

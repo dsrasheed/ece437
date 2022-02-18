@@ -24,6 +24,7 @@
 //`include "mem_latch.sv"
 `include "mem_stage_if.vh"
 `include "mem_latch_if.vh"
+`include "forward_unit_if.vh"
 /*`include "request_unit_if.vh"
 `include "control_unit_if.vh"
 `include "register_file_if.vh"
@@ -52,10 +53,11 @@ module datapath (
   decode_latch_if dlif ();
   exec_latch_if elif ();
   mem_latch_if mlif ();
-  fetch_stage_if fsif();
+  fetch_stage_if fsif ();
   decode_stage_if dsif ();
   exec_stage_if esif ();
   mem_stage_if msif ();
+  forwarding_unit_if fuif ();
 
   assign mem_wait = (msif.dcache_dREN | msif.dcache_dWEN) & ~dpif.dhit;
 
@@ -91,6 +93,19 @@ module datapath (
   assign esif.track_in = dlif.track_out;
   assign elif.track_in = esif.track_out;
   assign elif.in = esif.out;
+
+  always_comb
+  begin
+    esif.in = dlif.out;
+    if(fuif.override_rdat1 == 1)
+    begin
+      esif.in.rdat1 = fuif.new_rdat1;
+    end
+    if(fuif.override_rdat2 == 1)
+    begin
+      esif.in.rdat2 = fuif.new_rdat1;
+    end
+  end
 
   exec_latch ELATCH(CLK, nRST, elif);
   assign elif.stall = mem_wait;
@@ -129,49 +144,59 @@ module datapath (
 
   always_ff @(posedge CLK, negedge nRST)
   begin
-	if(nRST == 0)
-	begin
-	  mem_halt <= 0;
-	end
-	else if(mlif.out.halt == 1)
-	begin
-	  mem_halt <= 1;
-	end
+    if(nRST == 0)
+    begin
+      mem_halt <= 0;
+    end
+    else if(mlif.out.halt == 1)
+    begin
+      mem_halt <= 1;
+    end
   end
  
   always_ff @(posedge CLK, negedge nRST)
   begin
-	if(nRST == 0)
-	begin
-	  dpif.halt <= 0;
-	end
-	else if(mem_halt == 1)
-	begin
-	  dpif.halt <= 1;
-	end
+    if(nRST == 0)
+    begin
+      dpif.halt <= 0;
+    end
+    else if(mem_halt == 1)
+    begin
+      dpif.halt <= 1;
+    end
   end
   
-
-always_comb
-begin
-	if(mlif.out.MemToReg == 1)
-	begin
-		mux_out = mlif.out.dmemload;
-	end
-	else
-	begin
-		mux_out = mlif.out.aluOut;
-	end
-	
-	if(mlif.out.WrLinkReg == 1)
-	begin
-		write_back = mlif.out.pc + 4;
-	end
-	else
-	begin
-		write_back = mux_out;
-	end
-end
+  forwarding_unit ONWARD(fuif);
+  assign fuif.rs = dlif.out.rs;
+  assign fuif.rt = dlif.out.rt;
+  assign fuif.mem_wsel = elif.out.wsel;
+  assign fuif.wr_wsel = mlif.out.wsel;
+  assign fuif.mem_RegWr = elif.out.RegWr;
+  assign fuif.wr_RegWr = mlif.out.RegWr;
+  assign fuif.writeback = write_back;
+  assign fuif.aluOut = elif.out.aluOut;
+  
+  //Write Back
+  always_comb
+  begin
+    if(mlif.out.MemToReg == 1)
+    begin
+      mux_out = mlif.out.dmemload;
+    end
+    else
+    begin
+      mux_out = mlif.out.aluOut;
+    end
+    
+    if(mlif.out.WrLinkReg == 1)
+    begin
+      write_back = mlif.out.pc + 4;
+    end
+    else
+    begin
+      write_back = mux_out;
+    end
+  end
 
   
 
