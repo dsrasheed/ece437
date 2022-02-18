@@ -173,6 +173,15 @@ begin
 	end
 end
 
+  hazard_unit_if huif ();
+  prediction_unit_if puif ();
+
+  hazard_unit HAZARD_UNIT(huif);
+  assign huif.PCSrc = elif.out.PCSrc;
+
+  prediction_unit PRED_UNIT(CLK, nRST, puif);
+
+
   
 
   /*// INSTRUCTION ASSIGNMENTS FOR CONVENIENCE
