@@ -41,14 +41,22 @@ begin
 	iaddrplus4 = pcif.iaddr + 4;
 	if(pcif.pc_en == 1)
 	begin	
-		if(pcif.pc_control == 1)
+		if(pcif.pc_control & pcif.flush)
 		begin
 			nxt_iaddr = pcif.nxt_pc;
 		end	
+		else if(pcif.pred_control)
+		begin
+			nxt_iaddr = pcif.pred_branch + 4;
+		end
 		else
 		begin
 			nxt_iaddr = iaddrplus4;
 		end
+	end
+	else if(pcif.pred_control)
+	begin
+		nxt_iaddr = pcif.pred_branch;
 	end
 end
 

@@ -19,7 +19,7 @@ begin
         flif.out <= flif.out;
         flif.track_out <= flif.track_out;
     end
-    else if (flif.flush <= 1'b1) begin
+    else if (flif.flush == 1'b1) begin
 	    flif.out <= '0;
         flif.track_out <= '0;
     end

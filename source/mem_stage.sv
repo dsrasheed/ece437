@@ -31,6 +31,7 @@ assign msif.track_out.writeback = msif.track_in.writeback;
 
 
 // NXT PC Inputs
+assign npcif.pc_4 = msif.in.pc;
 assign npcif.PCSrc = msif.in.PCSrc;
 assign npcif.j_addr = msif.in.j_addr;
 assign npcif.b_addr = msif.in.b_addr;

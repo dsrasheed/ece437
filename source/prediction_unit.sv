@@ -72,7 +72,7 @@ begin
 	endcase
 end
 
-assign puif.pred_branch = (puif.pc + 4) + puif.b_offset;
+assign puif.pred_branch = (puif.pc + 4) + (puif.b_offset << 2);
 
 always_comb
 begin

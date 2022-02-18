@@ -92,7 +92,6 @@ package datapath_types_pkg;
     word_t aluOut;
     // DCache Output
     word_t dmemload;
-    logic  dhit;
     // PC Forwarding
     word_t pc;
   } mem_latch_t;
@@ -103,7 +102,7 @@ package datapath_types_pkg;
     opcode_t opcode;
     regbits_t rs;
     regbits_t rt;
-    word_t wsel;
+    regbits_t wsel;
     word_t instr;
     word_t pc;
     word_t nxt_pc;

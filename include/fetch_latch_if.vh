@@ -12,12 +12,13 @@ interface fetch_latch_if;
 
   fetch_latch_t in;
   fetch_latch_t out;
-  logic stall, flush;
+  logic stall, flush, pred_control;
   cpu_tracker_t track_in, track_out;
+  word_t pred_branch;
 
   // fetch latch device
   modport fl (
-    input   in, track_in, stall, flush
+    input   in, track_in, stall, flush,
     output  out, track_out
   );
 

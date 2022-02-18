@@ -24,7 +24,7 @@
 //`include "mem_latch.sv"
 `include "mem_stage_if.vh"
 `include "mem_latch_if.vh"
-`include "forward_unit_if.vh"
+`include "forwarding_unit_if.vh"
 /*`include "request_unit_if.vh"
 `include "control_unit_if.vh"
 `include "register_file_if.vh"
@@ -48,7 +48,7 @@ module datapath (
   // pc init
   parameter PC_INIT = 0;
   word_t mux_out, write_back;
-  logic fetch_halt, decode_halt, exec_halt, mem_halt, mem_wait;
+  logic halt, mem_wait;
   r_t rinstr;
   cpu_tracker_t track;
 
@@ -67,19 +67,28 @@ module datapath (
   assign mem_wait = (msif.dcache_dREN | msif.dcache_dWEN) & ~dpif.dhit;
 
   fetch_stage FSTAGE(CLK, nRST, fsif);
-  assign fsif.ihit = dpif.ihit;
-  assign fsif.pc_control = (huif.flush & msif.pc_control) | puif.pc_control;
-  assign fsif.next_pc = (huif.flush & msif.pc_control) ? msif.next_pc : puif.pred_branch;
+  assign fsif.ihit = dpif.ihit & ~flif.stall;
+  assign fsif.pc_control = msif.pc_control;
+  assign fsif.pred_control = puif.pred_control;
   assign fsif.nxt_pc = msif.nxt_pc;
+  assign fsif.pred_branch = puif.pred_branch;
+  assign fsif.flush = huif.flush;
   assign dpif.imemaddr = fsif.out.pc;
   assign dpif.imemREN = 1'b1;
   assign fsif.instr = dpif.imemload;
   assign flif.track_in = fsif.track_out;
-  assign flif.in = fsif.out;
+  always_comb
+  begin
+    flif.in = fsif.out;
+    if(puif.pred_control == 1)
+    begin
+      flif.in.pc = puif.pred_branch;
+    end
+  end
 
   fetch_latch FLATCH(CLK, nRST, flif); 
   assign flif.stall = huif.insert_nop;
-  assign flif.flush = ~dpif.ihit | mem_wait | huif.flush;
+  assign flif.flush = ~dpif.ihit | mem_wait | huif.flush | elif.out.halt;
   
   decode_stage DSTAGE(CLK, nRST, dsif);
   assign dsif.in = flif.out;
@@ -95,13 +104,14 @@ module datapath (
   prediction_unit PRED_UNIT(CLK, nRST, puif);
   assign puif.pred_result = huif.br_pred_result;
   assign puif.PCSrc = dsif.PCSrc;
+  assign puif.pc = dsif.out.pc;
+  assign puif.b_offset = dsif.out.extOut;
 
   decode_latch DLATCH(CLK, nRST, dlif);
-  assign dlif.flush = huif.insert_nop | huif.flush;
+  assign dlif.flush = huif.insert_nop | huif.flush | elif.out.halt;
   assign dlif.stall = mem_wait;
 
   exec_stage ESTAGE(esif);
-  assign esif.in = dlif.out;
   assign esif.track_in = dlif.track_out;
   assign elif.track_in = esif.track_out;
   assign elif.in = esif.out;
@@ -117,7 +127,7 @@ module datapath (
 
   exec_latch ELATCH(CLK, nRST, elif);
   assign elif.stall = mem_wait;
-  assign elif.flush = huif.flush;
+  assign elif.flush = huif.flush | elif.out.halt;
 
   mem_stage MSTAGE(msif);
   assign msif.in = elif.out;
@@ -155,11 +165,11 @@ module datapath (
   begin
     if(nRST == 0)
     begin
-      mem_halt <= 0;
+      halt <= 0;
     end
-    else if(mlif.out.halt == 1)
+    else if(elif.out.halt == 1)
     begin
-      mem_halt <= 1;
+      halt <= 1;
     end
   end
  
@@ -169,7 +179,7 @@ module datapath (
     begin
       dpif.halt <= 0;
     end
-    else if(mem_halt == 1)
+    else if(halt == 1)
     begin
       dpif.halt <= 1;
     end

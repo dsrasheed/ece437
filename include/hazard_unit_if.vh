@@ -13,18 +13,18 @@ interface hazard_unit_if;
   pcsrc_t PCSrc;
   regbits_t rs, rt, exec_wsel;
   pred_t br_pred_result;
-  logic zero, flush, pred_taken, taken, insert_nop, exec_MemRd;
+  logic zero, flush, pred_taken, insert_nop, exec_MemRd;
 
   // hazard unit device
   modport hu (
-    input   PCSrc, zero, pred_taken, taken, exec_MemRd, rs, rt, exec_wsel,
+    input   PCSrc, zero, pred_taken, exec_MemRd, rs, rt, exec_wsel,
     output  insert_nop, br_pred_result, flush
   );
 
   // testbench
   modport tb (
     input    insert_nop, br_pred_result, flush,
-    output   PCSrc, zero, pred_taken, taken, exec_MemRd, rs, rt, exec_wsel
+    output   PCSrc, zero, pred_taken, exec_MemRd, rs, rt, exec_wsel
   );
 
 endinterface

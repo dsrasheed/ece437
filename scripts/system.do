@@ -1,14 +1,12 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
+add wave -noupdate -label CPUCLK /system_tb/DUT/CPU/CLK
 add wave -noupdate /system_tb/CLK
-add wave -noupdate /system_tb/DUT/CPU/CLK
 add wave -noupdate /system_tb/nRST
 add wave -noupdate /system_tb/DUT/halt
-add wave -noupdate /system_tb/DUT/CPU/DP/fetch_halt
-add wave -noupdate /system_tb/DUT/CPU/DP/decode_halt
-add wave -noupdate /system_tb/DUT/CPU/DP/exec_halt
-add wave -noupdate /system_tb/DUT/CPU/DP/mem_halt
+add wave -noupdate /system_tb/DUT/CPU/DP/halt
 add wave -noupdate /system_tb/DUT/CPU/DP/mem_wait
+add wave -noupdate -expand /system_tb/DUT/CPU/DP/track
 add wave -noupdate -group scif /system_tb/DUT/CPU/scif/ramREN
 add wave -noupdate -group scif /system_tb/DUT/CPU/scif/ramWEN
 add wave -noupdate -group scif /system_tb/DUT/CPU/scif/ramaddr
@@ -44,15 +42,22 @@ add wave -noupdate -expand -group icache /system_tb/DUT/CPU/dcif/imemREN
 add wave -noupdate -expand -group icache /system_tb/DUT/CPU/dcif/imemload
 add wave -noupdate -expand -group icache /system_tb/DUT/CPU/dcif/imemaddr
 add wave -noupdate -expand -group Fetch_Stage /system_tb/DUT/CPU/DP/fsif/out
-add wave -noupdate -expand -group Fetch_Stage /system_tb/DUT/CPU/DP/FSTAGE/pcif/pc_control
-add wave -noupdate -expand -group Fetch_Stage /system_tb/DUT/CPU/DP/FSTAGE/pcif/pc_en
-add wave -noupdate -expand -group Fetch_Stage /system_tb/DUT/CPU/DP/FSTAGE/pcif/iaddr
-add wave -noupdate -expand -group Fetch_Stage /system_tb/DUT/CPU/DP/FSTAGE/pcif/nxt_pc
-add wave -noupdate -expand -group Fetch_Latch /system_tb/DUT/CPU/DP/flif/in
-add wave -noupdate -expand -group Fetch_Latch /system_tb/DUT/CPU/DP/flif/out
-add wave -noupdate -expand -group Decode_Stage /system_tb/DUT/CPU/DP/dsif/in
+add wave -noupdate /system_tb/DUT/CPU/DP/FSTAGE/pcif/pc_control
+add wave -noupdate /system_tb/DUT/CPU/DP/FSTAGE/pcif/pc_en
+add wave -noupdate /system_tb/DUT/CPU/DP/FSTAGE/pcif/pred_control
+add wave -noupdate /system_tb/DUT/CPU/DP/FSTAGE/pcif/flush
+add wave -noupdate /system_tb/DUT/CPU/DP/FSTAGE/pcif/iaddr
+add wave -noupdate /system_tb/DUT/CPU/DP/FSTAGE/pcif/nxt_pc
+add wave -noupdate /system_tb/DUT/CPU/DP/FSTAGE/pcif/pred_branch
+add wave -noupdate -expand -group Fetch_Latch /system_tb/DUT/CPU/DP/flif/stall
+add wave -noupdate -expand -group Fetch_Latch /system_tb/DUT/CPU/DP/flif/flush
+add wave -noupdate -expand -group Fetch_Latch -expand /system_tb/DUT/CPU/DP/flif/in
+add wave -noupdate -expand -group Fetch_Latch -expand /system_tb/DUT/CPU/DP/flif/out
+add wave -noupdate -expand -group Decode_Stage -expand /system_tb/DUT/CPU/DP/dsif/in
 add wave -noupdate -expand -group Decode_Stage /system_tb/DUT/CPU/DP/dsif/out
 add wave -noupdate -expand -group Decode_Stage /system_tb/DUT/CPU/DP/DSTAGE/extOut
+add wave -noupdate -expand -group Decode_Latch /system_tb/DUT/CPU/DP/dlif/stall
+add wave -noupdate -expand -group Decode_Latch /system_tb/DUT/CPU/DP/dlif/flush
 add wave -noupdate -expand -group Decode_Latch /system_tb/DUT/CPU/DP/dlif/in
 add wave -noupdate -expand -group Decode_Latch /system_tb/DUT/CPU/DP/dlif/out
 add wave -noupdate -expand -group Exec_Stage /system_tb/DUT/CPU/DP/ESTAGE/aluif/aluop
@@ -64,10 +69,13 @@ add wave -noupdate -expand -group Exec_Stage /system_tb/DUT/CPU/DP/ESTAGE/aluif/
 add wave -noupdate -expand -group Exec_Stage /system_tb/DUT/CPU/DP/ESTAGE/aluif/zero
 add wave -noupdate -expand -group Exec_Stage /system_tb/DUT/CPU/DP/esif/in
 add wave -noupdate -expand -group Exec_Stage /system_tb/DUT/CPU/DP/esif/out
+add wave -noupdate -expand -group Exec_Latch /system_tb/DUT/CPU/DP/elif/stall
+add wave -noupdate -expand -group Exec_Latch /system_tb/DUT/CPU/DP/elif/flush
 add wave -noupdate -expand -group Exec_Latch /system_tb/DUT/CPU/DP/elif/in
 add wave -noupdate -expand -group Exec_Latch /system_tb/DUT/CPU/DP/elif/out
 add wave -noupdate -expand -group Mem_Stage /system_tb/DUT/CPU/DP/msif/in
-add wave -noupdate -expand -group Mem_Stage /system_tb/DUT/CPU/DP/msif/out
+add wave -noupdate -expand -group Mem_Stage -expand /system_tb/DUT/CPU/DP/msif/out
+add wave -noupdate -expand -group Mem_Latch /system_tb/DUT/CPU/DP/mlif/stall
 add wave -noupdate -expand -group Mem_Latch /system_tb/DUT/CPU/DP/mlif/in
 add wave -noupdate -expand -group Mem_Latch /system_tb/DUT/CPU/DP/mlif/out
 add wave -noupdate /system_tb/DUT/CPU/DP/write_back
@@ -84,8 +92,38 @@ add wave -noupdate -expand -group reg_file /system_tb/DUT/CPU/DP/DSTAGE/rfif/rse
 add wave -noupdate -expand -group reg_file /system_tb/DUT/CPU/DP/DSTAGE/rfif/wdat
 add wave -noupdate -expand -group reg_file /system_tb/DUT/CPU/DP/DSTAGE/rfif/rdat1
 add wave -noupdate -expand -group reg_file /system_tb/DUT/CPU/DP/DSTAGE/rfif/rdat2
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/PCSrc
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/rs
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/rt
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/exec_wsel
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/br_pred_result
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/zero
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/flush
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/pred_taken
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/insert_nop
+add wave -noupdate -expand -group {Hazard Unit} /system_tb/DUT/CPU/DP/huif/exec_MemRd
+add wave -noupdate -expand -group {Prediction Unit} /system_tb/DUT/CPU/DP/puif/pred_branch
+add wave -noupdate -expand -group {Prediction Unit} /system_tb/DUT/CPU/DP/puif/pc
+add wave -noupdate -expand -group {Prediction Unit} /system_tb/DUT/CPU/DP/puif/b_offset
+add wave -noupdate -expand -group {Prediction Unit} /system_tb/DUT/CPU/DP/puif/pred_control
+add wave -noupdate -expand -group {Prediction Unit} /system_tb/DUT/CPU/DP/puif/pred_result
+add wave -noupdate -expand -group {Prediction Unit} /system_tb/DUT/CPU/DP/puif/PCSrc
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/mem_RegWr
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/mem_wsel
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/rs
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/rt
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/wr_RegWr
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/wr_wsel
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/rs
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/rt
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/writeback
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/aluOut
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/override_rdat1
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/new_rdat1
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/override_rdat2
+add wave -noupdate -expand -group {Forward Unit} /system_tb/DUT/CPU/DP/fuif/new_rdat2
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {217486 ps} 0}
+WaveRestoreCursors {{Cursor 1} {78689 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100

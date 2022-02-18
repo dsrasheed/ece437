@@ -48,21 +48,25 @@ integer test_case_num = 0;
 
 
 	task set_values;
-	input word_t pc_tb;
 	input pcsrc_t pcsrc_tb;
 	input pred_t pred_result_tb;
+	begin
+		tbpu.PCSrc = pcsrc_tb;
+		tbpu.pred_result = pred_result_tb;
+	end
+	endtask
+
+	task set_values_branch;
+	input word_t pc_tb;
 	input word_t b_offset_tb;
 	begin
 		tbpu.pc = pc_tb;
-		tbpu.PCSrc = pcsrc_tb;
-		tbpu.pred_result = pred_result_tb;
 		tbpu.b_offset = b_offset_tb;
 	end
 	endtask
 
 	task check_values;
 	input logic expected_control;
-	input word_t expected_branch;
 	begin
 		if(expected_control == tbpu.pred_control)
 		begin
@@ -72,7 +76,12 @@ integer test_case_num = 0;
 		begin
 			$display("Test Case #%0d Control ERROR", test_case_num);
 		end
+	end
+	endtask
 
+	task check_values_branch;
+	input word_t expected_branch;
+	begin
 		if(expected_branch == tbpu.pred_branch)
 		begin		
 			$display("Test Case #%0d, Branch Success", test_case_num);
@@ -87,14 +96,69 @@ integer test_case_num = 0;
 initial begin
 	
 	nRST = 0;
-	set_values(32'd0, NEXT, NA, 32'd0);
+	set_values(NEXT, NA);
+	set_values_branch(32'd0, 32'd0);
 	#(PERIOD);
 	nRST = 1;
 
 	@(posedge CLK);
+	@(posedge CLK);
+	set_values_branch(32'd0, 32'd82);
+	//Take2
+	set_values(NEXT, WRONG_PRED);
+	@(posedge CLK);
+	check_values(0);
 
-	
+	//NoTake1
+	set_values(BREQ, WRONG_PRED);
+	@(posedge CLK);
+	check_values(0);
 
+	//NoTake1
+	set_values(BRNE, RIGHT_PRED);
+	@(posedge CLK);
+	check_values(0);
+
+	//NoTake2
+	set_values(BREQ, WRONG_PRED);
+	@(posedge CLK);
+	check_values(0);
+
+	//NoTake1
+	set_values(NEXT, RIGHT_PRED);
+	@(posedge CLK);
+	check_values(0);
+
+	//NoTake2
+	set_values(BRNE, WRONG_PRED);
+	@(posedge CLK);
+	check_values(0);
+
+	//Take1
+	set_values(NEXT, WRONG_PRED);
+	@(posedge CLK);
+	check_values(0);
+
+	//Take1
+	set_values(BREQ, RIGHT_PRED);
+	@(posedge CLK);
+	check_values(1);
+
+	//Take2
+	set_values(BRNE, WRONG_PRED);
+	@(posedge CLK);
+	check_values(1);
+
+	//Take1
+	set_values(BRNE, RIGHT_PRED);
+	@(posedge CLK);
+	check_values(1);
+
+	//Take2
+	set_values(BREQ, WRONG_PRED);
+	@(posedge CLK);
+	check_values(1);
+	#(PERIOD);
 	
 $finish;
 end

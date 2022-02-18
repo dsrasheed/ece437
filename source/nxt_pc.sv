@@ -13,20 +13,21 @@ import datapath_types_pkg::*;
 always_comb
 begin
 	npcif.pc_control = 0;
-	npcif.nxt_pc = '0;
+	npcif.nxt_pc = npcif.pc_4 + 4;
 	if(npcif.PCSrc == BREQ)
 	begin
+		npcif.pc_control = 1;
 		if(npcif.zero == 1)
 		begin
-			npcif.pc_control = 1;
+
 			npcif.nxt_pc = npcif.b_addr;
 		end
 	end
 	else if(npcif.PCSrc == BRNE)
 	begin
+		npcif.pc_control = 1;
 		if(npcif.zero == 0)
 		begin
-			npcif.pc_control = 1;
 			npcif.nxt_pc = npcif.b_addr;
 		end
 	end

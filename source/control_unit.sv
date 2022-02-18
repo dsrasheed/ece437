@@ -1,7 +1,7 @@
 // memory types
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 `include "control_unit_if.vh"
-`include "datapath_unit_if.vh"
 
 import cpu_types_pkg::*;
 import datapath_types_pkg::*;
@@ -58,10 +58,12 @@ always_comb begin
         BEQ: begin
             ALUg = ALUG_SUB;
             cuif.PCSrc = BREQ;
+            cuif.ExtOp = 1'b1;
         end
         BNE: begin
             ALUg = ALUG_SUB;
             cuif.PCSrc = BRNE;
+            cuif.ExtOp = 1'b1;
         end
         ADDI,
         ADDIU: begin
