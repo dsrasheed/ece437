@@ -49,5 +49,6 @@ assign esif.out.rdat2 = esif.in.rdat2;
 assign esif.out.b_addr = npclif.b_addr;
 assign esif.out.j_addr = npclif.j_addr;
 assign esif.out.pc = esif.in.pc;
+assign esif.out.pred_taken = esif.in.pred_taken;
 
 endmodule

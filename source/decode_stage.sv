@@ -74,6 +74,9 @@ assign rfif.WEN = dsif.RegWr;
 //assign rfif.WEN = dsif.stall == 1'b1 ? 0 : dsif.RegWr;
 assign rfif.wsel = dsif.wsel;
 
+// Output to Prediction Unit
+assign dsif.PCSrc = cuif.PCSrc;
+
 // Outputs to Decode Latch
 assign dsif.out.halt = cuif.halt;
 assign dsif.out.wsel = cuif.WrLinkReg == 1 ? 31 : cuif.RegDst == 1 ? rinstr.rd : rinstr.rt;
@@ -92,5 +95,6 @@ assign dsif.out.j_offset = jinstr.addr;
 assign dsif.out.pc = dsif.in.pc;
 assign dsif.out.rs = rinstr.rs;
 assign dsif.out.rt = rinstr.rt;
+assign dsif.out.pred_taken = dsif.pred_taken;
 
 endmodule

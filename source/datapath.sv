@@ -47,6 +47,7 @@ module datapath (
   parameter PC_INIT = 0;
   word_t mux_out, write_back;
   logic fetch_halt, decode_halt, exec_halt, mem_halt, mem_wait;
+  r_t rinstr;
   cpu_tracker_t track;
 
   fetch_latch_if flif ();
@@ -58,12 +59,15 @@ module datapath (
   exec_stage_if esif ();
   mem_stage_if msif ();
   forwarding_unit_if fuif ();
+  prediction_unit_if puif ();
+  hazard_unit_if huif ();
 
   assign mem_wait = (msif.dcache_dREN | msif.dcache_dWEN) & ~dpif.dhit;
 
   fetch_stage FSTAGE(CLK, nRST, fsif);
   assign fsif.ihit = dpif.ihit;
-  assign fsif.pc_control = msif.pc_control;
+  assign fsif.pc_control = (huif.flush & msif.pc_control) | puif.pc_control;
+  assign fsif.next_pc = (huif.flush & msif.pc_control) ? msif.next_pc : puif.pred_branch;
   assign fsif.nxt_pc = msif.nxt_pc;
   assign dpif.imemaddr = fsif.out.pc;
   assign dpif.imemREN = 1'b1;
@@ -72,8 +76,8 @@ module datapath (
   assign flif.in = fsif.out;
 
   fetch_latch FLATCH(CLK, nRST, flif); 
-  assign flif.stall = 1'b0;
-  assign flif.flush = ~dpif.ihit | mem_wait;
+  assign flif.stall = huif.insert_nop;
+  assign flif.flush = ~dpif.ihit | mem_wait | huif.flush;
   
   decode_stage DSTAGE(CLK, nRST, dsif);
   assign dsif.in = flif.out;
@@ -82,10 +86,16 @@ module datapath (
   assign dsif.wsel = mlif.out.wsel;
   assign dsif.wdat = write_back;
   assign dsif.stall = mem_wait;
-  assign dlif.track_in = dsif.track_out;
+  assign dsif.pred_taken = puif.pred_control;
   assign dlif.in = dsif.out;
+  assign dlif.track_in = dsif.track_out;
+
+  prediction_unit PRED_UNIT(CLK, nRST, puif);
+  assign puif.pred_result = huif.br_pred_result;
+  assign puif.PCSrc = dsif.PCSrc;
 
   decode_latch DLATCH(CLK, nRST, dlif);
+  assign dlif.flush = huif.insert_nop | huif.flush;
   assign dlif.stall = mem_wait;
 
   exec_stage ESTAGE(esif);
@@ -97,18 +107,15 @@ module datapath (
   always_comb
   begin
     esif.in = dlif.out;
-    if(fuif.override_rdat1 == 1)
-    begin
+    if (fuif.override_rdat1 == 1)
       esif.in.rdat1 = fuif.new_rdat1;
-    end
-    if(fuif.override_rdat2 == 1)
-    begin
-      esif.in.rdat2 = fuif.new_rdat1;
-    end
+    if (fuif.override_rdat2 == 1)
+      esif.in.rdat2 = fuif.new_rdat2;
   end
 
   exec_latch ELATCH(CLK, nRST, elif);
   assign elif.stall = mem_wait;
+  assign elif.flush = huif.flush;
 
   mem_stage MSTAGE(msif);
   assign msif.in = elif.out;
@@ -198,16 +205,15 @@ module datapath (
     end
   end
 
-  hazard_unit_if huif ();
-  prediction_unit_if puif ();
-
   hazard_unit HAZARD_UNIT(huif);
   assign huif.PCSrc = elif.out.PCSrc;
-
-  prediction_unit PRED_UNIT(CLK, nRST, puif);
-
-
-  
+  assign huif.zero = elif.out.zero;
+  assign huif.pred_taken = elif.out.pred_taken;
+  assign rinstr = flif.out.instr;
+  assign huif.rs = rinstr.rs;
+  assign huif.rt = rinstr.rt;
+  assign huif.exec_MemRd = dlif.out.MemRd;
+  assign huif.exec_wsel = dlif.out.wsel;
 
   /*// INSTRUCTION ASSIGNMENTS FOR CONVENIENCE
   always_comb begin
