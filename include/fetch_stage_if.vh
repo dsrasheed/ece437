@@ -3,10 +3,12 @@
 
 // typedefs
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 
 interface fetch_stage_if;
   // import types
   import cpu_types_pkg::*;
+  import datapath_types_pkg::*;
 
   fetch_latch_t out;
   logic stall, pc_control, ihit;

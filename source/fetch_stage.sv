@@ -4,7 +4,6 @@
 //`include "pc.sv"
 
 // memory types
-`include "cpu_types_pkg.vh"
 `include "datapath_types_pkg.vh"
 
 module fetch_stage (
@@ -12,7 +11,6 @@ module fetch_stage (
   fetch_stage_if.fs fsif
 );
 
-import cpu_types_pkg::*;
 import datapath_types_pkg::*;
 
 cpu_tracker_t track;

@@ -35,6 +35,7 @@
 
 // alu op, mips op, and instruction type
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 
 module datapath (
   input logic CLK, nRST,
@@ -42,6 +43,7 @@ module datapath (
 );
   // import types
   import cpu_types_pkg::*;
+  import datapath_types_pkg::*;
 
   // pc init
   parameter PC_INIT = 0;

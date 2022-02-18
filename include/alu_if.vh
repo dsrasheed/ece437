@@ -3,12 +3,10 @@
 
 // all types
 `include "cpu_types_pkg.vh"
-`include "datapath_types_pkg.vh"
 
 interface alu_if;
   // import types
   import cpu_types_pkg::*;
-  import datapath_types_pkg::*;
 
   aluop_t   aluop;
   word_t    ra, rb, out;

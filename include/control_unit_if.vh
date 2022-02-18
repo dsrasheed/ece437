@@ -3,10 +3,12 @@
 
 // typedefs
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 
 interface control_unit_if;
   // import types
   import cpu_types_pkg::*;
+  import datapath_types_pkg::*;
 
   opcode_t            opcode;
   funct_t             funct;

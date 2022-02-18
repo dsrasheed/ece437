@@ -1,15 +1,11 @@
 // interface include
 `include "exec_latch_if.vh"
 
-// memory types
-`include "cpu_types_pkg.vh"
 
 module exec_latch (
   input CLK, nRST,
   exec_latch_if.el elif
 );
-
-import cpu_types_pkg::*;
 
 always_ff @ (posedge CLK, negedge nRST)
 begin

@@ -1,8 +1,10 @@
 // memory types
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 `include "pc_if.vh"
 
 import cpu_types_pkg::*;
+import datapath_types_pkg::*;
 
 module pc (
   input logic CLK, nRST, 

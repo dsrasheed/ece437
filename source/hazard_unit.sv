@@ -1,16 +1,10 @@
 // interface include
 `include "hazard_unit_if.vh"
 
-// memory types
-`include "cpu_types_pkg.vh"
-`include "datapath_types_pkg.vh"
 
 module hazard_unit (
   hazard_unit_if.hu huif
 );
-
-import cpu_types_pkg::*;
-import datapath_types_pkg::*;
 
 // CONTROL FLOW HAZARDS
 logic taken, b_instr, j_instr;

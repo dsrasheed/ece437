@@ -2,14 +2,12 @@
 `include "fetch_latch_if.vh"
 
 // memory types
-`include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 
 module fetch_latch (
   input CLK, nRST,
   fetch_latch_if.fl flif
 );
-
-import cpu_types_pkg::*;
 
 always_ff @ (posedge CLK, negedge nRST)
 begin
