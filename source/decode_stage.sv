@@ -7,6 +7,7 @@
 
 // memory types
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 
 module decode_stage (
   input CLK, nRST,
@@ -14,6 +15,7 @@ module decode_stage (
 );
 
 import cpu_types_pkg::*;
+import datapath_types_pkg::*;
 
 control_unit_if cuif ();
 register_file_if rfif ();

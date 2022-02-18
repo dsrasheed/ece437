@@ -1,8 +1,10 @@
 // memory types
 `include "cpu_types_pkg.vh"
 `include "control_unit_if.vh"
+`include "datapath_unit_if.vh"
 
 import cpu_types_pkg::*;
+import datapath_types_pkg::*;
 
 module control_unit (
   control_unit_if.cu cuif

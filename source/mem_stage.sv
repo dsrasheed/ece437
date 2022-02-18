@@ -2,14 +2,9 @@
 `include "nxt_pc_if.vh"
 `include "mem_stage_if.vh"
 
-// memory types
-`include "cpu_types_pkg.vh"
-
 module mem_stage (
   mem_stage_if.ms msif
 );
-
-import cpu_types_pkg::*;
 
 nxt_pc_if npcif ();
 

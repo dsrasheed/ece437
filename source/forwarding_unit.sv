@@ -1,15 +1,9 @@
 // interface include
 
-// memory types
-`include "cpu_types_pkg.vh"
-`include "datapath_types_pkg.vh"
 
 module forwarding_unit (
   forwarding_unit_if.fu fuif
 );
-
-import cpu_types_pkg::*;
-import datapath_types_pkg::*;
 
 always_comb begin
     fuif.new_rdat1 = '0;

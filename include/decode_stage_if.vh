@@ -3,10 +3,12 @@
 
 // typedefs
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 
 interface decode_stage_if;
   // import types
   import cpu_types_pkg::*;
+  import datapath_types_pkg::*;
 
   fetch_latch_t in;
   cpu_tracker_t track_in, track_out;

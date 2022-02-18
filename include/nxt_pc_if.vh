@@ -3,13 +3,15 @@
 
 // typedefs
 `include "cpu_types_pkg.vh"
+`include "datapth_types_pkg.vh"
 
 interface nxt_pc_if;
   // import types
   import cpu_types_pkg::*;
+  import datapath_types_pkg::*;
 
   
-  logic [2:0] PCSrc;
+  pcsrc_t PCSrc;
   logic zero, pc_control;
   word_t nxt_pc, j_addr, b_addr, jr_addr;
   

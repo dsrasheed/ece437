@@ -1,8 +1,10 @@
 // mapped needs this
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 `include "control_unit_if.vh"
 
 import cpu_types_pkg::*;
+import datapath_types_pkg::*;
 
 // mapped timing needs this. 1ns is too fast
 `timescale 1 ns / 1 ns

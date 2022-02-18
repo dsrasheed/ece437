@@ -5,14 +5,9 @@
 //`include "nxt_pc_logic.sv"
 `include "nxt_pc_logic_if.vh"
 
-// memory types
-`include "cpu_types_pkg.vh"
-
 module exec_stage (
   exec_stage_if.es esif
 );
-
-import cpu_types_pkg::*;
 
 alu_if aluif ();
 npcl_if npclif ();

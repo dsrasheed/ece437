@@ -2,17 +2,13 @@
 `include "cpu_types_pkg.vh"
 `include "nxt_pc_if.vh"
 
-import cpu_types_pkg::*;
+import datapath_types_pkg::*;
 
 module nxt_pc (
   nxt_pc_if.pc npcif
 );
 
-// pc_src 0, 1: pc+4
-//        2: jump
-//        3: jr
-//        4, 5: bne
-//        6, 7: beq
+import datapath_types_pkg::*;
 
 always_comb
 begin

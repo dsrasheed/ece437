@@ -3,10 +3,12 @@
 
 // typedefs
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 
 interface exec_latch_if;
   // import types
   import cpu_types_pkg::*;
+  import datapath_types_pkg::*;
 
   exec_latch_t in;
   exec_latch_t out;
