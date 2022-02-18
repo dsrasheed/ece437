@@ -40,8 +40,10 @@ always_comb begin
         RTYPE: begin
             ALUg = ALUG_RTYPE;
             if (cuif.funct != JR) begin
+                if(cuif.funct != 0) begin
                 cuif.RegDst = 1'b1;
                 cuif.RegWr = 1'b1;
+                end
             end
             else begin
                 cuif.PCSrc = JUMPR;
