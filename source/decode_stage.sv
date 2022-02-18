@@ -90,5 +90,7 @@ assign dsif.out.rdat1 = rfif.rdat1;
 assign dsif.out.rdat2 = rfif.rdat2;
 assign dsif.out.j_offset = jinstr.addr;
 assign dsif.out.pc = dsif.in.pc;
+assign dsif.out.rs = rinstr.rs;
+assign dsif.out.rt = rinstr.rt;
 
 endmodule
