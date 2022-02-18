@@ -5,6 +5,7 @@
 
 // memory types
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 
 module fetch_stage (
   input CLK, nRST,
@@ -12,6 +13,7 @@ module fetch_stage (
 );
 
 import cpu_types_pkg::*;
+import datapath_types_pkg::*;
 
 cpu_tracker_t track;
 
@@ -44,7 +46,5 @@ assign fsif.out.instr = fsif.instr;
 assign pcif.pc_en = fsif.ihit;
 assign pcif.pc_control = fsif.pc_control;
 assign pcif.nxt_pc = fsif.nxt_pc;
-
-
 
 endmodule

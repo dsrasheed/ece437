@@ -70,20 +70,9 @@ module datapath (
   assign flif.in = fsif.out;
 
   fetch_latch FLATCH(CLK, nRST, flif); 
-  assign flif.stall = fetch_halt | ~dpif.ihit | mem_wait;
+  assign flif.stall = 1'b0;
+  assign flif.flush = ~dpif.ihit | mem_wait;
   
-  always_ff @(posedge CLK, negedge nRST)
-  begin
-	if(nRST == 0)
-	begin
-	  fetch_halt <= 0;
-	end
-	else if(dlif.out.halt == 1)
-	begin
-	  fetch_halt <= 1;
-	end
-  end
-
   decode_stage DSTAGE(CLK, nRST, dsif);
   assign dsif.in = flif.out;
   assign dsif.track_in = flif.track_out;
@@ -95,19 +84,7 @@ module datapath (
   assign dlif.in = dsif.out;
 
   decode_latch DLATCH(CLK, nRST, dlif);
-  assign dlif.stall = decode_halt | mem_wait;
-
-  always_ff @(posedge CLK, negedge nRST)
-  begin
-	if(nRST == 0)
-	begin
-	  decode_halt <= 0;
-	end
-	else if(dlif.out.halt == 1)
-	begin
-	  decode_halt <= 1;
-	end
-  end
+  assign dlif.stall = mem_wait;
 
   exec_stage ESTAGE(esif);
   assign esif.in = dlif.out;
@@ -116,20 +93,7 @@ module datapath (
   assign elif.in = esif.out;
 
   exec_latch ELATCH(CLK, nRST, elif);
-  assign elif.stall = exec_halt | mem_wait;
-
-  always_ff @(posedge CLK, negedge nRST)
-  begin
-	if(nRST == 0)
-	begin
-	  exec_halt <= 0;
-	end
-	else if(elif.out.halt == 1)
-	begin
-	  exec_halt <= 1;
-	end
-  end
-
+  assign elif.stall = mem_wait;
 
   mem_stage MSTAGE(msif);
   assign msif.in = elif.out;
@@ -143,7 +107,7 @@ module datapath (
   assign mlif.in = msif.out;
 
   mem_latch MLATCH(CLK, nRST, mlif);
-  assign mlif.stall = mem_halt | mem_wait;
+  assign mlif.stall = mem_wait;
  
   assign track.daddr = mlif.track_out.daddr;
   assign track.dstore = mlif.track_out.dstore;

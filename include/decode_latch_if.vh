@@ -11,11 +11,11 @@ interface decode_latch_if;
   decode_latch_t in;
   decode_latch_t out;
   cpu_tracker_t track_in, track_out;
-  logic stall;
+  logic stall, flush;
 
   // decode latch device
   modport dl (
-    input   in, track_in, stall,
+    input   in, track_in, stall, flush,
     output  out, track_out
   );
 
