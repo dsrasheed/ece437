@@ -39,9 +39,9 @@ always_comb
 begin
 	nxt_iaddr = pcif.iaddr;
 	iaddrplus4 = pcif.iaddr + 4;
-	if(pcif.pc_en == 1)
+	if(pcif.pc_en | pcif.flush)
 	begin	
-		if(pcif.pc_control & pcif.flush)
+		if(pcif.pc_control)
 		begin
 			nxt_iaddr = pcif.nxt_pc;
 		end	
