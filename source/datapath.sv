@@ -47,8 +47,8 @@ module datapath (
 
   // pc init
   parameter PC_INIT = 0;
-  word_t mux_out, write_back;
-  logic halt, mem_wait;
+  word_t write_back;
+  logic mem_wait;
   r_t rinstr;
   cpu_tracker_t track;
 
@@ -80,15 +80,13 @@ module datapath (
   always_comb
   begin
     flif.in = fsif.out;
-    if(puif.pred_control == 1)
-    begin
+    if (puif.pred_control == 1)
       flif.in.pc = puif.pred_branch;
-    end
   end
 
   fetch_latch FLATCH(CLK, nRST, flif); 
   assign flif.stall = huif.insert_nop;
-  assign flif.flush = ~dpif.ihit | mem_wait | huif.flush | elif.out.halt;
+  assign flif.flush = ~dpif.ihit | mem_wait | huif.flush | elif.out.halt | dpif.halt;
   
   decode_stage DSTAGE(CLK, nRST, dsif);
   assign dsif.in = flif.out;
@@ -108,7 +106,7 @@ module datapath (
   assign puif.b_offset = dsif.out.extOut;
 
   decode_latch DLATCH(CLK, nRST, dlif);
-  assign dlif.flush = huif.insert_nop | huif.flush | elif.out.halt;
+  assign dlif.flush = huif.insert_nop | huif.flush | elif.out.halt | dpif.halt;
   assign dlif.stall = mem_wait;
 
   exec_stage ESTAGE(esif);
@@ -127,7 +125,7 @@ module datapath (
 
   exec_latch ELATCH(CLK, nRST, elif);
   assign elif.stall = mem_wait;
-  assign elif.flush = huif.flush | elif.out.halt;
+  assign elif.flush = huif.flush | elif.out.halt | dpif.halt;
 
   mem_stage MSTAGE(msif);
   assign msif.in = elif.out;
@@ -163,26 +161,12 @@ module datapath (
 
   always_ff @(posedge CLK, negedge nRST)
   begin
-    if(nRST == 0)
-    begin
-      halt <= 0;
-    end
-    else if(elif.out.halt == 1)
-    begin
-      halt <= 1;
-    end
-  end
- 
-  always_ff @(posedge CLK, negedge nRST)
-  begin
-    if(nRST == 0)
-    begin
+    if (nRST == 0)
       dpif.halt <= 0;
-    end
-    else if(halt == 1)
-    begin
+    else if(elif.out.halt == 1)
       dpif.halt <= 1;
-    end
+    else
+      dpif.halt <= dpif.halt;
   end
   
   forwarding_unit ONWARD(fuif);
@@ -197,23 +181,13 @@ module datapath (
   
   //Write Back
   always_comb
-  begin
-    if(mlif.out.MemToReg == 1)
-    begin
-      mux_out = mlif.out.dmemload;
-    end
-    else
-    begin
-      mux_out = mlif.out.aluOut;
-    end
-    
+  begin    
     if(mlif.out.WrLinkReg == 1)
-    begin
       write_back = mlif.out.pc + 4;
-    end
-    else
-    begin
-      write_back = mux_out;
+    else begin
+      write_back = mlif.out.aluOut;
+      if (mlif.out.MemToReg == 1)
+        write_back = mlif.out.dmemload;
     end
   end
 
