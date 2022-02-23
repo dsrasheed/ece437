@@ -41,7 +41,7 @@ begin
 	iaddrplus4 = pcif.iaddr + 4;
 	if(pcif.pc_en | pcif.flush)
 	begin	
-		if(pcif.pc_control)
+		if(pcif.pc_control & pcif.flush)
 		begin
 			nxt_iaddr = pcif.nxt_pc;
 		end	
