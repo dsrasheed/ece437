@@ -10,11 +10,11 @@ always_ff @ (posedge CLK, negedge nRST)
 begin
     if (nRST == 1'b0) begin
         dlif.out <= '0;
-	    dlif.track_out <= '0;
+	dlif.track_out <= '0;
     end
     else if (dlif.stall == 1'b1) begin
         dlif.out <= dlif.out;
-	    dlif.track_out <= dlif.track_out;
+	dlif.track_out <= dlif.track_out;
     end
     else if (dlif.flush == 1'b1) begin
         dlif.out <= '0;
