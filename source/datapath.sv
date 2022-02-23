@@ -86,7 +86,7 @@ module datapath (
 
   fetch_latch FLATCH(CLK, nRST, flif); 
   assign flif.stall = huif.insert_nop | mem_wait;
-  assign flif.flush = ~dpif.ihit | huif.flush | elif.out.halt;
+  assign flif.flush = ~dpif.ihit | huif.flush | elif.out.halt | dpif.halt;
   
   decode_stage DSTAGE(CLK, nRST, dsif);
   assign dsif.in = flif.out;
