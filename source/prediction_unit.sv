@@ -13,7 +13,9 @@ module prediction_unit (
 import cpu_types_pkg::*;
 import datapath_types_pkg::*;
 
-logic [1:0] state, nxt_state;
+logic [8:0] hash_in, hash_out;
+logic [1:0] nxt_state;
+logic [1:0] BTB [511:0];
 
 parameter TAKE1    = 2'b00,
 	      TAKE2    = 2'b01,
@@ -21,22 +23,27 @@ parameter TAKE1    = 2'b00,
 	      NO_TAKE2 = 2'b11;
 	  
 
+assign hash_out = 9'h1ff & (puif.pc_decode >> 2);
+assign hash_in = 9'h1ff & (puif.pc_mem >> 2);
+
 always_ff @(posedge CLK, negedge nRST)
 begin
 	if(nRST == 0)
 	begin
-		state <= TAKE1;
+		BTB <= '{default:TAKE1};
+		//state <= TAKE1;
 	end
 	else
 	begin
-		state <= nxt_state;
+		BTB[hash_in] <= nxt_state;
+		//state <= nxt_state;
 	end
 end
 
 always_comb
 begin
-	nxt_state = state;
-	case(state)
+	nxt_state = BTB[hash_in];
+	case(BTB[hash_in])
 	TAKE1:
 	begin
 		if(puif.pred_result == RIGHT_PRED)
@@ -72,12 +79,12 @@ begin
 	endcase
 end
 
-assign puif.pred_branch = (puif.pc + 4) + (puif.b_offset << 2);
+assign puif.pred_branch = (puif.pc_decode + 4) + (puif.b_offset << 2);
 
 always_comb
 begin
 	puif.pred_control = 0;
-	case(state)
+	case(BTB[hash_out])
 	TAKE1:
 	begin
 		if(puif.PCSrc == BREQ || puif.PCSrc == BRNE)
