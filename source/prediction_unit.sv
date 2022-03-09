@@ -15,12 +15,14 @@ import datapath_types_pkg::*;
 
 logic [8:0] hash_in, hash_out;
 logic [1:0] nxt_state;
-logic [1:0] BTB [511:0];
+//word_t BTB [511:0];
+logic [1:0] BTS [511:0];
+word_t nxt_branch;
 
-parameter TAKE1    = 2'b00,
-	      TAKE2    = 2'b01,
-	      NO_TAKE1 = 2'b10,
-	      NO_TAKE2 = 2'b11;
+parameter NO_TAKE1    = 2'b00,
+	      NO_TAKE2    = 2'b01,
+	      TAKE1 	  = 2'b10,
+	      TAKE2 	  = 2'b11;
 	  
 
 assign hash_out = 9'h1ff & (puif.pc_decode >> 2);
@@ -30,20 +32,22 @@ always_ff @(posedge CLK, negedge nRST)
 begin
 	if(nRST == 0)
 	begin
-		BTB <= '{default:TAKE1};
-		//state <= TAKE1;
+		BTS <= '{default: NO_TAKE1};
+		//BTB <= '{default: '0};
+		//state <= NO_TAKE1;
 	end
 	else
 	begin
-		BTB[hash_in] <= nxt_state;
+		BTS[hash_in] <= nxt_state;
+		//BTB[hash_out] <= nxt_branch;
 		//state <= nxt_state;
 	end
 end
 
 always_comb
 begin
-	nxt_state = BTB[hash_in];
-	case(BTB[hash_in])
+	nxt_state = BTS[hash_in];
+	case(BTS[hash_in])
 	TAKE1:
 	begin
 		if(puif.pred_result == RIGHT_PRED)
@@ -84,7 +88,7 @@ assign puif.pred_branch = (puif.pc_decode + 4) + (puif.b_offset << 2);
 always_comb
 begin
 	puif.pred_control = 0;
-	case(BTB[hash_out])
+	case(BTS[hash_out])
 	TAKE1:
 	begin
 		if(puif.PCSrc == BREQ || puif.PCSrc == BRNE)
@@ -105,5 +109,14 @@ begin
 	end
 	endcase
 end
+
+/*always_comb
+begin
+	nxt_branch = BTB[hash_out];
+	if(puif.PCSrc == BREQ || puif.PCSrc == BRNE)
+		nxt_branch = (puif.pc_decode + 4) + (puif.b_offset << 2);
+	puif.pred_branch = BTB[hash_out];
+end*/
+
 
 endmodule	
