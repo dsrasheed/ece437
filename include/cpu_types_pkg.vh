@@ -159,15 +159,6 @@ package cpu_types_pkg;
     ERROR
   } ramstate_t;
 
-// PC Src
-  typedef enum logic [2:0] {
-    NEXT,
-    BRANCH,
-    JUMP,
-    JUMPR,
-    KEEP
-  } pcsrc_t;
-
 // cache frame structs
   //dcache frame
   typedef struct packed {

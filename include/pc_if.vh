@@ -8,20 +8,19 @@ interface pc_if;
   // import types
   import cpu_types_pkg::*;
 
-  pcsrc_t PCSrc;
-  logic [ADDR_W-1:0] j_offset;
-  word_t b_offset, jr_addr, iaddr;
+  logic pc_control, pc_en, pred_control, flush;
+  word_t iaddr, nxt_pc, pred_branch;
   
   // pc device
   modport pc (
-    input   PCSrc, j_offset, b_offset, jr_addr,
+    input   pc_control, nxt_pc, pc_en, pred_control, pred_branch, flush,
     output  iaddr
   );
 
   // testbench
   modport tb (
     input    iaddr,
-    output   PCSrc, j_offset, b_offset, jr_addr 
+    output   pc_control, nxt_pc, pc_en, pred_control, pred_branch, flush
   );
 
 endinterface
