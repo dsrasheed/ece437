@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-03-09T14:15:43.711Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36" etag="hxcjhwNPSbRjGhwr3WNU" version="16.6.6" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2022-03-09T14:17:20.598Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36" etag="2CzRnIdAvLfs8BWPKLb-" version="16.6.6" type="github" pages="2">
   <diagram id="JrA7ryfGbsVBiMZWuKP9" name="Page-1">
     <mxGraphModel dx="1962" dy="889" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -436,7 +436,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="xEfdTOnW5aqnIUiHK3hS-44" value="&lt;font style=&quot;font-size: 15px&quot;&gt;selected_dirty = replace0 ? dirty0[index] : dirty1[index]&amp;nbsp;&lt;br&gt;selected_tag = replace0 ? tag0[index] : tag1[index]&amp;nbsp;&lt;br&gt;selected_block = replace0 ? block0[index] : block1[index]&amp;nbsp;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="xEfdTOnW5aqnIUiHK3hS-1">
+        <mxCell id="xEfdTOnW5aqnIUiHK3hS-44" value="&lt;font style=&quot;font-size: 15px&quot;&gt;selected_dirty = LRU[index] ? dirty0[index] : dirty1[index]&amp;nbsp;&lt;br&gt;selected_tag = LRU[index] ? tag0[index] : tag1[index]&amp;nbsp;&lt;br&gt;selected_block = LRU[index] ? block0[index] : block1[index]&amp;nbsp;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="xEfdTOnW5aqnIUiHK3hS-1">
           <mxGeometry x="298" y="708.75" width="430" height="109.5" as="geometry" />
         </mxCell>
         <mxCell id="EQuZEqetHIDUBt2iD832-4" value="Miss Handler" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" vertex="1" parent="xEfdTOnW5aqnIUiHK3hS-1">
@@ -463,8 +463,8 @@
         <mxCell id="zrRTkS5JI1-01QVbvCzG-1" value="dpcif.dmemaddr" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;" vertex="1" parent="xEfdTOnW5aqnIUiHK3hS-1">
           <mxGeometry x="1530" y="40" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="DG8PfcGv6j1Ny0go0JBR-6" value="replace0" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;" vertex="1" parent="xEfdTOnW5aqnIUiHK3hS-1">
-          <mxGeometry x="1308" y="574.5" width="60" height="23" as="geometry" />
+        <mxCell id="DG8PfcGv6j1Ny0go0JBR-6" value="LRU[index]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;" vertex="1" parent="xEfdTOnW5aqnIUiHK3hS-1">
+          <mxGeometry x="1300" y="574.5" width="60" height="23" as="geometry" />
         </mxCell>
         <mxCell id="DG8PfcGv6j1Ny0go0JBR-7" value="" style="endArrow=classic;html=1;rounded=0;fontSize=15;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.175;entryY=0.25;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="xEfdTOnW5aqnIUiHK3hS-1" source="EQuZEqetHIDUBt2iD832-5" target="DG8PfcGv6j1Ny0go0JBR-11">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
