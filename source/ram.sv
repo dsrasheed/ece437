@@ -15,7 +15,6 @@ module ram (input logic CLK, nRST, cpu_ram_if.ram ramif);
   import cpu_types_pkg::*;
 
   parameter BAD = 32'hBAD1BAD1, LAT = 2;
-
   logic [3:0]   count;
   ramstate_t    rstate;
   word_t        q, addr = 0;
