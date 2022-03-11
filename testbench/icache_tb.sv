@@ -5,7 +5,7 @@ import cpu_types_pkg::*;
 
 `timescale 1 ns / 1 ns
 
-module dcache_tb;
+module icache_tb;
 
   parameter PERIOD = 10;
   logic CLK = 0, nRST;
@@ -19,10 +19,10 @@ module dcache_tb;
   test PROG (CLK, nRST, cif, dcif);
 
 `ifndef MAPPED
-  dcache DUT(CLK, nRST, cif, dcif);
+  icache DUT(CLK, nRST, cif, dcif);
 
 `else
-  dcache DUT(
+  icache DUT(
     .\CLK(CLK),
     .\nRST(nRST),
     .\dcif.dmemREN(dcif.dmemREN),
@@ -63,32 +63,30 @@ integer test_case_num = 0;
 integer instr_num = 0;
 
 task set_dp_values;
-	input logic dmemren_tb, dmemwen_tb;
-	input word_t dmemaddr_tb, dmemstore_tb;
+	input logic imemren_tb;
+	input word_t imemaddr_tb;
 	input logic halt_tb;
 	begin
-		tbdc.dmemaddr = dmemaddr_tb;
-		tbdc.dmemstore = dmemstore_tb;
-		tbdc.dmemREN = dmemren_tb;
-		tbdc.dmemWEN = dmemwen_tb;
+		tbdc.imemaddr = imemaddr_tb;
+		tbdc.imemREN = imemren_tb;
 		tbdc.halt = halt_tb;
 	end
 endtask
 
 task set_mc_values;
-	input logic dwait_tb;
-	input word_t dload_tb;
+	input logic iwait_tb;
+	input word_t iload_tb;
 	begin
-		tbc.dload = dload_tb;
-		tbc.dwait = dwait_tb;
+		tbc.iload = iload_tb;
+		tbc.iwait = iwait_tb;
 	end
 endtask
 
 task check_values1;
-	input logic expected_dren, expected_dwen;
-	input word_t expected_daddr, expected_dstore;
-	begin		
-		if(expected_daddr == tbc.daddr)
+	input logic expected_iren;
+	input word_t expected_iaddr;
+	begin
+		if(expected_iaddr == tbc.iaddr)
 		begin
 			$display("Test Case #%0d Instr #%0d, Addr Success", test_case_num, instr_num);
 		end
@@ -97,16 +95,7 @@ task check_values1;
 			$display("Test Case #%0d Instr #%0d, Addr ERROR", test_case_num, instr_num);
 		end
 
-		if(expected_dstore == tbc.dstore)
-		begin
-			$display("Test Case #%0d Instr #%0d, Store Success", test_case_num, instr_num);
-		end
-		else
-		begin
-			$display("Test Case #%0d Instr #%0d, Store ERROR", test_case_num, instr_num);
-		end
-
-		if(expected_dren == tbc.dREN)
+		if(expected_iren == tbc.iREN)
 		begin
 			$display("Test Case #%0d Instr #%0d, REN Success", test_case_num, instr_num);
 		end
@@ -114,23 +103,14 @@ task check_values1;
 		begin
 			$display("Test Case #%0d Instr #%0d, REN ERROR", test_case_num, instr_num);
 		end
-
-		if(expected_dwen == tbc.dWEN)
-		begin
-			$display("Test Case #%0d Instr #%0d, WEN Success", test_case_num, instr_num);
-		end
-		else
-		begin
-			$display("Test Case #%0d Instr #%0d, WEN ERROR", test_case_num, instr_num);
-		end
 	end
 endtask
 
 task check_values2;
-	input logic expected_dhit;
-	input word_t expected_dmemload;
+	input logic expected_ihit;
+	input word_t expected_imemload;
 	begin
-		if(expected_dmemload == tbdc.dmemload)
+		if(expected_imemload == tbdc.imemload)
 		begin
 			$display("Test Case #%0d Instr #%0d, Memload Success", test_case_num, instr_num);
 		end
@@ -139,7 +119,7 @@ task check_values2;
 			$display("Test Case #%0d Instr #%0d, Memload ERROR", test_case_num, instr_num);
 		end
 		
-		if(expected_dhit == tbdc.dhit)
+		if(expected_ihit == tbdc.ihit)
 		begin
 			$display("Test Case #%0d Instr #%0d, Hit Success", test_case_num, instr_num);
 		end
@@ -150,77 +130,67 @@ task check_values2;
 	end
 endtask
 
-
 initial begin
 
 	nRST = 1;
-	tbdc.imemaddr = '0;
-	tbdc.imemREN = 1;
+	tbdc.dmemREN = 0;
+	tbdc.dmemWEN = 0;
 	tbdc.datomic = 0;
-	tbdc.imemaddr = 0;
+	tbdc.dmemstore = '0;
+	tbdc.dmemaddr = '0;
+	tbdc.imemaddr = '0;
+	tbc.dwait = 0;
+	tbc.dload = '0;
 	tbc.ccwait = 0;
 	tbc.ccinv = 0;
 	tbc.ccsnoopaddr = 0;
-	tbc.iwait = 1;
-	tbc.iload = 0;
-	set_dp_values(0, 0, 32'h0, 32'h0, 0);
+	set_dp_values(0, 32'h0, 0);
 	set_mc_values(1, 32'h0);
 
 	nRST = 0;
 	#(PERIOD);
 	nRST = 1;
-
-	//load from 0x80 miss
-	set_dp_values(1, 0, {30'h80, 2'b00}, 32'h0, 0);
+	//write ton idx1
+	test_case_num += 1;
+	set_dp_values(1, 32'hffffffc4, 0);
+	#(PERIOD);
 	set_mc_values(0, 32'h12345678);
+	#(PERIOD);
+	set_mc_values(1, 32'h0);
+	//write to idx2
+	set_dp_values(1, 32'hffffffc8, 0);
 	#(PERIOD);
 	set_mc_values(0, 32'h87654321);
 	#(PERIOD);
-	//load from 0x81 hit
-	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
+	set_mc_values(1, 32'h0);
+	//write to idx3
+	set_dp_values(1, 32'hffffffcc, 0);
+	set_mc_values(0, 32'ha5a55a5a);
 	#(PERIOD);
-	//store into 0x80 dirty hit
-	set_dp_values(0, 1, {30'h80, 2'b00}, 32'h5a5aa5a5, 0);
+
+	//fetch reg1 - match
+	test_case_num += 1;
+	set_dp_values(1, 32'hffffffc4, 0);
 	set_mc_values(1, 32'h0);
 	#(PERIOD);
-	//load from 0x80 hit
-	set_dp_values(1, 0, {30'h80, 2'b00}, 32'h0, 0);
+	check_values2(1, 32'h12345678);
+
+	//fetch reg2 - mismatch
+	test_case_num += 1;
+	set_dp_values(1, 32'hffffffc8, 0);
+	set_mc_values(0, 32'hDEADFEED);
 	#(PERIOD);
-	//load from 0x81 hit
-	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
-	#(PERIOD);
-	//store to 0x81 dirty hit 
-	set_dp_values(0, 1, {30'h81 2'b00}, 32'ha5a55a5a, 0);
-	#(PERIOD);
-	//load from 0x581 miss
-	set_dp_values(1, 0, {30'h581, 2'b00}, 32'h0, 0);
-	set_mc_values(0, 32'hbad1bad1);
-	#(PERIOD);
-	set_mc_values(1, 32'hbad1bad1);
-	#(PERIOD);
-	set_mc_values(1, 32'h0);
-	//save to 0x580 dirty hit
-	set_dp_values(0, 1, {30'h580, 2'b00}, 32'hFEEDBEAF, 0);
-	#(PERIOD);
-	//load from 0x3fffff00 miss
-	set_dp_values(1, 0, {30'h3fffff00, 2'b00}, 32'h0, 0);
-	set_mc_values(0, 32'hDEAFBEEF);
-	#(PERIOD);
+	check_values1(1, 32'hffffffc8);
+	check_values2(1, 32'h87654321);
+
+	//don't read
+	test_case_num += 1;
+	set_dp_values(0, 32'hffffffc4, 0);
 	set_mc_values(1, 32'h0);
 	#(PERIOD);
-	set_mc_values(0, 32'hFEEDBEEF);
+	check_values1(0, 32'h0);
+	check_values2(0, 32'h0);
+
 	#(PERIOD);
-	set_mc_values(0, 32'hDEADBED0);
-	#(PERIOD);
-	//halt
-	set_mc_values(1, 32'h0);
-	set_dp_values(0, 0, 32'h0, 32'h0, 1);
-
-	#(PERIOD*10);
-end
-
-
-
-
-
+end  
 endprogram
