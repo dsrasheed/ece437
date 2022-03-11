@@ -102,7 +102,8 @@ module datapath (
   prediction_unit PRED_UNIT(CLK, nRST, puif);
   assign puif.pred_result = huif.br_pred_result;
   assign puif.PCSrc = dsif.PCSrc;
-  assign puif.pc = dsif.out.pc;
+  assign puif.pc_decode = dsif.out.pc;
+  assign puif.pc_mem = msif.out.pc;
   assign puif.b_offset = dsif.out.extOut;
 
   decode_latch DLATCH(CLK, nRST, dlif);

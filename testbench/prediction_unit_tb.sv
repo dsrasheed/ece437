@@ -24,7 +24,8 @@ module prediction_unit_tb;
 	prediction_unit DUT(CLK, nRST, puif);
 	`else
 	predicition_unit DUT(
-	    	.\puif.pc (puif.pc),
+	    	.\puif.pc_decode (puif.pc_decode),
+			.\puif.pc_mem (puif.pc_mem),
 			.\puif.PCSrc (puif.PCSrc),
 			.\puif.pred_result (puif.pred_result),
 			.\puif.b_offset (puif.b_offset),
@@ -60,7 +61,8 @@ integer test_case_num = 0;
 	input word_t pc_tb;
 	input word_t b_offset_tb;
 	begin
-		tbpu.pc = pc_tb;
+		tbpu.pc_decode = pc_tb;
+		tbpu.pc_mem = pc_tb;
 		tbpu.b_offset = b_offset_tb;
 	end
 	endtask
