@@ -16,10 +16,10 @@ module dcache_tb;
   caches_if cif ();
   datapath_cache_if dcif ();
   // test program setup
-  test PROG ();
+  test PROG (CLK, nRST, cif, dcif);
 
 `ifndef MAPPED
-  dcache DUT(CLK, nRST, dcif, cif);
+  dcache DUT(CLK, nRST, cif, dcif);
 
 `else
   dcache DUT(
@@ -55,7 +55,7 @@ program test
 (
     input logic CLK,
     output logic nRST,
-    caches_if.tb tbc
+    caches_if.tb tbc,
     datapath_cache_if.tb tbdc
 );
 parameter PERIOD = 10;
@@ -88,7 +88,7 @@ task check_values1;
 	input logic expected_dren, expected_dwen;
 	input word_t expected_daddr, expected_dstore;
 	begin		
-		if(expected_daddr == tbdc.daddr)
+		if(expected_daddr == tbc.daddr)
 		begin
 			$display("Test Case #%0d Instr #%0d, Addr Success", test_case_num, instr_num);
 		end
@@ -97,7 +97,7 @@ task check_values1;
 			$display("Test Case #%0d Instr #%0d, Addr ERROR", test_case_num, instr_num);
 		end
 
-		if(expected_dstore == tbdc.dstore)
+		if(expected_dstore == tbc.dstore)
 		begin
 			$display("Test Case #%0d Instr #%0d, Store Success", test_case_num, instr_num);
 		end
@@ -106,7 +106,7 @@ task check_values1;
 			$display("Test Case #%0d Instr #%0d, Store ERROR", test_case_num, instr_num);
 		end
 
-		if(expected_dren == tbdc.dREN)
+		if(expected_dren == tbc.dREN)
 		begin
 			$display("Test Case #%0d Instr #%0d, REN Success", test_case_num, instr_num);
 		end
@@ -115,7 +115,7 @@ task check_values1;
 			$display("Test Case #%0d Instr #%0d, REN ERROR", test_case_num, instr_num);
 		end
 
-		if(expected_dwen == tbdc.dWEN)
+		if(expected_dwen == tbc.dWEN)
 		begin
 			$display("Test Case #%0d Instr #%0d, WEN Success", test_case_num, instr_num);
 		end
@@ -130,7 +130,7 @@ task check_values2;
 	input logic expected_dhit;
 	input word_t expected_dmemload;
 	begin
-		if(expected_dmemload == tbc.dmemload)
+		if(expected_dmemload == tbdc.dmemload)
 		begin
 			$display("Test Case #%0d Instr #%0d, Memload Success", test_case_num, instr_num);
 		end
@@ -139,7 +139,7 @@ task check_values2;
 			$display("Test Case #%0d Instr #%0d, Memload ERROR", test_case_num, instr_num);
 		end
 		
-		if(expected_dhit == tbc.dhit)
+		if(expected_dhit == tbdc.dhit)
 		begin
 			$display("Test Case #%0d Instr #%0d, Hit Success", test_case_num, instr_num);
 		end
