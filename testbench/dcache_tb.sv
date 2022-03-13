@@ -167,37 +167,37 @@ initial begin
 	set_mc_values(1, 32'h0);
 
 	nRST = 0;
-	#(PERIOD);
+	#(2*PERIOD);
 	nRST = 1;
 
 	//load from 0x80 miss
 	set_dp_values(1, 0, {30'h80, 2'b00}, 32'h0, 0);
 	set_mc_values(0, 32'h12345678);
-	#(PERIOD);
+	#(2*PERIOD);
 	set_mc_values(0, 32'h87654321);
 	#(PERIOD);
 	//load from 0x81 hit
 	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
-	#(PERIOD);
+	#(2*PERIOD);
 	//store into 0x80 dirty hit
 	set_dp_values(0, 1, {30'h80, 2'b00}, 32'h5a5aa5a5, 0);
 	set_mc_values(1, 32'h0);
-	#(PERIOD);
+	#(2*PERIOD);
 	//load from 0x80 hit
 	set_dp_values(1, 0, {30'h80, 2'b00}, 32'h0, 0);
-	#(PERIOD);
+	#(2*PERIOD);
 	//load from 0x81 hit
 	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
-	#(PERIOD);
+	#(2*PERIOD);
 	//store to 0x81 dirty hit 
 	set_dp_values(0, 1, {30'h81, 2'b00}, 32'ha5a55a5a, 0);
 	#(PERIOD);
 	//load from 0x581 miss
 	set_dp_values(1, 0, {30'h581, 2'b00}, 32'h0, 0);
 	set_mc_values(0, 32'hbad1bad1);
-	#(PERIOD);
+	#(2*PERIOD);
 	set_mc_values(1, 32'hbad1bad1);
-	#(PERIOD);
+	#(2*PERIOD);
 	set_mc_values(1, 32'h0);
 	//save to 0x580 dirty hit
 	set_dp_values(0, 1, {30'h580, 2'b00}, 32'hFEEDBEAF, 0);
@@ -205,13 +205,13 @@ initial begin
 	//load from 0x3fffff00 miss
 	set_dp_values(1, 0, {30'h3fffff00, 2'b00}, 32'h0, 0);
 	set_mc_values(0, 32'hDEAFBEEF);
-	#(PERIOD);
+	#(2*PERIOD);
 	set_mc_values(1, 32'h0);
-	#(PERIOD);
+	#(2*PERIOD);
 	set_mc_values(0, 32'hFEEDBEEF);
-	#(PERIOD);
+	#(2*PERIOD);
 	set_mc_values(0, 32'hDEADBED0);
-	#(PERIOD);
+	#(2*PERIOD);
 	//halt
 	set_mc_values(1, 32'h0);
 	set_dp_values(0, 0, 32'h0, 32'h0, 1);
