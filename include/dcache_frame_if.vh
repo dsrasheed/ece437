@@ -11,7 +11,7 @@ interface dcache_frame_if;
   word_t dload;
 
   // input from datapath
-  logic dmemstore;
+  word_t dmemstore;
   logic dmemWEN;
 
   // output to control unit

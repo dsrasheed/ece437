@@ -51,12 +51,12 @@ begin
     casez (state) // synthesis full_case
         IDLE:
         begin
-            if (!dcuif.hit && selected_frame.dirty)
+            if (dcuif.halt)
+                nxt_state = SET_CACHE_ADDR;
+            else if (!dcuif.hit && selected_frame.dirty)
                 nxt_state = WRITE1;
             else if (!dcuif.hit && !selected_frame.dirty)
                 nxt_state = LOAD1;
-            else if (dcuif.halt)
-                nxt_state = SET_CACHE_ADDR;
         end
         WRITE1:
             if (dcuif.latch_en) nxt_state = WRITE2;

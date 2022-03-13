@@ -6,13 +6,13 @@
 
 module dcache (
   input logic CLK, nRST,
-  caches_if.dcache cif
-  datapath_cache_if.dcache dcif,
+  caches_if.dcache cif,
+  datapath_cache_if.dcache dcif
 );
 
-localparam N_SETS = 2**DIDX_W;
-
 import cpu_types_pkg::*;
+
+localparam N_SETS = 2**DIDX_W;
 
 /* GLUE SIGNALS */
 word_t hit_count;
@@ -22,14 +22,14 @@ logic hit;
 logic [N_SETS-1:0] LRU;
 logic [N_SETS-1:0] nxt_LRU;
 
-dcache_frame_if frame0if;
-dcache_frame_if frame1if;
-dcache_control_unit_if dcuif;
+dcache_frame_if frame0if ();
+dcache_frame_if frame1if ();
+dcache_control_unit_if dcuif ();
 
-dcache_frame FRAME0(CLK, nRST, frame0if.df);
-dcache_frame FRAME1(CLK, nRST, frame1if.df);
-dcache_control_unit CONTROL_UNIT(CLK, nRST, dcuif.dcu);
-flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER(
+dcache_frame_set FRAME0 (CLK, nRST, frame0if.df);
+dcache_frame_set FRAME1 (CLK, nRST, frame1if.df);
+dcache_control_unit CONTROL_UNIT (CLK, nRST, dcuif.dcu);
+flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
   .clk(CLK),
   .n_rst(nRST),
   .clear(1'b0),

@@ -1,7 +1,7 @@
 `include "cpu_types_pkg.vh"
 `include "dcache_frame_if.vh"
 
-module dcache_frame (
+module dcache_frame_set (
   input logic CLK, nRST,
   dcache_frame_if.df dfif
 );
