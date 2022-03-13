@@ -190,7 +190,7 @@ initial begin
 	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
 	#(PERIOD);
 	//store to 0x81 dirty hit 
-	set_dp_values(0, 1, {30'h81 2'b00}, 32'ha5a55a5a, 0);
+	set_dp_values(0, 1, {30'h81, 2'b00}, 32'ha5a55a5a, 0);
 	#(PERIOD);
 	//load from 0x581 miss
 	set_dp_values(1, 0, {30'h581, 2'b00}, 32'h0, 0);

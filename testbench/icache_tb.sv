@@ -144,8 +144,8 @@ initial begin
 	tbc.ccwait = 0;
 	tbc.ccinv = 0;
 	tbc.ccsnoopaddr = 0;
-	set_dp_values(0, 32'h0, 0);
-	set_mc_values(1, 32'h0);
+	set_dp_values(0, 32'd0, 0);
+	set_mc_values(1, 32'd0);
 
 	nRST = 0;
 	#(PERIOD);
@@ -153,13 +153,11 @@ initial begin
 	//write ton idx1
 	test_case_num += 1;
 	set_dp_values(1, 32'hffffffc4, 0);
-	#(PERIOD);
 	set_mc_values(0, 32'h12345678);
 	#(PERIOD);
 	set_mc_values(1, 32'h0);
 	//write to idx2
 	set_dp_values(1, 32'hffffffc8, 0);
-	#(PERIOD);
 	set_mc_values(0, 32'h87654321);
 	#(PERIOD);
 	set_mc_values(1, 32'h0);
@@ -167,27 +165,28 @@ initial begin
 	set_dp_values(1, 32'hffffffcc, 0);
 	set_mc_values(0, 32'ha5a55a5a);
 	#(PERIOD);
+	set_mc_values(1, 32'h0);
 
 	//fetch reg1 - match
 	test_case_num += 1;
 	set_dp_values(1, 32'hffffffc4, 0);
 	set_mc_values(1, 32'h0);
-	#(PERIOD);
+	#(PERIOD/5);
 	check_values2(1, 32'h12345678);
 
 	//fetch reg2 - mismatch
 	test_case_num += 1;
-	set_dp_values(1, 32'hffffffc8, 0);
+	set_dp_values(1, 32'hffffff88, 0);
 	set_mc_values(0, 32'hDEADFEED);
-	#(PERIOD);
-	check_values1(1, 32'hffffffc8);
-	check_values2(1, 32'h87654321);
+	#(PERIOD/5);
+	check_values1(1, 32'hffffff88);
+	check_values2(1, 32'hDEADFEED);
 
 	//don't read
 	test_case_num += 1;
 	set_dp_values(0, 32'hffffffc4, 0);
 	set_mc_values(1, 32'h0);
-	#(PERIOD);
+	#(PERIOD/5);
 	check_values1(0, 32'h0);
 	check_values2(0, 32'h0);
 
