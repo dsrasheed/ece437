@@ -16,7 +16,7 @@ localparam N_SETS = 2**DIDX_W;
 
 /* GLUE SIGNALS */
 word_t hit_count;
-logic hit;
+logic hit, discard;
 
 /* LRU */
 logic [N_SETS-1:0] LRU;
@@ -35,7 +35,8 @@ flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
   .clear(1'b0),
   .count_enable(hit),
   .rollover_val(32'hffffffff),
-  .count_out(hit_count)
+  .count_out(hit_count),
+  .rollover_flag(discard)
 );
 
 // glue logic assignments

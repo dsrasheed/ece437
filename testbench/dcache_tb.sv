@@ -12,10 +12,9 @@ module dcache_tb;
 
   always #(PERIOD/2) CLK++;
 
-  // interface delcaration
   caches_if cif ();
   datapath_cache_if dcif ();
-  // test program setup
+  
   test PROG (CLK, nRST, cif, dcif);
 
 `ifndef MAPPED
@@ -170,8 +169,55 @@ initial begin
 	#(2*PERIOD);
 	nRST = 1;
 
+	//load to all in frame0
 	//load from 0x80 miss
 	set_dp_values(1, 0, {30'h80, 2'b00}, 32'h0, 0);
+	set_mc_values(1, 32'h0);
+	#(PERIOD);
+	set_mc_values(0, 32'h12345678);
+	#(PERIOD);
+	set_mc_values(1, 32'h0);
+	#(PERIOD);
+	set_mc_values(0, 32'h87654321);
+	#(PERIOD);
+	//load from 0xA2 miss
+	set_dp_values(1, 0, {30'hA2, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'h12345678);
+	#(2*PERIOD);
+	set_mc_values(0, 32'h87654321);
+	#(PERIOD);
+	//load from 0xC4 miss
+	set_dp_values(1, 0, {30'hC4, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'h12345678);
+	#(2*PERIOD);
+	set_mc_values(0, 32'h87654321);
+	#(PERIOD);
+	//load from 0x106 miss
+	set_dp_values(1, 0, {30'h106, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'h12345678);
+	#(2*PERIOD);
+	set_mc_values(0, 32'h87654321);
+	#(PERIOD);
+	//load from 0x148 miss
+	set_dp_values(1, 0, {30'h148, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'h12345678);
+	#(2*PERIOD);
+	set_mc_values(0, 32'h87654321);
+	#(PERIOD);
+	//load from 0x18A miss
+	set_dp_values(1, 0, {30'h18A, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'h12345678);
+	#(2*PERIOD);
+	set_mc_values(0, 32'h87654321);
+	#(PERIOD);
+	//load from 0x1AC miss
+	set_dp_values(1, 0, {30'h1AC, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'h12345678);
+	#(2*PERIOD);
+	set_mc_values(0, 32'h87654321);
+	#(PERIOD);
+	//load from 0x24E miss
+	set_dp_values(1, 0, {30'h24E, 2'b00}, 32'h0, 0);
 	set_mc_values(0, 32'h12345678);
 	#(2*PERIOD);
 	set_mc_values(0, 32'h87654321);
@@ -179,8 +225,35 @@ initial begin
 	//load from 0x81 hit
 	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
 	#(2*PERIOD);
+	//load from 0xA3 hit
+	set_dp_values(1, 0, {30'hA3, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+	//load from 0xC5 hit
+	set_dp_values(1, 0, {30'hC5, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+	//load from 0x107 hit
+	set_dp_values(1, 0, {30'h107, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+	//load from 0x149 hit
+	set_dp_values(1, 0, {30'h149, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+	//load from 0x18B hit
+	set_dp_values(1, 0, {30'h18B, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+	//load from 0x1AD hit
+	set_dp_values(1, 0, {30'h1AD, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+	//load from 0x24F hit
+	set_dp_values(1, 0, {30'h24F, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+
+	//store cases
 	//store into 0x80 dirty hit
 	set_dp_values(0, 1, {30'h80, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x81 dirty hit
+	set_dp_values(0, 1, {30'h81, 2'b00}, 32'ha5a55a5a, 0);
 	set_mc_values(1, 32'h0);
 	#(2*PERIOD);
 	//load from 0x80 hit
@@ -189,9 +262,6 @@ initial begin
 	//load from 0x81 hit
 	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
 	#(2*PERIOD);
-	//store to 0x81 dirty hit 
-	set_dp_values(0, 1, {30'h81, 2'b00}, 32'ha5a55a5a, 0);
-	#(PERIOD);
 	//load from 0x581 miss
 	set_dp_values(1, 0, {30'h581, 2'b00}, 32'h0, 0);
 	set_mc_values(0, 32'hbad1bad1);
@@ -202,6 +272,64 @@ initial begin
 	//save to 0x580 dirty hit
 	set_dp_values(0, 1, {30'h580, 2'b00}, 32'hFEEDBEAF, 0);
 	#(PERIOD);
+
+	//load to all in frame1
+	//load from 0x3fffffff miss
+	set_dp_values(1, 0, {30'h3fffffff, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hDEAFBEEF);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	set_mc_values(0, 32'hFEEDBEEF);
+	//load from 0x3fffffed miss
+	set_dp_values(1, 0, {30'h3fffffed, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hDEAFBEEF);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	set_mc_values(0, 32'hFEEDBEEF);
+	//load from 0x3fffffdb miss
+	set_dp_values(1, 0, {30'h3fffffdb, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hDEAFBEEF);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	set_mc_values(0, 32'hFEEDBEEF);
+	//load from 0x3fffffc9 miss
+	set_dp_values(1, 0, {30'h3fffffc9, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hDEAFBEEF);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	set_mc_values(0, 32'hFEEDBEEF);
+	//load from 0x3fffffb7 miss
+	set_dp_values(1, 0, {30'h3fffffb7, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hDEAFBEEF);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	set_mc_values(0, 32'hFEEDBEEF);
+	//load from 0x3fffffa5 miss
+	set_dp_values(1, 0, {30'h3fffffa5, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hDEAFBEEF);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	set_mc_values(0, 32'hFEEDBEEF);
+	//load from 0x3fffff93 miss
+	set_dp_values(1, 0, {30'h3fffff93, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hDEAFBEEF);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	set_mc_values(0, 32'hFEEDBEEF);
+	//load from 0x3fffff81 miss
+	set_dp_values(1, 0, {30'h3fffff81, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hDEAFBEEF);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	set_mc_values(0, 32'hFEEDBEEF);
 	//load from 0x3fffff00 miss
 	set_dp_values(1, 0, {30'h3fffff00, 2'b00}, 32'h0, 0);
 	set_mc_values(0, 32'hDEAFBEEF);
@@ -209,18 +337,11 @@ initial begin
 	set_mc_values(1, 32'h0);
 	#(2*PERIOD);
 	set_mc_values(0, 32'hFEEDBEEF);
-	#(2*PERIOD);
-	set_mc_values(0, 32'hDEADBED0);
-	#(2*PERIOD);
 	//halt
 	set_mc_values(1, 32'h0);
 	set_dp_values(0, 0, 32'h0, 32'h0, 1);
 
 	#(PERIOD*10);
 end
-
-
-
-
 
 endprogram

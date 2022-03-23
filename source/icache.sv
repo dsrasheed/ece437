@@ -22,7 +22,7 @@ assign addr.tag = dcif.imemaddr[31:6];
 assign addr.idx = dcif.imemaddr[5:2];
 assign addr.bytoff = dcif.imemaddr[1:0];
 
-always_ff @(posedge CLK or negedge nRST) 
+always_ff @(posedge CLK, negedge nRST) 
 begin
 	if(nRST == 0) 
 	begin
