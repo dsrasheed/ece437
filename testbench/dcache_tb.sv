@@ -247,32 +247,6 @@ initial begin
 	set_dp_values(1, 0, {30'h24F, 2'b00}, 32'h0, 0);
 	#(2*PERIOD);
 
-	//store cases
-	//store into 0x80 dirty hit
-	set_dp_values(0, 1, {30'h80, 2'b00}, 32'h5a5aa5a5, 0);
-	set_mc_values(1, 32'h0);
-	#(2*PERIOD);
-	//store into 0x81 dirty hit
-	set_dp_values(0, 1, {30'h81, 2'b00}, 32'ha5a55a5a, 0);
-	set_mc_values(1, 32'h0);
-	#(2*PERIOD);
-	//load from 0x80 hit
-	set_dp_values(1, 0, {30'h80, 2'b00}, 32'h0, 0);
-	#(2*PERIOD);
-	//load from 0x81 hit
-	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
-	#(2*PERIOD);
-	//load from 0x581 miss
-	set_dp_values(1, 0, {30'h581, 2'b00}, 32'h0, 0);
-	set_mc_values(0, 32'hbad1bad1);
-	#(2*PERIOD);
-	set_mc_values(1, 32'hbad1bad1);
-	#(2*PERIOD);
-	set_mc_values(1, 32'h0);
-	//save to 0x580 dirty hit
-	set_dp_values(0, 1, {30'h580, 2'b00}, 32'hFEEDBEAF, 0);
-	#(PERIOD);
-
 	//load to all in frame1
 	//load from 0x3fffffff miss
 	set_dp_values(1, 0, {30'h3fffffff, 2'b00}, 32'h0, 0);
@@ -337,6 +311,88 @@ initial begin
 	set_mc_values(1, 32'h0);
 	#(2*PERIOD);
 	set_mc_values(0, 32'hFEEDBEEF);
+
+	//store cases
+	//store into 0x80 dirty hit
+	set_dp_values(0, 1, {30'h80, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x81 dirty hit
+	set_dp_values(0, 1, {30'h81, 2'b00}, 32'ha5a55a5a, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0xA2 dirty hit
+	set_dp_values(0, 1, {30'hA2, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0xA3 dirty hit
+	set_dp_values(0, 1, {30'hA3, 2'b00}, 32'ha5a55a5a, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0xC4 dirty hit
+	set_dp_values(0, 1, {30'hC4, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0xC5 dirty hit
+	set_dp_values(0, 1, {30'hC5, 2'b00}, 32'ha5a55a5a, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x106 dirty hit
+	set_dp_values(0, 1, {30'h106, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x107 dirty hit
+	set_dp_values(0, 1, {30'h107, 2'b00}, 32'ha5a55a5a, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x148 dirty hit
+	set_dp_values(0, 1, {30'h148, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x149 dirty hit
+	set_dp_values(0, 1, {30'h149, 2'b00}, 32'ha5a55a5a, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x18A dirty hit
+	set_dp_values(0, 1, {30'h18A, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x18B dirty hit
+	set_dp_values(0, 1, {30'h18B, 2'b00}, 32'ha5a55a5a, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x1AC dirty hit
+	set_dp_values(0, 1, {30'h1AC, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x1AD dirty hit
+	set_dp_values(0, 1, {30'h1AD, 2'b00}, 32'ha5a55a5a, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x24E dirty hit
+	set_dp_values(0, 1, {30'h24E, 2'b00}, 32'h5a5aa5a5, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//store into 0x24F dirty hit
+	set_dp_values(0, 1, {30'h24F, 2'b00}, 32'ha5a55a5a, 0);
+	set_mc_values(1, 32'h0);
+	#(2*PERIOD);
+	//load from 0x80 hit
+	set_dp_values(1, 0, {30'h80, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+	//load from 0x81 hit
+	set_dp_values(1, 0, {30'h81, 2'b00}, 32'h0, 0);
+	#(2*PERIOD);
+	//load from 0x581 miss
+	set_dp_values(1, 0, {30'h581, 2'b00}, 32'h0, 0);
+	set_mc_values(0, 32'hbad1bad1);
+	#(2*PERIOD);
+	set_mc_values(1, 32'hbad1bad1);
+	#(2*PERIOD);
+	set_mc_values(1, 32'h0);
+	//save to 0x580 dirty hit
+	set_dp_values(0, 1, {30'h580, 2'b00}, 32'hFEEDBEAF, 0);
+	#(PERIOD);
 	//halt
 	set_mc_values(1, 32'h0);
 	set_dp_values(0, 0, 32'h0, 32'h0, 1);
