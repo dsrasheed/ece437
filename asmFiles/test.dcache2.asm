@@ -8,9 +8,9 @@ org 0x0000
   ori   $10,$zero,0xDB0
   ori   $11,$zero,0xEB8
 
-  lw $1, 0($4)
-  lw $2, 4($4)
-  lw $3, 8($4)
+  lw $1, 0($4) #0xf000
+  lw $2, 4($4) #0xf004
+  lw $3, 8($4) #0xf008
 
   add $21, $4, $5
 
@@ -60,6 +60,7 @@ org   0xF000
   cfw   0x1331
   cfw   0x4242
   cfw   0x2332
+  cfw   0x5454
 
 org   0xF108
   cfw   0x7337
