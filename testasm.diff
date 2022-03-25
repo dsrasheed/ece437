@@ -1,0 +1,36 @@
+processing file asmFiles/associativity.asm (1 of 24)
+processing file asmFiles/associativity.asm (1 of 24)
+processing file asmFiles/associativity.asm (1 of 24)
+processing file asmFiles/branch.asm (2 of 24)
+processing file asmFiles/count_days.asm (3 of 24)
+processing file asmFiles/fib.asm (4 of 24)
+processing file asmFiles/halt.asm (5 of 24)
+processing file asmFiles/hit2.asm (6 of 24)
+processing file asmFiles/hit.asm (7 of 24)
+processing file asmFiles/jump.asm (8 of 24)
+processing file asmFiles/mergesort.asm (9 of 24)
+--- memsim.hex	2022-03-25 02:28:15.115704461 -0400
++++ memcpu.hex	2022-03-25 02:28:15.017700795 -0400
+@@ -209,6 +209,6 @@
+ :04017D00000000631B
+ :04017E000000006419
+ :04017F000000006418
+-:040C40000000057437
++:040C40000000059417
+ :043FFE0000000500BA
+ :00000001FF
+processing file asmFiles/mult.asm (10 of 24)
+processing file asmFiles/mult_procedure.asm (11 of 24)
+processing file asmFiles/search.asm (12 of 24)
+processing file asmFiles/test.branchjump1.asm (13 of 24)
+processing file asmFiles/test.control_hazard.asm (14 of 24)
+processing file asmFiles/test.data_hazard.asm (15 of 24)
+processing file asmFiles/test.dcache1.asm (16 of 24)
+processing file asmFiles/test.dcache2.asm (17 of 24)
+processing file asmFiles/test.dcache3.asm (18 of 24)
+processing file asmFiles/test.instr.asm (19 of 24)
+processing file asmFiles/test.ldst1.asm (20 of 24)
+processing file asmFiles/test.ldst2.asm (21 of 24)
+processing file asmFiles/test.loadstore.asm (22 of 24)
+processing file asmFiles/test.rtype.asm (23 of 24)
+processing file asmFiles/test.structure_hazard.asm (24 of 24)
