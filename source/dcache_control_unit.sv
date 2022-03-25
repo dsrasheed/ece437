@@ -191,6 +191,12 @@ begin
             dcuif.set_valid = 1'b1;
             dcuif.write_tag = 1'b1;
         end
+        IS_FRAME0_DIRTY:
+        begin
+            dcuif.cache_addr = '0;
+            dcuif.cache_addr.idx = counter_out[2:0];
+            dcuif.cache_addr.blkoff = 1'b0;
+        end
         HALT_WRITE_F0_0:
         begin
             dcuif.cache_addr = '0;
@@ -202,7 +208,14 @@ begin
             dcuif.cache_addr = '0;
             dcuif.cache_addr.idx = counter_out[2:0];
             dcuif.cache_addr.blkoff = 1'b1;
-            dcuif.clear_dirty = 1'b1;
+        end
+        IS_FRAME1_DIRTY:
+        begin
+            dcuif.cache_addr = '0;
+            dcuif.cache_addr.idx = counter_out[2:0];
+            dcuif.cache_addr.blkoff = 1'b0;
+            if (!dcuif.frame1.dirty)
+                counter_incr = 1'b1;
         end
         HALT_WRITE_F1_0:
         begin
@@ -216,11 +229,6 @@ begin
             dcuif.cache_addr.idx = counter_out[2:0];
             dcuif.cache_addr.blkoff = 1'b1;
             counter_incr = 1'b1;
-        end
-        IS_FRAME1_DIRTY:
-        begin
-            if (!dcuif.frame1.dirty)
-                counter_incr = 1'b1;
         end
     endcase
 end
