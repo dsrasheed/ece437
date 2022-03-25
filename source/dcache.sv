@@ -42,7 +42,7 @@ flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
 assign mem_ready = ~cif.dwait;
 
 // control unit input assignments
-assign dcuif.enable = dcif.dmemREN | dcif.dmemWEN | dcif.halt;
+assign dcuif.enable = dcif.dmemREN | dcif.dmemWEN;
 assign dcuif.dmemaddr = dcif.dmemaddr;
 assign dcuif.mem_ready = mem_ready;
 assign dcuif.frame0 = frame0if.out_frame;

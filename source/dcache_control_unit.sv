@@ -49,7 +49,7 @@ assign selected_frame = dcuif.frame_sel == 1 ? dcuif.frame1 : dcuif.frame0;
 always_comb
 begin
     nxt_state = state;
-    if (!dcuif.enable)
+    if (!dcuif.enable || !dcuif.halt)
         nxt_state = IDLE;
     else
     begin
@@ -241,7 +241,8 @@ assign dcuif.disable_hit_counter =
     state == HALT_WRITE_F1_0 |
     state == HALT_WRITE_F1_1 |
     state == IS_FRAME0_DIRTY |
-    state == IS_FRAME1_DIRTY ;
+    state == IS_FRAME1_DIRTY |
+    state == CHECK_FLUSH_DONE;
 
 // STATE MACHINE DATAPATH CONTROL
 assign dcuif.flushed = state == HALTED;
