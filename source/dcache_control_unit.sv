@@ -49,7 +49,7 @@ assign selected_frame = dcuif.frame_sel == 1 ? dcuif.frame1 : dcuif.frame0;
 always_comb
 begin
     nxt_state = state;
-    if (!dcuif.enable || !dcuif.halt)
+    if (!(dcuif.enable || dcuif.halt))
         nxt_state = IDLE;
     else
     begin
