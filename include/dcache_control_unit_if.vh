@@ -21,23 +21,23 @@ interface dcache_control_unit_if;
   logic halt;
 
   // dcache control
-  logic write_offset, load_data, set_valid, clear_dirty,
-        write_tag, flushed, decr_counter;
+  logic load_data, set_valid, clear_dirty,
+        write_tag, disable_hit_counter, flushed;
   dcachef_t cache_addr;
 
   // latch control signals
-  logic latch_en;
+  logic mem_ready;
 
   // mem control
-  logic dREN, dWEN, dwait;
+  logic dREN, dWEN;
   word_t daddr;
   word_t dstore;
 
   // decode stage device
   modport dcu (
-    input hit_count, frame0, frame1, frame_sel, hit, dmemaddr, halt, dwait,
-    output latch_en, write_offset, load_data, set_valid, clear_dirty, write_tag,
-           cache_addr, flushed, decr_counter, dREN, dWEN, daddr, dstore
+    input hit_count, frame0, frame1, frame_sel, hit, dmemaddr, halt, mem_ready,
+    output load_data, set_valid, clear_dirty, write_tag,
+           cache_addr, flushed, disable_hit_counter, dREN, dWEN, daddr, dstore
   );
 
 endinterface
