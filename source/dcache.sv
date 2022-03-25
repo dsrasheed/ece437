@@ -61,7 +61,7 @@ begin
   frame0if.clear_dirty = 1'b0;
   frame0if.write_tag = 1'b0;
   frame0if.store = '0;
-  if (dcif.dhit && dcif.dmemWEN)
+  if (frame0if.hit && dcif.dmemWEN)
   begin
     frame0if.store_data = 1'b1;
     frame0if.store = dcif.dmemstore;
@@ -85,7 +85,7 @@ begin
   frame1if.clear_dirty = 1'b0;
   frame1if.write_tag = 1'b0;
   frame1if.store = '0;
-  if (dcif.dhit && dcif.dmemWEN)
+  if (frame1if.hit && dcif.dmemWEN)
   begin
     frame1if.store_data = 1'b1;
     frame1if.store = dcif.dmemstore;
