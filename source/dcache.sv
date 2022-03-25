@@ -7,7 +7,7 @@
 module dcache (
   input logic CLK, nRST,
   caches_if.dcache cif,
-  datapath_cache_if.dcache dcif
+  datapath_cache_if dcif
 );
 
 import cpu_types_pkg::*;
