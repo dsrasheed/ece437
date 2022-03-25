@@ -8,6 +8,9 @@ interface dcache_control_unit_if;
   // import types
   import cpu_types_pkg::*;
 
+  // enable
+  logic enable;
+
   // hit counter inputs
   word_t hit_count;
 
@@ -35,7 +38,7 @@ interface dcache_control_unit_if;
 
   // decode stage device
   modport dcu (
-    input hit_count, frame0, frame1, frame_sel, hit, dmemaddr, halt, mem_ready,
+    input enable, hit_count, frame0, frame1, frame_sel, hit, dmemaddr, halt, mem_ready,
     output load_data, set_valid, clear_dirty, write_tag,
            cache_addr, flushed, disable_hit_counter, dREN, dWEN, daddr, dstore
   );

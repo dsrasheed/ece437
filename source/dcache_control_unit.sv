@@ -49,54 +49,59 @@ assign selected_frame = dcuif.frame_sel == 1 ? dcuif.frame1 : dcuif.frame0;
 always_comb
 begin
     nxt_state = state;
-    casez (state) // synthesis full_case
-        IDLE:
-        begin
-            if (dcuif.halt)
-                nxt_state = IS_FRAME0_DIRTY;
-            else if (!dcuif.hit && selected_frame.dirty)
-                nxt_state = WRITE1;
-            else if (!dcuif.hit && !selected_frame.dirty)
-                nxt_state = LOAD1;
-        end
-        WRITE1:
-            if (dcuif.mem_ready) nxt_state = WRITE2;
-        WRITE2:
-            if (dcuif.mem_ready) nxt_state = LOAD1;
-        LOAD1: 
-            if (dcuif.mem_ready) nxt_state = LOAD2;
-        LOAD2:
-            if (dcuif.mem_ready) nxt_state = WAIT_HIT;
-        WAIT_HIT:
-            if (dcuif.hit) nxt_state = IDLE;
-        IS_FRAME0_DIRTY:
-        begin
-            if (dcuif.frame0.dirty) nxt_state = HALT_WRITE_F0_0;
-            else nxt_state = IS_FRAME1_DIRTY;
-        end
-        HALT_WRITE_F0_0:
-            if (dcuif.mem_ready) nxt_state = HALT_WRITE_F0_1;
-        HALT_WRITE_F0_1:
-            if (dcuif.mem_ready) nxt_state = IS_FRAME1_DIRTY;
-        IS_FRAME1_DIRTY:
-        begin
-            if (dcuif.frame1.dirty) nxt_state = HALT_WRITE_F1_0;
-            else nxt_state = CHECK_FLUSH_DONE;
-        end 
-        HALT_WRITE_F1_0:
-            if (dcuif.mem_ready) nxt_state = HALT_WRITE_F1_1;
-        HALT_WRITE_F1_1:
-            if (dcuif.mem_ready) nxt_state = CHECK_FLUSH_DONE;
-        CHECK_FLUSH_DONE:
-        begin
-            if (counter_rollover)
-                nxt_state = WRITE_HIT_COUNTER;
-            else
-                nxt_state = IS_FRAME0_DIRTY;
-        end
-        WRITE_HIT_COUNTER:
-            if (dcuif.mem_ready) nxt_state = HALTED;
-    endcase
+    if (!dcuif.enable)
+        nxt_state = IDLE;
+    else
+    begin
+        casez (state) // synthesis full_case
+            IDLE:
+            begin
+                if (dcuif.halt)
+                    nxt_state = IS_FRAME0_DIRTY;
+                else if (!dcuif.hit && selected_frame.dirty)
+                    nxt_state = WRITE1;
+                else if (!dcuif.hit && !selected_frame.dirty)
+                    nxt_state = LOAD1;
+            end
+            WRITE1:
+                if (dcuif.mem_ready) nxt_state = WRITE2;
+            WRITE2:
+                if (dcuif.mem_ready) nxt_state = LOAD1;
+            LOAD1: 
+                if (dcuif.mem_ready) nxt_state = LOAD2;
+            LOAD2:
+                if (dcuif.mem_ready) nxt_state = WAIT_HIT;
+            WAIT_HIT:
+                if (dcuif.hit) nxt_state = IDLE;
+            IS_FRAME0_DIRTY:
+            begin
+                if (dcuif.frame0.dirty) nxt_state = HALT_WRITE_F0_0;
+                else nxt_state = IS_FRAME1_DIRTY;
+            end
+            HALT_WRITE_F0_0:
+                if (dcuif.mem_ready) nxt_state = HALT_WRITE_F0_1;
+            HALT_WRITE_F0_1:
+                if (dcuif.mem_ready) nxt_state = IS_FRAME1_DIRTY;
+            IS_FRAME1_DIRTY:
+            begin
+                if (dcuif.frame1.dirty) nxt_state = HALT_WRITE_F1_0;
+                else nxt_state = CHECK_FLUSH_DONE;
+            end 
+            HALT_WRITE_F1_0:
+                if (dcuif.mem_ready) nxt_state = HALT_WRITE_F1_1;
+            HALT_WRITE_F1_1:
+                if (dcuif.mem_ready) nxt_state = CHECK_FLUSH_DONE;
+            CHECK_FLUSH_DONE:
+            begin
+                if (counter_rollover)
+                    nxt_state = WRITE_HIT_COUNTER;
+                else
+                    nxt_state = IS_FRAME0_DIRTY;
+            end
+            WRITE_HIT_COUNTER:
+                if (dcuif.mem_ready) nxt_state = HALTED;
+        endcase
+    end
 end
 
 // STATE MACHINE MEMORY CONTROL

@@ -42,12 +42,13 @@ flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
 assign mem_ready = ~cif.dwait;
 
 // control unit input assignments
+assign dcuif.enable = dcif.dmemREN | dcif.dmemWEN | dcif.halt;
 assign dcuif.dmemaddr = dcif.dmemaddr;
 assign dcuif.mem_ready = mem_ready;
 assign dcuif.frame0 = frame0if.out_frame;
 assign dcuif.frame1 = frame1if.out_frame;
 assign dcuif.frame_sel = LRU[dcuif.cache_addr.idx];
-assign dcuif.hit = dcif.dhit & (dcif.dmemREN | dcif.dmemWEN);
+assign dcuif.hit = dcif.dhit;
 assign dcuif.hit_count = hit_count;
 assign dcuif.halt = dcif.halt;
 
