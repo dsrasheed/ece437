@@ -47,7 +47,7 @@ assign dcuif.mem_ready = mem_ready;
 assign dcuif.frame0 = frame0if.out_frame;
 assign dcuif.frame1 = frame1if.out_frame;
 assign dcuif.frame_sel = LRU[dcuif.cache_addr.idx];
-assign dcuif.hit = dcif.dhit;
+assign dcuif.hit = dcif.dhit & (dcif.dmemREN | dcif.dmemWEN);
 assign dcuif.hit_count = hit_count;
 assign dcuif.halt = dcif.halt;
 
