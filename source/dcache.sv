@@ -16,6 +16,7 @@ localparam N_SETS = 2**DIDX_W;
 
 word_t hit_count;
 logic mem_ready;
+logic discard;
 logic [N_SETS-1:0] LRU;
 logic [N_SETS-1:0] nxt_LRU;
 
@@ -33,7 +34,8 @@ flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
   .clear(1'b0),
   .count_enable(dcif.dhit & ~dcuif.disable_hit_counter),
   .rollover_val(32'hffffffff),
-  .count_out(hit_count)
+  .count_out(hit_count),
+  .rollover_flag(discard)
 );
 
 /* GLUEING INTERNAL MODULES TOGETHER */
