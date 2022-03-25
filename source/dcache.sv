@@ -112,9 +112,9 @@ end
 always_comb
 begin
   nxt_LRU = LRU;
-  if (frame0if.hit)
+  if (frame0if.hit && dcuif.enable)
     nxt_LRU[dcuif.cache_addr.idx] = 1'b1;
-  else if (frame1if.hit)
+  else if (frame1if.hit && dcuif.enable)
     nxt_LRU[dcuif.cache_addr.idx] = 1'b0;
 end
 

@@ -13,7 +13,7 @@ import cpu_types_pkg::*;
 icache_frame [15:0] cache;
 icachef_t addr;
 
-logic miss, nxt_valid;
+logic nxt_valid;
 logic [25:0] nxt_tag;
 logic [31:0] nxt_data; 
 
@@ -38,19 +38,19 @@ end
 
 always_comb 
 begin
-	miss = 0;
+	//miss = 1;
 	dcif.ihit = 0;
 	dcif.imemload = 0;
 	if(dcif.imemREN == 1 && dcif.dmemREN == 0 && dcif.dmemWEN == 0) 
 	begin
 		if(cache[addr.idx].tag == addr.tag && cache[addr.idx].valid == 1) 
 		begin
+			//miss = 0
 			dcif.ihit = 1;
 			dcif.imemload = cache[addr.idx].data;
 		end 
 		else 
 		begin
-			miss = 1;
 			dcif.ihit = ~cif.iwait;
 			dcif.imemload = cif.iload;
 		end
@@ -70,7 +70,7 @@ begin
 	end
 end
 
-assign cif.iREN = miss ? dcif.imemREN : 0;
-assign cif.iaddr = miss ? dcif.imemaddr : '0;
+assign cif.iREN = dcif.imemREN;
+assign cif.iaddr = dcif.imemaddr;
 
 endmodule

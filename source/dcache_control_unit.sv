@@ -131,7 +131,7 @@ begin
         end
         LOAD2:
         begin
-            dcuif.daddr = {dcuif.dmemaddr.tag, dcuif.dmemaddr.idx, 3'b000};
+            dcuif.daddr = {dcuif.dmemaddr.tag, dcuif.dmemaddr.idx, 3'b100};
             dcuif.dREN = 1'b1;
         end
         HALT_WRITE_F0_0:
