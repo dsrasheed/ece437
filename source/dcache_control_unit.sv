@@ -136,25 +136,25 @@ begin
         end
         HALT_WRITE_F0_0:
         begin
-            dcuif.daddr = {dcuif.frame0.tag, counter_out, 3'b000};
+            dcuif.daddr = {dcuif.frame0.tag, counter_out[2:0], 3'b000};
             dcuif.dstore = dcuif.frame0.data[0];
             dcuif.dWEN = 1'b1;
         end
         HALT_WRITE_F0_1:
         begin
-            dcuif.daddr = {dcuif.frame0.tag, counter_out, 3'b100};
+            dcuif.daddr = {dcuif.frame0.tag, counter_out[2:0], 3'b100};
             dcuif.dstore = dcuif.frame0.data[1];
             dcuif.dWEN = 1'b1;
         end
         HALT_WRITE_F1_0:
         begin
-            dcuif.daddr = {dcuif.frame1.tag, counter_out, 3'b000};
+            dcuif.daddr = {dcuif.frame1.tag, counter_out[2:0], 3'b000};
             dcuif.dstore = dcuif.frame1.data[0];
             dcuif.dWEN = 1'b1;
         end
         HALT_WRITE_F1_1:
         begin
-            dcuif.daddr = {dcuif.frame1.tag, counter_out, 3'b100};
+            dcuif.daddr = {dcuif.frame1.tag, counter_out[2:0], 3'b100};
             dcuif.dstore = dcuif.frame1.data[1];
             dcuif.dWEN = 1'b1;
         end
