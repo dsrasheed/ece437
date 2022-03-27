@@ -38,14 +38,12 @@ end
 
 always_comb 
 begin
-	//miss = 1;
 	dcif.ihit = 0;
 	dcif.imemload = 0;
 	if(dcif.imemREN == 1 && dcif.dmemREN == 0 && dcif.dmemWEN == 0) 
 	begin
 		if(cache[addr.idx].tag == addr.tag && cache[addr.idx].valid == 1) 
 		begin
-			//miss = 0
 			dcif.ihit = 1;
 			dcif.imemload = cache[addr.idx].data;
 		end 
