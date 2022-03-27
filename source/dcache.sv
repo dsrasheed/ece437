@@ -104,9 +104,13 @@ end
 always_ff @ (posedge CLK, negedge nRST)
 begin
   if (nRST == 1'b0)
+  begin
     LRU <= '0;
+  end
   else
+  begin
     LRU <= nxt_LRU;
+  end
 end
 
 always_comb
@@ -120,7 +124,7 @@ end
 
 /* OUTPUTS */
 // Datapath
-assign dcif.dhit = frame0if.hit | frame1if.hit;
+assign dcif.dhit = (frame0if.hit | frame1if.hit) & dcuif.enable;
 always_comb begin
   dcif.dmemload = frame0if.out_frame.data[dcuif.cache_addr.blkoff];
   if (frame1if.hit)

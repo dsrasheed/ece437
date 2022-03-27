@@ -49,15 +49,17 @@ assign selected_frame = dcuif.frame_sel == 1 ? dcuif.frame1 : dcuif.frame0;
 always_comb
 begin
     nxt_state = state;
-    if (!(dcuif.enable || dcuif.halt))
+    /*if (!(dcuif.enable || dcuif.halt))
         nxt_state = IDLE;
     else
-    begin
-        casez (state) // synthesis full_case
+    begin*/
+        case (state) // synthesis full_case
             IDLE:
             begin
-                if (dcuif.halt)
+		if (dcuif.halt)
                     nxt_state = IS_FRAME0_DIRTY;
+		else if (dcuif.enable == 0)
+		    nxt_state = IDLE;
                 else if (!dcuif.hit && selected_frame.dirty)
                     nxt_state = WRITE1;
                 else if (!dcuif.hit && !selected_frame.dirty)
@@ -100,8 +102,12 @@ begin
             end
             WRITE_HIT_COUNTER:
                 if (dcuif.mem_ready) nxt_state = HALTED;
+	    HALTED:
+		nxt_state = HALTED;
+	    default:
+		nxt_state = IDLE;
         endcase
-    end
+    //end
 end
 
 // STATE MACHINE MEMORY CONTROL
@@ -111,7 +117,7 @@ begin
     dcuif.dstore = '0;
     dcuif.dREN = 1'b0;
     dcuif.dWEN = 1'b0;
-    casez (state) // synthesis full_case
+    case (state) // synthesis full_case
         WRITE1:
         begin
             dcuif.daddr = {selected_frame.tag, dcuif.dmemaddr.idx, 3'b000};
@@ -164,6 +170,14 @@ begin
             dcuif.dstore = dcuif.hit_count;
             dcuif.dWEN = 1'b1;
         end
+        default:
+	begin
+	    dcuif.daddr = '0;
+	    dcuif.dstore = '0;
+	    dcuif.dREN = 1'b0;
+	    dcuif.dWEN = 1'b0;
+	end
+		
     endcase
 end
 
@@ -176,7 +190,7 @@ begin
     dcuif.write_tag = 0;
     dcuif.cache_addr = dcuif.dmemaddr;
     counter_incr = 0;
-    casez (state) // synthesis full_case
+    case (state) // synthesis full_case
         WRITE2:
             dcuif.clear_dirty = 1'b1;
         LOAD1:
@@ -230,6 +244,15 @@ begin
             dcuif.cache_addr.blkoff = 1'b1;
             counter_incr = 1'b1;
         end
+	default:
+	begin
+	    dcuif.load_data = 0;
+	    dcuif.set_valid = 0;
+	    dcuif.clear_dirty = 0;
+	    dcuif.write_tag = 0;
+	    dcuif.cache_addr = dcuif.dmemaddr;
+	    counter_incr = 0;
+	end
     endcase
 end
 
@@ -245,6 +268,6 @@ assign dcuif.disable_hit_counter =
     state == CHECK_FLUSH_DONE;
 
 // STATE MACHINE DATAPATH CONTROL
-assign dcuif.flushed = state == HALTED;
+assign dcuif.flushed = (state == HALTED) ? 1 : 0;
 
 endmodule
