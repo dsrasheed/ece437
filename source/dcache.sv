@@ -16,6 +16,8 @@ localparam N_SETS = 2**DIDX_W;
 
 word_t hit_count;
 logic mem_ready;
+// unused signal connected to HIT_COUNTER's rollover_flag.
+// Synthesis screamed at us for having nothing connected to it.
 logic discard;
 logic [N_SETS-1:0] LRU;
 logic [N_SETS-1:0] nxt_LRU;
@@ -104,13 +106,9 @@ end
 always_ff @ (posedge CLK, negedge nRST)
 begin
   if (nRST == 1'b0)
-  begin
     LRU <= '0;
-  end
   else
-  begin
     LRU <= nxt_LRU;
-  end
 end
 
 always_comb
