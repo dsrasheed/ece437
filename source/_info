@@ -105,7 +105,7 @@ R12
 R13
 Yalu_if
 R1
-Z16 DXx4 work 13 cpu_types_pkg 0 22 24fc]V^K_Pm60[E@OB:=`2
+DXx4 work 13 cpu_types_pkg 0 22 24fc]V^K_Pm60[E@OB:=`2
 !s110 1643932626
 !i10b 1
 !s100 IB0VVf==9]PSeP>H1PEWG1
@@ -130,16 +130,16 @@ R12
 R13
 Ycache_control_if
 R1
-Z17 DXx4 work 13 cpu_types_pkg 0 22 JW?^GmlKDTB1SLiAhW;8F2
-!s110 1643537834
+Z16 DXx4 work 13 cpu_types_pkg 0 22 JW?^GmlKDTB1SLiAhW;8F2
+Z17 !s110 1648416461
 !i10b 1
 !s100 ^jdLFBO;D6BoQd`j@YGKG2
 IO?205hR2NLj2^V:7DXG[h3
 R3
-!s105 cache_control_if_vh_unit
+Z18 !s105 cache_control_if_vh_unit
 S1
 R0
-w1643375031
+Z19 w1644346087
 8/home/ecegrid/a/mg216/ece437/processors/include/cache_control_if.vh
 F/home/ecegrid/a/mg216/ece437/processors/include/cache_control_if.vh
 L0 25
@@ -147,48 +147,48 @@ R8
 r1
 !s85 0
 31
-!s108 1643537834.000000
-!s107 /home/ecegrid/a/mg216/ece437/processors/include/caches_if.vh|/home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/cache_control_if.vh|
-!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/cache_control_if.vh|
+Z20 !s108 1648416461.000000
+Z21 !s107 /home/ecegrid/a/mg216/ece437/processors/include/caches_if.vh|/home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/cache_control_if.vh|
+Z22 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/cache_control_if.vh|
 !i113 0
 R12
 R13
 vcaches
 R1
-R15
+!s110 1648416459
 !i10b 1
-!s100 13ggijESBN84ATei[k13S0
-I3DJedI>3bjiPNM9ddE?R=0
+!s100 U@2dIAWQO8^Q`=bOnTf<F0
+IdjSOANaAHILlQW=M@4^_l2
 R3
-R4
+!s105 caches_sv_unit
 S1
 R0
-R5
-R6
-R7
-L0 20630
+w1648406908
+8/home/ecegrid/a/mg216/ece437/processors/source/caches.sv
+F/home/ecegrid/a/mg216/ece437/processors/source/caches.sv
+L0 9
 R8
 r1
 !s85 0
 31
-R9
-R10
-R11
+!s108 1648416459.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/source/caches.sv|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/source/caches.sv|
 !i113 0
 R12
 R13
 Ycaches_if
 R1
+R16
 R17
-!s110 1643537849
 !i10b 1
-!s100 kh8T7SGj8?=6?=Cc2SOH30
-Ic=WP4VQJAaU;3i:TZzf:F2
+!s100 mhK;in75hFBZzQ`a3:lgk1
+IRN@FlW^:LKcMifnA8P8220
 R3
-!s105 caches_if_vh_unit
+R18
 S1
 R0
-Z18 w1643096189
+Z23 w1646973202
 8/home/ecegrid/a/mg216/ece437/processors/include/caches_if.vh
 F/home/ecegrid/a/mg216/ece437/processors/include/caches_if.vh
 L0 18
@@ -196,9 +196,9 @@ R8
 r1
 !s85 0
 31
-!s108 1643537849.000000
-!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/caches_if.vh|
-!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/caches_if.vh|
+R20
+R21
+R22
 !i113 0
 R12
 R13
@@ -228,16 +228,16 @@ R12
 R13
 Ycontrol_unit_if
 R1
-R16
-Z19 !s110 1643961860
+DXx4 work 13 cpu_types_pkg 0 22 J6Z?d6KDFZimDV4IKnAT10
+!s110 1644565927
 !i10b 1
 !s100 PoKPIW4M[BHC3E[@8<C:f3
-I<iMLL6f4lBW0YS96^bkR=3
+I`SR^@WKk=<YI=iT<<PcGa0
 R3
 !s105 control_unit_if_vh_unit
 S1
 R0
-w1643961860
+R19
 8/home/ecegrid/a/mg216/ece437/processors/include/control_unit_if.vh
 F/home/ecegrid/a/mg216/ece437/processors/include/control_unit_if.vh
 L0 7
@@ -245,22 +245,22 @@ R8
 r1
 !s85 0
 31
-Z20 !s108 1643961860.000000
-Z21 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/control_unit_if.vh|
-Z22 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/control_unit_if.vh|
+!s108 1644565927.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/control_unit_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/control_unit_if.vh|
 !i113 0
 R12
 R13
 Xcpu_types_pkg
 R1
-R19
+Z24 !s110 1648416539
 !i10b 1
-!s100 eR@gAj8b33SSR@fCoK=m:2
-I24fc]V^K_Pm60[E@OB:=`2
-V24fc]V^K_Pm60[E@OB:=`2
+!s100 fDM_GjeVN]?<a[[;MTMEX3
+IJW?^GmlKDTB1SLiAhW;8F2
+VJW?^GmlKDTB1SLiAhW;8F2
 S1
 R0
-w1643882314
+w1648174997
 8/home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh
 F/home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh
 L0 15
@@ -268,9 +268,33 @@ R8
 r1
 !s85 0
 31
-R20
-R21
-R22
+Z25 !s108 1648416539.000000
+Z26 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/datapath_types_pkg.vh|
+Z27 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/datapath_types_pkg.vh|
+!i113 0
+R12
+R13
+Xcpu_types_pkg_ext
+R1
+Z28 DXx4 work 13 cpu_types_pkg 0 22 eaAGj;:L@b77MXBN]lf;c2
+!s110 1644894949
+!i10b 1
+!s100 e0gDd_M5?mY`2=Ti>:`hZ0
+IGzenKX4iY4eP[jMjd=jGK0
+VGzenKX4iY4eP[jMjd=jGK0
+S1
+R0
+w1644894949
+Z29 8/home/ecegrid/a/mg216/ece437/processors/include/datapath_types_pkg.vh
+Z30 F/home/ecegrid/a/mg216/ece437/processors/include/datapath_types_pkg.vh
+L0 6
+R8
+r1
+!s85 0
+31
+!s108 1644894949.000000
+R26
+R27
 !i113 0
 R12
 R13
@@ -301,25 +325,173 @@ R13
 Ydatapath_cache_if
 R1
 R16
-!s110 1643882988
+!s110 1648416306
 !i10b 1
-!s100 R^R3kf1AED@h`@;WDF<]C3
-IQb]SRX1<5E3?7K0@[c5QU3
+!s100 L0YIZlWaUO7<7i3I:=iZC1
+IS=5E0UH31_bWoP7l[fC8Y1
 R3
 !s105 datapath_cache_if_vh_unit
 S1
 R0
-R18
+R23
 8/home/ecegrid/a/mg216/ece437/processors/include/datapath_cache_if.vh
 F/home/ecegrid/a/mg216/ece437/processors/include/datapath_cache_if.vh
-Z23 L0 13
+Z31 L0 13
 R8
 r1
 !s85 0
 31
-!s108 1643882988.000000
+!s108 1648416306.000000
 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/datapath_cache_if.vh|
 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/datapath_cache_if.vh|
+!i113 0
+R12
+R13
+Xdatapath_types_pkg
+R1
+R16
+R24
+!i10b 1
+!s100 0Q@:fkcj26Y_GaI8CU;RV0
+I_44Q;IK>NHb@@kAD8Bf]o0
+V_44Q;IK>NHb@@kAD8Bf]o0
+S1
+R0
+w1645192233
+R29
+R30
+L0 6
+R8
+r1
+!s85 0
+31
+R25
+R26
+R27
+!i113 0
+R12
+R13
+vdcache
+R1
+!s110 1646978031
+!i10b 1
+!s100 i@Vh26?cZ_M0zCz3Ce@<T1
+I9oYJ6R[RQESKCMCa4nRVW3
+R3
+!s105 dcache_sv_unit
+S1
+R0
+w1646978031
+8/home/ecegrid/a/mg216/ece437/processors/source/dcache.sv
+F/home/ecegrid/a/mg216/ece437/processors/source/dcache.sv
+L0 1
+R8
+r1
+!s85 0
+31
+!s108 1646978031.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/source/dcache.sv|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/source/dcache.sv|
+!i113 0
+R12
+R13
+Ydcache_control_unit
+R1
+R16
+!s110 1646987994
+!i10b 1
+!s100 =;gk7jY?T2o>4a_^:=BB>3
+ILbBS`>O2L@?M1zTf@WaOI2
+R3
+Z32 !s105 dcache_control_unit_if_vh_unit
+S1
+R0
+w1646987993
+Z33 8/home/ecegrid/a/mg216/ece437/processors/include/dcache_control_unit_if.vh
+Z34 F/home/ecegrid/a/mg216/ece437/processors/include/dcache_control_unit_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1646987993.000000
+Z35 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/dcache_control_unit_if.vh|
+Z36 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/dcache_control_unit_if.vh|
+!i113 0
+R12
+R13
+Ydcache_control_unit_if
+R1
+R16
+!s110 1648416537
+!i10b 1
+!s100 `oK^lbj]N?A<4YS2e;eck1
+ISOWLRn^ikM?:J_[bB=8mL2
+R3
+R32
+S1
+R0
+w1648178329
+R33
+R34
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1648416537.000000
+R35
+R36
+!i113 0
+R12
+R13
+Ydcache_frame_array_if
+R1
+R16
+!s110 1648173322
+!i10b 1
+!s100 7bgm<=l;JPRW<L_Y7Qb<=0
+I;aei<0<@<:ZK_`8?_?l;B2
+R3
+Z37 !s105 dcache_frame_array_if_vh_unit
+S1
+R0
+w1648173322
+Z38 8/home/ecegrid/a/mg216/ece437/processors/include/dcache_frame_array_if.vh
+Z39 F/home/ecegrid/a/mg216/ece437/processors/include/dcache_frame_array_if.vh
+L0 6
+R8
+r1
+!s85 0
+31
+!s108 1648173322.000000
+Z40 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/dcache_frame_array_if.vh|
+Z41 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/dcache_frame_array_if.vh|
+!i113 0
+R12
+R13
+Ydcache_frame_if
+R1
+R16
+!s110 1648171957
+!i10b 1
+!s100 2aGCcmYRBnfABBHihoO<U2
+IBo_;8?m3EZJN6MZe<XWC41
+R3
+R37
+S1
+R0
+w1648171957
+R38
+R39
+L0 6
+R8
+r1
+!s85 0
+31
+!s108 1648171957.000000
+R40
+R41
 !i113 0
 R12
 R13
@@ -371,9 +543,284 @@ R11
 !i113 0
 R12
 R13
+Ydecode_latch_if
+R1
+R28
+!s110 1644894804
+!i10b 1
+!s100 0JPJ9<BATej<O[GBC4L1b2
+I?_C^@Cc3o@3GJTD=<O<I>3
+R3
+!s105 decode_latch_if_vh_unit
+S1
+R0
+Z42 w1644894501
+8/home/ecegrid/a/mg216/ece437/processors/include/decode_latch_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/decode_latch_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1644894804.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/decode_latch_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/decode_latch_if.vh|
+!i113 0
+R12
+R13
+Yexec_latch_if
+R1
+Z43 DXx4 work 13 cpu_types_pkg 0 22 []HVB]T1S?2FK:;l=Uc^F2
+!s110 1644711573
+!i10b 1
+!s100 n2Q5Pmg9YaUfdb:MoAb]P1
+I8WKCeeBKB]MJa6kOQ>Lf90
+R3
+!s105 exec_latch_if_vh_unit
+S1
+R0
+w1644593603
+8/home/ecegrid/a/mg216/ece437/processors/include/exec_latch_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/exec_latch_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1644711573.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/exec_latch_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/exec_latch_if.vh|
+!i113 0
+R12
+R13
+Yexec_stage_if
+R1
+R28
+!s110 1644894672
+!i10b 1
+!s100 DbT_7zWlB6B<QWebO8NKi2
+Ik:31eaoF=ZY7SUDb@_3IA0
+R3
+!s105 exec_stage_if_vh_unit
+S1
+R0
+R42
+8/home/ecegrid/a/mg216/ece437/processors/include/exec_stage_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/exec_stage_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1644894672.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/exec_stage_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/exec_stage_if.vh|
+!i113 0
+R12
+R13
+Yfetch_latch_if
+R1
+DXx4 work 13 cpu_types_pkg 0 22 MVZeMlWhzjcjOYY8>FaiZ2
+!s110 1644579556
+!i10b 1
+!s100 DZUQRI;N1o9gJbNE3mf]f0
+I0S1IcZjbgLE5UKIh:1Cg61
+R3
+Z44 !s105 fetch_latch_if_vh_unit
+S1
+R0
+w1644579555
+Z45 8/home/ecegrid/a/mg216/ece437/processors/include/fetch_latch_if.vh
+Z46 F/home/ecegrid/a/mg216/ece437/processors/include/fetch_latch_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1644579555.000000
+Z47 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/fetch_latch_if.vh|
+Z48 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/fetch_latch_if.vh|
+!i113 0
+R12
+R13
+Yfetch_stage_if
+R1
+R16
+DXx4 work 18 datapath_types_pkg 0 22 _44Q;IK>NHb@@kAD8Bf]o0
+!s110 1646983338
+!i10b 1
+!s100 [a7IiREQNQAJIIYfVV]910
+IGH3fW<lScHFPPT;58nV^32
+R3
+!s105 dirty_block_flusher_if_vh_unit
+S1
+R0
+w1646983338
+8/home/ecegrid/a/mg216/ece437/processors/include/dirty_block_flusher_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/dirty_block_flusher_if.vh
+L0 8
+R8
+r1
+!s85 0
+31
+!s108 1646983338.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/datapath_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/dirty_block_flusher_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/dirty_block_flusher_if.vh|
+!i113 0
+R12
+R13
+vflex_counter
+R1
+!s110 1648416462
+!i10b 1
+!s100 Gkh<T<UefIWkFP4@N;@]X2
+IX;10Nnm3oOCl>6fJfISSQ2
+R3
+!s105 flex_counter_sv_unit
+S1
+R0
+w1647010544
+8/home/ecegrid/a/mg216/ece437/processors/source/flex_counter.sv
+F/home/ecegrid/a/mg216/ece437/processors/source/flex_counter.sv
+L0 9
+R8
+r1
+!s85 0
+31
+R20
+!s107 /home/ecegrid/a/mg216/ece437/processors/source/flex_counter.sv|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/source/flex_counter.sv|
+!i113 0
+R12
+R13
+vforwarding_unit
+R1
+!s110 1646973287
+!i10b 1
+!s100 CgYMoIZR^>2XPO>Nebd653
+IoM^`;[FPE?1Q9LZ<iS4jC3
+R3
+!s105 forwarding_unit_sv_unit
+S1
+R0
+w1646973287
+8/home/ecegrid/a/mg216/ece437/processors/source/forwarding_unit.sv
+F/home/ecegrid/a/mg216/ece437/processors/source/forwarding_unit.sv
+L0 4
+R8
+r1
+!s85 0
+31
+!s108 1646973287.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/source/forwarding_unit.sv|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/source/forwarding_unit.sv|
+!i113 0
+R12
+R13
+Yforwarding_unit_if
+R1
+R16
+!s110 1645198628
+!i10b 1
+!s100 4Qc[2ef[Z77=YeL0B161X0
+I1TZ2nbAMGY0YL7S3@9Um?3
+R3
+!s105 forwarding_unit_if_vh_unit
+S1
+R0
+Z49 w1645031245
+8/home/ecegrid/a/mg216/ece437/processors/include/forwarding_unit_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/forwarding_unit_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1645198628.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/forwarding_unit_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/forwarding_unit_if.vh|
+!i113 0
+R12
+R13
+Yhazard_unit_if
+R1
+R16
+DXx4 work 18 datapath_types_pkg 0 22 YWAHHF=?BKb2o1H4ZobIh1
+!s110 1645165168
+!i10b 1
+!s100 ZNalfLB8h89SM:_6kBGib0
+Ij=^GA[o7o563]SkbhJ2Q_2
+R3
+!s105 hazard_unit_if_vh_unit
+S1
+R0
+R49
+8/home/ecegrid/a/mg216/ece437/processors/include/hazard_unit_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/hazard_unit_if.vh
+L0 8
+R8
+r1
+!s85 0
+31
+!s108 1645165168.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/datapath_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/hazard_unit_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/hazard_unit_if.vh|
+!i113 0
+R12
+R13
+Ymem_latch_if
+R1
+R28
+!s110 1644894661
+!i10b 1
+!s100 YcYihz3RlAnG16cDi56DD2
+Ioea492QR><Z=Ne_e6PAFb0
+R3
+!s105 mem_latch_if_vh_unit
+S1
+R0
+R42
+8/home/ecegrid/a/mg216/ece437/processors/include/mem_latch_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/mem_latch_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1644894661.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/mem_latch_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/mem_latch_if.vh|
+!i113 0
+R12
+R13
+Ymem_stage_if
+R1
+R43
+!s110 1644712286
+!i10b 1
+!s100 YgE6gd5;1YbBT`MA]DD^^1
+IRnQ<SW8GNl__XaflSo;2K0
+R3
+!s105 mem_stage_if_vh_unit
+S1
+R0
+w1644711479
+8/home/ecegrid/a/mg216/ece437/processors/include/mem_stage_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/mem_stage_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1644712286.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/mem_stage_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/mem_stage_if.vh|
+!i113 0
+R12
+R13
 vmemory_control
 R1
-Z24 !s110 1643986959
+Z50 !s110 1643986959
 !i10b 1
 !s100 8Im@<<I96Y;7kgP58C:YE0
 In:ko@zi`KNX4Z8Z5H2EX:1
@@ -392,6 +839,31 @@ r1
 R9
 R10
 R11
+!i113 0
+R12
+R13
+Ynpcl_if
+R1
+R16
+!s110 1648416504
+!i10b 1
+!s100 Eg7AkmYkEQ30NRBAg:Y^f3
+ITPNKPo3e=Xd?;CPEjzYLN1
+R3
+!s105 nxt_pc_logic_if_vh_unit
+S1
+R0
+w1644590913
+8/home/ecegrid/a/mg216/ece437/processors/include/nxt_pc_logic_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/nxt_pc_logic_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1648416504.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/nxt_pc_logic_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/nxt_pc_logic_if.vh|
 !i113 0
 R12
 R13
@@ -421,16 +893,16 @@ R12
 R13
 Ypc_if
 R1
-R16
-!s110 1643934954
+R28
+!s110 1644894671
 !i10b 1
-!s100 RQOP3j^hM:C;6?A0Lcn<U1
-Ib6Qla`YLRK5MimFgO>E:d2
+!s100 UV<dK8]J]CA6@>nhP>DkR0
+IaVzfd9KKV=P`@CMoZc?2@0
 R3
 !s105 pc_if_vh_unit
 S1
 R0
-w1643881566
+w1644713823
 8/home/ecegrid/a/mg216/ece437/processors/include/pc_if.vh
 F/home/ecegrid/a/mg216/ece437/processors/include/pc_if.vh
 L0 7
@@ -438,9 +910,33 @@ R8
 r1
 !s85 0
 31
-!s108 1643934954.000000
+!s108 1644894670.000000
 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/pc_if.vh|
 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/pc_if.vh|
+!i113 0
+R12
+R13
+vpipeline
+R1
+!s110 1648184114
+!i10b 1
+!s100 gWh_M@H:[5:9mzoQ_:UkF1
+ISM6X``f]O2fR:od7L:7z50
+R3
+!s105 pipeline_sv_unit
+S1
+R0
+w1644459626
+8/home/ecegrid/a/mg216/ece437/processors/source/pipeline.sv
+F/home/ecegrid/a/mg216/ece437/processors/source/pipeline.sv
+Z51 L0 10
+R8
+r1
+!s85 0
+31
+!s108 1648184114.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/source/pipeline.sv|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/source/pipeline.sv|
 !i113 0
 R12
 R13
@@ -470,7 +966,7 @@ R12
 R13
 vregister_file
 R1
-R24
+R50
 !i10b 1
 !s100 >fMO2G61QP3Ok6QFfW<EI0
 IdnbQglYkVf7T<_0>SGHDG0
@@ -494,11 +990,11 @@ R12
 R13
 Yregister_file_if
 R1
-R16
-!s110 1643882200
+R28
+!s110 1644894691
 !i10b 1
 !s100 A:`7l^eP2f@Fc>>00linZ2
-ISB;We?TK1:OmOeD@l<Uo<3
+IKT=`7j_UJnJNlIMZBm`9I3
 R3
 !s105 register_file_if_vh_unit
 S1
@@ -506,12 +1002,12 @@ R0
 w1642476585
 8/home/ecegrid/a/mg216/ece437/processors/include/register_file_if.vh
 F/home/ecegrid/a/mg216/ece437/processors/include/register_file_if.vh
-R23
+R31
 R8
 r1
 !s85 0
 31
-!s108 1643882200.000000
+!s108 1644894691.000000
 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/register_file_if.vh|
 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/register_file_if.vh|
 !i113 0
@@ -519,7 +1015,7 @@ R12
 R13
 vrequest_unit
 R1
-R24
+R50
 !i10b 1
 !s100 z?o@bh3D3hnVF7daG?cW40
 Ih_S5M>jcTJhTiNfLj==5Y1
@@ -543,50 +1039,50 @@ R12
 R13
 Yrequest_unit_if
 R1
-R16
-!s110 1643960788
+Z52 DXx4 work 13 cpu_types_pkg 0 22 oh_=TYCJET:Ted9<?lDKh0
+!s110 1644568345
 !i10b 1
 !s100 `d`MA<KQmWVNRC;HRc0Ff0
-IHkhC6:n3f`[8JPz<G3IiG2
+Ii;HiKd56in9[^_=o3Wdc:3
 R3
-!s105 request_unit_if_vh_unit
+R44
 S1
 R0
-w1643881859
-8/home/ecegrid/a/mg216/ece437/processors/include/request_unit_if.vh
-F/home/ecegrid/a/mg216/ece437/processors/include/request_unit_if.vh
+w1644568344
+R45
+R46
 L0 7
 R8
 r1
 !s85 0
 31
-!s108 1643960788.000000
-!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/request_unit_if.vh|
-!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/request_unit_if.vh|
+!s108 1644568344.000000
+R47
+R48
 !i113 0
 R12
 R13
 vsinglecycle
 R1
-R15
+!s110 1644894664
 !i10b 1
-!s100 YZGg64d5Go^9=^jBHFQON3
-Ied=c<Po]MN1YMg>FzM9a?0
+!s100 V0aTiRX21khPXOXF=5JWC0
+I2IPo[OheB[SVYZaLzSFNC1
 R3
-R4
+!s105 singlecycle_sv_unit
 S1
 R0
-R5
-R6
-R7
-L0 19780
+w1644459784
+8/home/ecegrid/a/mg216/ece437/processors/source/singlecycle.sv
+F/home/ecegrid/a/mg216/ece437/processors/source/singlecycle.sv
+R51
 R8
 r1
 !s85 0
 31
-R9
-R10
-R11
+!s108 1644894664.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/source/singlecycle.sv|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/source/singlecycle.sv|
 !i113 0
 R12
 R13
@@ -664,24 +1160,24 @@ R12
 R13
 Ysystem_if
 R1
-R17
-!s110 1643344660
+R43
+!s110 1644712682
 !i10b 1
 !s100 AT1:zBiOjo:3fYNFGAUf:3
-IWXC2]=N^1>Fmm3TlnAmh]1
+IH`3=>`lOOAf@k<;mZF1@53
 R3
 !s105 system_if_vh_unit
 S1
 R0
-R18
+R19
 8/home/ecegrid/a/mg216/ece437/processors/include/system_if.vh
 F/home/ecegrid/a/mg216/ece437/processors/include/system_if.vh
-R23
+R31
 R8
 r1
 !s85 0
 31
-!s108 1643344660.000000
+!s108 1644712682.000000
 !s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/system_if.vh|
 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/system_if.vh|
 !i113 0
@@ -689,26 +1185,51 @@ R12
 R13
 4test
 R1
-R16
-!s110 1643958144
+DXx4 work 13 cpu_types_pkg 0 22 P?G9V]_QTm:D?BOUNegG13
+!s110 1644894487
 !i10b 1
-!s100 VX8V2?7bm1221=Am2WM:H2
-IJ51A0U_eOZV5kX1NGXL9f3
+!s100 L3BFe0Dg23L9>DWlaYT;L2
+Ih3cV3c>h1i;d@Bcf]fL>G1
 R3
 !s105 system_tb_sv_unit
 S1
 R0
-w1643958143
+w1644459699
 8/home/ecegrid/a/mg216/ece437/processors/testbench/system_tb.sv
 F/home/ecegrid/a/mg216/ece437/processors/testbench/system_tb.sv
-L0 97
+L0 95
 R8
 r1
 !s85 0
 31
-!s108 1643958143.000000
+!s108 1644894485.000000
 !s107 /home/ecegrid/a/mg216/ece437/processors/testbench/system_tb.sv|
 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/testbench/system_tb.sv|
+!i113 0
+R12
+R13
+Ywrite_latch_if
+R1
+R52
+!s110 1644569745
+!i10b 1
+!s100 4K39@RRIYibAk?GV[XkT]1
+IRz0j1h`I<3jTKJ>j9nbEd2
+R3
+!s105 write_latch_if_vh_unit
+S1
+R0
+w1644569744
+8/home/ecegrid/a/mg216/ece437/processors/include/write_latch_if.vh
+F/home/ecegrid/a/mg216/ece437/processors/include/write_latch_if.vh
+L0 7
+R8
+r1
+!s85 0
+31
+!s108 1644569745.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/write_latch_if.vh|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/write_latch_if.vh|
 !i113 0
 R12
 R13

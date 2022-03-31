@@ -2,13 +2,14 @@ work
 mapped
 fpga
 transcript
-Makefile
-modelsim.ini
 *.wlf
 README
 *.swp
 ._*
 *.log
+*.summary
+*.diff
 .deps
 *.hex
 *.ver
+testasm*

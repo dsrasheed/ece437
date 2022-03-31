@@ -1,8 +1,10 @@
 // memory types
 `include "cpu_types_pkg.vh"
+`include "datapath_types_pkg.vh"
 `include "control_unit_if.vh"
 
 import cpu_types_pkg::*;
+import datapath_types_pkg::*;
 
 module control_unit (
   control_unit_if.cu cuif
@@ -38,8 +40,10 @@ always_comb begin
         RTYPE: begin
             ALUg = ALUG_RTYPE;
             if (cuif.funct != JR) begin
+                if(cuif.funct != 0) begin
                 cuif.RegDst = 1'b1;
                 cuif.RegWr = 1'b1;
+                end
             end
             else begin
                 cuif.PCSrc = JUMPR;
@@ -55,11 +59,13 @@ always_comb begin
         end
         BEQ: begin
             ALUg = ALUG_SUB;
-            cuif.PCSrc = cuif.equal ? BRANCH : NEXT;
+            cuif.PCSrc = BREQ;
+            cuif.ExtOp = 1'b1;
         end
         BNE: begin
             ALUg = ALUG_SUB;
-            cuif.PCSrc = cuif.equal ? NEXT : BRANCH;
+            cuif.PCSrc = BRNE;
+            cuif.ExtOp = 1'b1;
         end
         ADDI,
         ADDIU: begin
@@ -120,11 +126,6 @@ always_comb begin
             cuif.PCSrc = KEEP;
         end
     endcase
-
-    if (cuif.stall) begin
-        cuif.RegWr = 1'b0;
-        cuif.PCSrc = KEEP;
-    end
 end
 
 always_comb begin
