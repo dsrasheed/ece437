@@ -27,12 +27,12 @@ module memory_control_tb;
   // interface
   caches_if cc0 ();
   caches_if cc1 ();
-  cache_control_if #(.CPUS(1)) ccif (cc0, cc1);
+  cache_control_if #(.CPUS(2)) ccif (cc0, cc1);
   cpu_ram_if prif ();
   system_if syif ();
  
   // test program
-  test PROG (CLK, nRST, cc0, syif);
+  test PROG (CLK, nRST, cc0, cc1, ccif, syif);
 
   // DUT
 `ifndef MAPPED
@@ -78,7 +78,7 @@ module memory_control_tb;
 
 endmodule
 
-program test(input logic CLK, output logic nRST, caches_if.caches ccif, system_if.tb syif);
+program test(input logic CLK, output logic nRST, caches_if.tb cc0, caches_if.tb cc1, cache_control_if.tb ccif, system_if.tb syif);
 
   string testcase;
 
@@ -127,68 +127,177 @@ program test(input logic CLK, output logic nRST, caches_if.caches ccif, system_i
 
   task reset;
   begin
-    ccif.dWEN = 1'b0;
-    ccif.dREN = 1'b0;
-    ccif.iREN = 1'b0;
-    ccif.dstore = '0;
-    ccif.iaddr = '0;
-    ccif.daddr = '0;
+    cc0.dWEN = 0;
+    cc0.dREN = 0;
+    cc0.iREN = 0;
+		cc0.dstore = '0;
+    cc0.iaddr = '0;
+    cc0.daddr = '0;
+		cc0.cctrans = '0;
+		cc0.ccwrite = '0;
+		cc1.dWEN = 0;
+    cc1.dREN = 0;
+		cc1.iREN = 0;
+    cc1.dstore = '0;
+    cc1.iaddr = '0;
+    cc1.daddr = '0;
+		cc1.cctrans = '0;
+		cc1.ccwrite = '0;
   end
   endtask
 
-  task write_data;
+  task write_data0;
     input word_t addr;
-    input word_t data;
+    input word_t data1;
+		input word_t data2;
   begin
-    ccif.dWEN = 1'b1;
-    ccif.daddr = addr;
-    ccif.dstore = data;
+    cc0.dWEN = 1'b1;
+    cc0.daddr = addr;
+    cc0.dstore = data1;
 
-    @(negedge ccif.dwait);
+    @(negedge cc0.dwait);
+    @(posedge CLK);
+		cc0.daddr = addr+4;
+    cc0.dstore = data2;
+		@(negedge cc0.dwait);
     @(posedge CLK);
 
-    ccif.dWEN = 1'b0;
+    cc0.dWEN = 1'b0;
 
     @(negedge CLK);
   end
   endtask
 
-  task read_data;
+  task read_data0;
     input word_t addr;
+    input word_t expected_load1;
+		input word_t expected_load2;
+  begin
+    cc0.dREN = 1'b1;
+    cc0.daddr = addr;
+    @(negedge cc0.dwait);
+		@(negedge CLK);
+		check_ramload0(1, expected_load1);
+    @(posedge CLK);
+		cc0.daddr = addr+4;
+		@(negedge cc0.dwait);
+    @(negedge CLK);
+		check_ramload0(1, expected_load2);
+    @(negedge CLK);
+		cc0.dREN = 1'b0;
+  end
+  endtask
+
+  task read_instr0;
+    input word_t addr;
+    input word_t expected_load1;
+		input word_t expected_load2;
+  begin
+    cc0.iREN = 1'b1;
+    cc0.iaddr = addr;
+    @(negedge cc0.iwait);
+    @(negedge CLK);
+    check_ramload0(0, expected_load1);
+		@(posedge CLK);
+		cc0.iaddr = addr+4;
+		@(negedge cc0.iwait);
+    @(negedge CLK);
+    check_ramload0(0, expected_load2);
+    @(negedge CLK);
+		cc0.iREN = 1'b0;
+  end
+  endtask
+
+  task check_ramload0;
+		input logic sel;
     input word_t expected_load;
   begin
-    ccif.dREN = 1'b1;
-    ccif.daddr = addr;
-    @(negedge ccif.dwait);
+		if(sel) begin
+    if (cc0.dload != expected_load)
+      $display("%s: Incorrect dload0: %x: %x %x", testcase, ccif.ramaddr, ccif.ramload, cc0.dload);
+		end
+		else begin
+    if (cc0.iload != expected_load)
+      $display("%s: Incorrect iload0: %x: %x %x", testcase, ccif.ramaddr, ccif.ramload,  cc0.iload);
+		end
+  end
+  endtask
+
+	task write_data1;
+    input word_t addr;
+    input word_t data1;
+		input word_t data2;
+  begin
+    cc1.dWEN = 1'b1;
+    cc1.daddr = addr;
+    cc1.dstore = data1;
+
+    @(negedge cc1.dwait);
     @(posedge CLK);
-    check_ramload(expected_load);
-    ccif.dREN = 1'b0;
+		cc1.daddr = addr+ 4;
+    cc1.dstore = data2;
+
+    @(negedge cc1.dwait);
+    @(posedge CLK);
+
+    cc1.dWEN = 1'b0;
+
     @(negedge CLK);
   end
   endtask
 
-  task read_instr;
+  task read_data1;
     input word_t addr;
-    input word_t expected_load;
+    input word_t expected_load1;
+		input word_t expected_load2;
   begin
-    ccif.iREN = 1'b1;
-    ccif.iaddr = addr;
-    @(negedge ccif.iwait);
-    @(posedge CLK);
-    @(posedge CLK);
-    check_ramload(expected_load);
-    ccif.iREN = 1'b0;
+    cc1.dREN = 1'b1;
+    cc1.daddr = addr;
+    @(negedge cc1.dwait);
     @(negedge CLK);
+    check_ramload1(1, expected_load1);
+		@(posedge CLK);
+		cc1.daddr = addr+4;
+		@(negedge cc1.dwait);
+    @(negedge CLK);
+    check_ramload1(1, expected_load2);
+    @(negedge CLK);
+		cc1.dREN = 1'b0;
   end
   endtask
 
-  task check_ramload;
+  task read_instr1;
+    input word_t addr;
+    input word_t expected_load1;
+		input word_t expected_load2;
+  begin
+    cc1.iREN = 1'b1;
+    cc1.iaddr = addr;
+    @(negedge cc1.iwait);
+    @(negedge CLK);
+    check_ramload1(0, expected_load1);
+		@(negedge CLK);
+		cc1.iaddr = addr+4;
+		@(negedge cc1.iwait);
+    @(negedge CLK);
+    check_ramload1(0, expected_load2);
+    @(negedge CLK);
+		cc1.iREN = 1'b0;
+  end
+  endtask
+
+  task check_ramload1;
+		input logic sel;
     input word_t expected_load;
   begin
-    if (ccif.dload != expected_load)
-      $display("%s: Incorrect dload: %x: %x", testcase, ccif.ramaddr, ccif.ramload);
-    if (ccif.iload != expected_load)
-      $display("%s: Incorrect iload: %x: %x", testcase, ccif.ramaddr, ccif.ramload);
+		if(sel) begin
+    if (cc1.dload != expected_load)
+      $display("%s: Incorrect dload1: %x: %x %x", testcase, ccif.ramaddr, ccif.ramload, cc1.dload);
+		end
+		else begin
+    if (cc1.iload != expected_load)
+      $display("%s: Incorrect iload1: %x: %x %x", testcase, ccif.ramaddr, ccif.ramload, cc1.iload);
+		end
   end
   endtask
 
@@ -197,50 +306,41 @@ program test(input logic CLK, output logic nRST, caches_if.caches ccif, system_i
     syif.tbCTRL = 1'b0;
     reset();
     nRST = 0;
-
+		reset();
     @(posedge CLK);
     @(posedge CLK);
     nRST = 1;
     @(posedge CLK);
+		reset();
     @(posedge CLK);
 
     testcase = "Write then Read Data";
     reset();
-    read_data(0, 32'h341DFFFC);
-    write_data(4, 4);
-    write_data(8, 8);
-    write_data(12, 12);
-    read_data(4, 4);
-    read_data(8, 8);
-    read_data(12, 12);
-    read_instr(4, 4);
-    read_instr(8, 8);
-    read_instr(12, 12);
+		cc0.cctrans = 1;
+		cc1.cctrans = 0;
+    read_data0(0, 32'h37BDFFFC, 32'h23BDFFF8);
+		cc0.cctrans = 0;
+    write_data1(4, 4, 8);
+    write_data0(8, 8, 12);
+    write_data1(12, 12, 16);
+		cc1.cctrans = 1;
+		@(posedge CLK)
+    read_data1(4, 4, 8);
+    read_data0(8, 16, 16);
+		cc0.cctrans = 1;
+		@(posedge CLK)
+    read_data1(12, 12, 12);
+		cc1.cctrans = 0;
+		cc0.cctrans = 0;
+		@(posedge CLK)
+    read_instr0(4, 4, 16);
+    read_instr1(8, 16, 12);
+    read_instr0(12, 12, 12);
+		reset();
+		$finish;
 
-    testcase = "Data Read over Instruction Read Priortity";
-    fork
-      read_data(4, 4);
-      read_instr(8, 8);
-    join
+    //testcase = "Dump Memory";
+    //dump_memory();
 
-    testcase = "Data Write over Instruction Read Priority";
-    fork
-      write_data(4, 437);
-      read_instr(4, 437);
-    join
-
-    testcase = "Keep iREN high";
-    ccif.iREN = 1'b1;
-    ccif.iaddr = '0;
-    for (int i = 0; i < 16; i += 4)
-    begin
-      ccif.iaddr = i;
-      
-    end
-
-    testcase = "Dump Memory";
-    dump_memory();
-
-    $finish;
   end
 endprogram
