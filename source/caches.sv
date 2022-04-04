@@ -8,7 +8,7 @@
 
 module caches (
   input logic CLK, nRST,
-  datapath_cache_if dcif,
+  datapath_cache_if.cache dcif,
   caches_if cif
 );
 

@@ -165,6 +165,8 @@ add wave -noupdate -expand -group {Frame 1} /system_tb/DUT/CPU/CM/DCACHE/frame1i
 add wave -noupdate -expand -group {Frame 1} /system_tb/DUT/CPU/CM/DCACHE/frame1if/out_frame
 add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/hit_count
 add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/mem_ready
+add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/CONTROL_UNIT/miss_count
+add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/CONTROL_UNIT/access_count
 add wave -noupdate -group Cache-DP-Out /system_tb/DUT/CPU/CM/DCACHE/dcif/dhit
 add wave -noupdate -group Cache-DP-Out /system_tb/DUT/CPU/CM/DCACHE/dcif/halt
 add wave -noupdate -group Cache-DP-Out /system_tb/DUT/CPU/CM/DCACHE/dcif/dmemREN
@@ -190,4 +192,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {150 ns} {1150 ns}
+WaveRestoreZoom {1701210 ns} {1702210 ns}

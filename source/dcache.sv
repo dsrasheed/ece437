@@ -34,7 +34,7 @@ flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
   .clk(CLK),
   .n_rst(nRST),
   .clear(1'b0),
-  .count_enable(dcif.dhit & ~dcuif.disable_hit_counter & dcuif.enable),
+  .count_enable(dcif.dhit && !dcuif.disable_hit_counter && dcuif.enable),
   .rollover_val(32'hffffffff),
   .count_out(hit_count),
   .rollover_flag(discard)
