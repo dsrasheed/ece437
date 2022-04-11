@@ -160,7 +160,7 @@ begin
 			begin
 				nxt_state = WB1;
 			end
-			else if(ccif.dREN[~snooping] & ccif.dWEN[snooping])
+			else if(ccif.dREN[~snooping] && ccif.dWEN[snooping])
 			begin
 				nxt_state = CACHE2CACHE;
 			end
@@ -232,13 +232,15 @@ begin
 	ccif.ccwait[1] = 0;
 
   case(state)
-		ARB: 
-		begin
-			ccif.ccwait[nxt_snooping] = 1;
-		end
 		SNOOP: 
 		begin
 			ccif.ccwait[snooping] = 1;
+			ccif.ccwait[~snooping] = 1;
+		end
+		ARB: 
+		begin
+			ccif.ccwait[nxt_snooping] = 1;
+			ccif.ccwait[~nxt_snooping] = 1;
 		end
 		MEM2CACHE: 
 		begin
@@ -293,9 +295,6 @@ begin
 	ccif.dwait[1] = 1;
 	ccif.dload[0] = 0; 
 	ccif.dload[1] = 0;
-	
-	ccif.ccwait[0] = 0;
-	ccif.ccwait[1] = 0;
 
 	ccif.ramREN = 0;
 	ccif.ramWEN = 0;
@@ -303,17 +302,8 @@ begin
 	ccif.ramstore = 0;
 
   case(state)
-		ARB: 
-		begin
-			ccif.ccwait[nxt_snooping] = 1;
-		end
-		SNOOP: 
-		begin
-			ccif.ccwait[snooping] = 1;
-		end
 		MEM2CACHE: 
 		begin
-			ccif.ccwait[snooping] = 1;
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
 			ccif.dload[~snooping] = ccif.ramload;
 			ccif.ramREN = ccif.dREN[~snooping];
@@ -321,7 +311,6 @@ begin
 		end
 		WAIT: 
 		begin
-			ccif.ccwait[snooping] = 1;
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
 			ccif.dload[~snooping] = ccif.ramload;
 			ccif.ramREN = ccif.dREN[~snooping];
@@ -329,7 +318,6 @@ begin
 		end
 		CACHE2CACHE: 
 		begin
-			ccif.ccwait[snooping] = 1;
 			ccif.dwait[snooping] = ccif.ramstate != ACCESS;
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
 			ccif.dload[~snooping] = ccif.ramload;
@@ -348,7 +336,6 @@ begin
 		end
 		READ: 
 		begin
-			ccif.ccwait[snooping] = 1;
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
 			ccif.dload[~snooping] = ccif.ramload;
 			ccif.ramREN = ccif.dREN[~snooping];
@@ -356,7 +343,6 @@ begin
 		end
 		WRITE: 
 		begin
-			ccif.ccwait[snooping] = 1;
 			ccif.dwait[snooping] = ccif.ramstate != ACCESS;
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
 			ccif.dload[~snooping] = ccif.dstore[snooping];
@@ -369,7 +355,6 @@ begin
 		begin
 			if(ccif.dWEN[snooping]) 
 			begin
-				ccif.ccwait[~snooping] = 1;
 				ccif.dwait[snooping] = ccif.ramstate != ACCESS;
 				ccif.ramWEN = ccif.dWEN[snooping];
 				ccif.ramaddr = ccif.daddr[snooping];
@@ -377,7 +362,6 @@ begin
 			end 
 			else if (ccif.dWEN[~snooping]) 
 			begin
-				ccif.ccwait[snooping] = 1;
 				ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
 				ccif.ramWEN = ccif.dWEN[~snooping];
 				ccif.ramaddr = ccif.daddr[~snooping];
@@ -388,7 +372,6 @@ begin
 		begin
 			if(ccif.dWEN[snooping]) 
 			begin
-				ccif.ccwait[~snooping] = 1;
 				ccif.dwait[snooping] = ccif.ramstate != ACCESS;
 				ccif.ramWEN = ccif.dWEN[snooping];
 				ccif.ramaddr = ccif.daddr[snooping];
@@ -396,7 +379,6 @@ begin
 			end 
 			else if (ccif.dWEN[~snooping]) 
 			begin
-				ccif.ccwait[snooping] = 1;
 				ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
 				ccif.ramWEN = ccif.dWEN[~snooping];
 				ccif.ramaddr = ccif.daddr[~snooping];
