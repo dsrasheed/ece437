@@ -158,16 +158,32 @@ begin
 		begin	
 			if(ccif.dWEN[~snooping])
 			begin
+				if(ccif.ccwrite[~snooping])
+				begin
+					nxt_state = WB1;
+				end
+				else if(ccif.cctrans[snooping] && ccif.ccwrite[snooping])
 				nxt_state = WB1;
 			end
-			else if(ccif.dREN[~snooping] && ccif.dWEN[snooping])
+			else if(ccif.dREN[~snooping])
+			begin
+				if(ccif.cctrans[snooping])
+				begin
+					nxt_state = CACHE2CACHE;
+				end
+				else
+				begin
+					nxt_state = MEM2CACHE;
+				end
+			end
+			/*else if(ccif.dREN[~snooping] && ccif.dWEN[snooping])
 			begin
 				nxt_state = CACHE2CACHE;
 			end
 			else if(ccif.dREN[~snooping])
 			begin
 				nxt_state = MEM2CACHE;
-			end
+			end*/
 		end
 		CACHE2CACHE: 
 		begin
@@ -316,19 +332,52 @@ begin
 			ccif.ramREN = ccif.dREN[~snooping];
 			ccif.ramaddr = ccif.daddr[~snooping];
 		end
+	  C2C_RD0: begin	    
+	      ccif.ccwait[1] = 1;
+	      if(ccif.cctrans[1] && ccif.ccwrite[1]) begin		 
+		    ccif.ramWEN = 1;
+		    daddr_m = ccif.ccsnoopaddr[1];
+		    ccif.ramstore = ccif.dstore[1];
+		    if(!dwait_m) begin		      
+			 n_state = WRITECA0;
+			 ccif.dwait[0] = 0;
+			 ccif.dload[0] = ccif.dstore[1];
+			 ccif.dwait[1] = 0;
+		   end
+	       end 
+	       else begin		 
+		    ccif.dwait[0] = 0;
+		    ccif.dload[0] = ccif.dstore[1];
+		    n_state = READCA0;
+	       end
+	  end
+	  WRITECA0: begin	    
+	       ccif.ccwait[1] = 1;
+	       ccif.ramWEN = 1;
+	       daddr_m = ccif.ccsnoopaddr[1];
+	       ccif.ramstore = ccif.dstore[1];
+	       if(!dwait_m) begin		 
+		    n_state = IDLE;
+		    ccif.dwait[1] = 0;
+		    ccif.dwait[0] = 0;
+		    ccif.dload[0] = ccif.dstore[1];
+	       end
+	  end 
+	  READCA0:begin 
+	       ccif.ccwait[1] = 1;
+	       ccif.dwait[0] = 0;
+	       ccif.dload[0] = ccif.dstore[1];
+	       n_state = IDLE;
+	       ccif.ccwait[1] = 0;
+	  end
 		CACHE2CACHE: 
 		begin
-			ccif.dwait[snooping] = ccif.ramstate != ACCESS;
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
-			ccif.dload[~snooping] = ccif.ramload;
-			ccif.ramREN = ccif.dREN[~snooping];
-			ccif.ramaddr = ccif.daddr[~snooping];
+			ccif.dload[~snooping] = ccif.dstore[snooping];
 			if(ccif.ccwrite[snooping])
 			begin
 				ccif.dwait[snooping] = ccif.ramstate != ACCESS;
-				ccif.dload[~snooping] = ccif.dstore[snooping];
 
-				ccif.ramREN = 0;	
 				ccif.ramWEN = 1;
 				ccif.ramaddr = ccif.daddr[snooping];
 				ccif.ramstore = ccif.dstore[snooping];
@@ -337,9 +386,7 @@ begin
 		READ: 
 		begin
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
-			ccif.dload[~snooping] = ccif.ramload;
-			ccif.ramREN = ccif.dREN[~snooping];
-			ccif.ramaddr = ccif.daddr[~snooping];
+			ccif.dload[~snooping] = ccif.dstore[snooping];
 		end
 		WRITE: 
 		begin
