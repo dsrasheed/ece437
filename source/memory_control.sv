@@ -20,7 +20,7 @@ module memory_control (
   import cpu_types_pkg::*;
 
   // number of cpus for cc
-  parameter CPUS = 2;
+  parameter CPUS = 1;
 
   /*always_ff @ (posedge CLK, negedge nRST) begin
     if (nRST == 1'b0) begin
@@ -39,7 +39,7 @@ module memory_control (
     end
   end*/
 
-  /*assign ccif.ramREN = (ccif.iREN | ccif.dREN) & ~ccif.dWEN;
+  assign ccif.ramREN = (ccif.iREN | ccif.dREN) & ~ccif.dWEN;
   assign ccif.ramWEN = ccif.dWEN;
   assign ccif.ramaddr = ccif.dREN | ccif.dWEN ? ccif.daddr : ccif.iaddr;
   assign ccif.ramstore = ccif.dstore;
@@ -47,9 +47,9 @@ module memory_control (
   assign ccif.iwait = ccif.iREN & (ccif.ramstate != ACCESS | ccif.dWEN | ccif.dREN);
   assign ccif.dwait = (ccif.dWEN | ccif.dREN) & ccif.ramstate != ACCESS;
   assign ccif.iload = ccif.ramload;
-  assign ccif.dload = ccif.ramload;*/
+  assign ccif.dload = ccif.ramload;
 
-typedef enum logic[3:0] {
+/*typedef enum logic[3:0] {
   IDLE,
 	FETCH,
 	ARB,
@@ -129,7 +129,7 @@ begin
 					nxt_state = FETCH;
 				end
 				nxt_rw_arb = ~rw_arb;
-			end*/
+			end*
 		end
 		FETCH: 
 		begin
@@ -140,7 +140,7 @@ begin
 			/*if (ccif.dWEN[1] || ccif.dWEN[0]) 
 			begin
 				nxt_state = WB1;
-			end*/
+			end*
 		end
 		SNOOP: 
 		begin
@@ -178,7 +178,7 @@ begin
 			else if(ccif.dREN[~snooping])
 			begin
 				nxt_state = MEM2CACHE;
-			end*/
+			end*
 		end
 		CACHE2CACHE: 
 		begin
@@ -410,6 +410,6 @@ end
 assign ccif.ccsnoopaddr[0] = ccif.daddr[1];
 assign ccif.ccsnoopaddr[1] = ccif.daddr[0];
 assign ccif.ccinv[0] = ccif.ccwrite[1];
-assign ccif.ccinv[1] = ccif.ccwrite[0];
+assign ccif.ccinv[1] = ccif.ccwrite[0];*/
 
 endmodule

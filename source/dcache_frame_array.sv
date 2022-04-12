@@ -41,7 +41,7 @@ begin
 
 end
 
-assign dfaif.hit = frames[dfaif.addr.idx].tag == dfaif.addr.tag;
+assign dfaif.hit = frames[dfaif.addr.idx].tag == dfaif.addr.tag && frames[dfaif.addr.idx].valid;
 assign dfaif.out_frame = frames[dfaif.addr.idx];
 
 endmodule
