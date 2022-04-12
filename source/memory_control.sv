@@ -20,7 +20,7 @@ module memory_control (
   import cpu_types_pkg::*;
 
   // number of cpus for cc
-  parameter CPUS = 1;
+  parameter CPUS = 2;
 
   /*always_ff @ (posedge CLK, negedge nRST) begin
     if (nRST == 1'b0) begin
@@ -39,7 +39,7 @@ module memory_control (
     end
   end*/
 
-  assign ccif.ramREN = (ccif.iREN | ccif.dREN) & ~ccif.dWEN;
+  /*assign ccif.ramREN = (ccif.iREN | ccif.dREN) & ~ccif.dWEN;
   assign ccif.ramWEN = ccif.dWEN;
   assign ccif.ramaddr = ccif.dREN | ccif.dWEN ? ccif.daddr : ccif.iaddr;
   assign ccif.ramstore = ccif.dstore;
@@ -47,9 +47,9 @@ module memory_control (
   assign ccif.iwait = ccif.iREN & (ccif.ramstate != ACCESS | ccif.dWEN | ccif.dREN);
   assign ccif.dwait = (ccif.dWEN | ccif.dREN) & ccif.ramstate != ACCESS;
   assign ccif.iload = ccif.ramload;
-  assign ccif.dload = ccif.ramload;
+  assign ccif.dload = ccif.ramload;*/
 
-/*typedef enum logic[3:0] {
+typedef enum logic[3:0] {
   IDLE,
 	FETCH,
 	ARB,
@@ -98,41 +98,6 @@ begin
 			begin
 				nxt_state = FETCH;
 			end
-<<<<<<< HEAD
-=======
-			/*if(rw_arb)
-			begin
-				if (ccif.dWEN[0] || ccif.dWEN[1]) 
-				begin
-					nxt_state = WB1;
-				end
-				else if (ccif.dREN[0] || ccif.dREN[1]) 
-				begin
-					nxt_state = ARB;
-				end
-				else if (ccif.iREN[0] || ccif.iREN[1]) 
-				begin
-					nxt_state = FETCH;
-				end
-				nxt_rw_arb = ~rw_arb;
-			end
-			else
-			begin
-				if (ccif.dREN[0] || ccif.dREN[1]) 
-				begin
-					nxt_state = ARB;
-				end
-				else if (ccif.dWEN[0] || ccif.dWEN[1]) 
-				begin
-					nxt_state = WB1;
-				end
-				else if (ccif.iREN[0] || ccif.iREN[1]) 
-				begin
-					nxt_state = FETCH;
-				end
-				nxt_rw_arb = ~rw_arb;
-			end*
->>>>>>> 05cf500c88dbf5fec9b0de50dcd019f4333efbe2
 		end
 		FETCH: 
 		begin
@@ -140,13 +105,6 @@ begin
 			begin
 				nxt_state = (ccif.cctrans == 0) ? IDLE : ARB;
 			end
-<<<<<<< HEAD
-=======
-			/*if (ccif.dWEN[1] || ccif.dWEN[0]) 
-			begin
-				nxt_state = WB1;
-			end*
->>>>>>> 05cf500c88dbf5fec9b0de50dcd019f4333efbe2
 		end
 		ARB:
 		begin
@@ -179,13 +137,8 @@ begin
 			end
 			else
 			begin
-<<<<<<< HEAD
 				nxt_state = MEM2CACHE_W1;
 			end
-=======
-				nxt_state = MEM2CACHE;
-			end*
->>>>>>> 05cf500c88dbf5fec9b0de50dcd019f4333efbe2
 		end
 		CACHE2CACHE_W1: 
 		begin
@@ -330,6 +283,6 @@ end
 assign ccif.ccsnoopaddr[0] = ccif.daddr[1];
 assign ccif.ccsnoopaddr[1] = ccif.daddr[0];
 assign ccif.ccinv[0] = ccif.ccwrite[1];
-assign ccif.ccinv[1] = ccif.ccwrite[0];*/
+assign ccif.ccinv[1] = ccif.ccwrite[0];
 
 endmodule
