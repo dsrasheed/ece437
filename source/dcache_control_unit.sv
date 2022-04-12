@@ -50,15 +50,13 @@ assign selected_frame = dcuif.frame_sel == 1 ? dcuif.frame1 : dcuif.frame0;
 always_comb
 begin
     nxt_state = state;
-    if (!dcuif.enable)
-        nxt_state = IDLE;
-    else
-    begin
     case (state) // synthesis full_case
         IDLE:
         begin
             if (dcuif.halt)
                 nxt_state = IS_FRAME0_DIRTY;
+            else if (!dcuif.enable)
+                nxt_state = IDLE;
             else if (!dcuif.hit && selected_frame.dirty)
             begin
                 nxt_state = WRITE1;
@@ -112,7 +110,6 @@ begin
             nxt_state = IDLE;
         end
     endcase
-    end
 end
 
 // STATE MACHINE MEMORY CONTROL
@@ -122,58 +119,71 @@ begin
     dcuif.dstore = '0;
     dcuif.dREN = 1'b0;
     dcuif.dWEN = 1'b0;
+    dcuif.cctrans = 1'b0;
+    dcuif.ccwrite = 1'b0;
     case (state) // synthesis full_case
         WRITE1:
         begin
             dcuif.daddr = {selected_frame.tag, dcuif.dmemaddr.idx, 3'b000};
             dcuif.dstore = selected_frame.data[0];
             dcuif.dWEN = 1'b1;
+            dcuif.cctrans = 1'b1;
         end
         WRITE2:
         begin
             dcuif.daddr = {selected_frame.tag, dcuif.dmemaddr.idx, 3'b100};
             dcuif.dstore = selected_frame.data[1];
             dcuif.dWEN = 1'b1;
+            dcuif.cctrans = 1'b1;
         end
         LOAD1:
         begin
             dcuif.daddr = {dcuif.dmemaddr.tag, dcuif.dmemaddr.idx, 3'b000};
             dcuif.dREN = 1'b1;
+            dcuif.cctrans = 1'b1;
+            dcuif.ccwrite = dcuif.will_modify;
         end
         LOAD2:
         begin
             dcuif.daddr = {dcuif.dmemaddr.tag, dcuif.dmemaddr.idx, 3'b100};
             dcuif.dREN = 1'b1;
+            dcuif.cctrans = 1'b1;
+            dcuif.ccwrite = dcuif.will_modify;
         end
         HALT_WRITE_F0_0:
         begin
             dcuif.daddr = {dcuif.frame0.tag, counter_out[2:0], 3'b000};
             dcuif.dstore = dcuif.frame0.data[0];
             dcuif.dWEN = 1'b1;
+            dcuif.cctrans = 1'b1;
         end
         HALT_WRITE_F0_1:
         begin
             dcuif.daddr = {dcuif.frame0.tag, counter_out[2:0], 3'b100};
             dcuif.dstore = dcuif.frame0.data[1];
             dcuif.dWEN = 1'b1;
+            dcuif.cctrans = 1'b1;
         end
         HALT_WRITE_F1_0:
         begin
             dcuif.daddr = {dcuif.frame1.tag, counter_out[2:0], 3'b000};
             dcuif.dstore = dcuif.frame1.data[0];
             dcuif.dWEN = 1'b1;
+            dcuif.cctrans = 1'b1;
         end
         HALT_WRITE_F1_1:
         begin
             dcuif.daddr = {dcuif.frame1.tag, counter_out[2:0], 3'b100};
             dcuif.dstore = dcuif.frame1.data[1];
             dcuif.dWEN = 1'b1;
+            dcuif.cctrans = 1'b1;
         end
         WRITE_HIT_COUNTER:
         begin
             dcuif.daddr = 32'h3100;
             dcuif.dstore = dcuif.hit_count;
             dcuif.dWEN = 1'b1;
+            dcuif.cctrans = 1'b1;
         end
         default:
         begin
@@ -181,6 +191,8 @@ begin
             dcuif.dstore = '0;
             dcuif.dREN = 1'b0;
             dcuif.dWEN = 1'b0;
+            dcuif.cctrans 1'b0;
+            dcuif.ccwrite = 1'b0;
         end
     endcase
 end

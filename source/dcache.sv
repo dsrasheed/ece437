@@ -47,8 +47,9 @@ flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
 assign mem_ready = ~cif.dwait;
 
 // control unit input assignments
-assign dcuif.enable = (dcif.dmemREN | dcif.dmemWEN) & ~cif.cctrans;
+assign dcuif.enable = (dcif.dmemREN | dcif.dmemWEN) & ~dsuif.pr_stall;
 assign dcuif.dmemaddr = dcif.dmemaddr;
+assign dcuif.will_modify = dcif.dmemWEN;
 assign dcuif.mem_ready = mem_ready;
 assign dcuif.frame0 = frame0if.out_frame;
 assign dcuif.frame1 = frame1if.out_frame;
@@ -68,7 +69,7 @@ begin
   frame0if.clear_dirty = 1'b0;
   frame0if.write_tag = 1'b0;
   frame0if.store = '0;
-  if (cif.cctrans)
+  if (dsuif.pr_stall)
   begin
     frame0if.clear_valid = frame0if.hit2 && dsuif.clear_valid;
     frame0if.clear_dirty = frame0if.hit2 && dsuif.clear_dirty;
@@ -99,7 +100,7 @@ begin
   frame1if.clear_dirty = 1'b0;
   frame1if.write_tag = 1'b0;
   frame1if.store = '0;
-  if (cif.cctrans)
+  if (dsuif.pr_stall)
   begin
     frame1if.clear_valid = frame1if.hit2 && dsuif.clear_valid;
     frame1if.clear_dirty = frame1if.hit2 && dsuif.clear_dirty;
@@ -160,12 +161,14 @@ assign cif.dWEN = dcuif.dWEN;
 always_comb begin
   cif.daddr = dcuif.daddr;
   cif.dstore = dcuif.dstore;
-  if (cif.cctrans) begin
+  cif.cctrans = dcuif.cctrans;
+  cif.ccwrite = dcuif.ccwrite;
+  if (dsuif.pr_stall) begin
     cif.daddr = dsuif.daddr;
     cif.dstore = dsuif.dstore;
+    cif.cctrans = dsuif.cctrans;
+    cif.ccwrite = dsuif.ccwrite;
   end
 end
-assign cif.cctrans = dsuif.cctrans;
-assign cif.ccwrite = dsuif.ccwrite;
 
 endmodule

@@ -21,6 +21,7 @@ interface dcache_control_unit_if;
 
   // datapath inputs
   dcachef_t dmemaddr;
+  logic will_modify;
   logic halt;
 
   // dcache control
@@ -35,12 +36,15 @@ interface dcache_control_unit_if;
   logic dREN, dWEN;
   word_t daddr;
   word_t dstore;
+  logic ccwrite, cctrans;
 
   // decode stage device
   modport dcu (
-    input enable, hit_count, frame0, frame1, frame_sel, hit, dmemaddr, halt, mem_ready,
+    input enable, hit_count, frame0, frame1, frame_sel, hit, dmemaddr, halt, 
+          mem_ready, will_modify,
     output load_data, set_valid, clear_dirty, write_tag,
-           cache_addr, flushed, disable_hit_counter, dREN, dWEN, daddr, dstore
+           cache_addr, flushed, disable_hit_counter, dREN, dWEN, daddr, dstore,
+           ccwrite, cctrans
   );
 
 endinterface

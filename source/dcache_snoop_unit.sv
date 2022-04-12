@@ -101,4 +101,6 @@ assign dsuif.ccwrite = state == HIT_M_W1 || state == HIT_M_W2;
 assign dsuif.clear_dirty = state == TRANS_I_STATE || state == TRANS_S_STATE;
 assign dsuif.clear_valid = state == TRANS_I_STATE;
 
+assign dsuif.pr_stall = dsuif.cctrans;
+
 endmodule
