@@ -292,61 +292,61 @@ initial begin
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store 12345678 to 0x410
-	set_dp_values1(0, 1, {26'h10, 3'd2, 1'b0, 2'b00}, 32'habcdefff, 0);
+	set_dp_values1(0, 1, {26'h10, 3'd2, 1'b1, 2'b00}, 32'habcdefff, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store 87654321 to 0x418
-	set_dp_values1(0, 1, {26'h10, 3'd3, 1'b0, 2'b00}, 32'hfedcbaa, 0);
+	set_dp_values1(0, 1, {26'h10, 3'd3, 1'b1, 2'b00}, 32'hfedcbaa, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store 12345678 to 0x420
-	set_dp_values1(0, 1, {26'h10, 3'd4, 1'b0, 2'b00}, 32'habcdefff, 0);
+	set_dp_values1(0, 1, {26'h10, 3'd4, 1'b1, 2'b00}, 32'habcdefff, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store 87654321 to 0x428
-	set_dp_values1(0, 1, {26'h10, 3'd5, 1'b0, 2'b00}, 32'hfedcbaa, 0);
+	set_dp_values1(0, 1, {26'h10, 3'd5, 1'b1, 2'b00}, 32'hfedcbaa, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store 12345678 to 0x430
-	set_dp_values1(0, 1, {26'h10, 3'd6, 1'b0, 2'b00}, 32'habcdefff, 0);
+	set_dp_values1(0, 1, {26'h10, 3'd6, 1'b1, 2'b00}, 32'habcdefff, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store 87654321 to 0x438
-	set_dp_values1(0, 1, {26'h10, 3'd7, 1'b0, 2'b00}, 32'hfedcbaa, 0);
+	set_dp_values1(0, 1, {26'h10, 3'd7, 1'b1, 2'b00}, 32'hfedcbaa, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store FEEDBEEF to 0x800
-	set_dp_values1(0, 1, {26'h20, 3'd0, 1'b0, 2'b00}, 32'hDEADBEAD, 0);
+	set_dp_values1(0, 1, {26'h20, 3'd0, 1'b1, 2'b00}, 32'hDEADBEAD, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store BEEFDEAD to 0x808
-	set_dp_values1(0, 1, {26'h20, 3'd1, 1'b0, 2'b00}, 32'hDEADABE1, 0);
+	set_dp_values1(0, 1, {26'h20, 3'd1, 1'b1, 2'b00}, 32'hDEADABE1, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store 20224404 to 0xC00
-	set_dp_values1(0, 1, {26'h30, 3'd0, 1'b0, 2'b00}, 32'h30337707, 0);
+	set_dp_values1(0, 1, {26'h30, 3'd0, 1'b1, 2'b00}, 32'h30337707, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//store 5055aa0a to 0xC08
-	set_dp_values1(0, 1, {26'h30, 3'd1, 1'b0, 2'b00}, 32'h60669909, 0);
+	set_dp_values1(0, 1, {26'h30, 3'd1, 1'b1, 2'b00}, 32'h60669909, 0);
 	@(posedge dcif1.dhit);
 	#(PERIOD);
 	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
