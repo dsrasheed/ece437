@@ -318,14 +318,27 @@ program test(input logic CLK, output logic nRST, caches_if.tb cc0, caches_if.tb 
     reset();
 		cc0.cctrans = 1;
 		cc1.cctrans = 0;
-    read_data0(0, 32'h37BDFFFC, 32'h23BDFFF8);
+    read_instr0(0, 32'h37BDFFFC, 32'h23BDFFF8);
+		read_instr1(8, 32'h34010018, 32'h34020003);
 		cc0.cctrans = 0;
+		cc1.cctrans = 1;
+		cc0.ccwrite = 0;
+		cc1.ccwrite = 1;
     write_data1(4, 4, 8);
+		cc0.cctrans = 1;
+		cc1.cctrans = 0;
+		cc0.ccwrite = 1;
+		cc1.ccwrite = 0;
     write_data0(8, 8, 12);
+		cc0.cctrans = 1;
+		cc1.cctrans = 1;
     write_data1(12, 12, 16);
+		cc0.cctrans = 0;
 		cc1.cctrans = 1;
 		@(posedge CLK)
     read_data1(4, 4, 8);
+		cc0.cctrans = 1;
+		cc1.cctrans = 0;
     read_data0(8, 16, 16);
 		cc0.cctrans = 1;
 		@(posedge CLK)

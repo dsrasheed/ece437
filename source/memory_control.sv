@@ -135,7 +135,7 @@ begin
 		begin
 			if (ccif.ramstate == ACCESS)
 			begin
-				nxt_state = (ccif.cctrans == 0)? IDLE:ARB;
+				nxt_state = (ccif.cctrans == 0) ? IDLE:ARB;
 			end
 			/*if (ccif.dWEN[1] || ccif.dWEN[0]) 
 			begin
@@ -144,30 +144,25 @@ begin
 		end
 		SNOOP: 
 		begin
-			if(ccif.cctrans[snooping])
+			if (ccif.cctrans[snooping])
 			begin
 				nxt_state = ARB;
 				nxt_snooping = ~snooping;
 			end
-			else if(ccif.cctrans[~snooping)
+			else if (ccif.cctrans[~snooping])
 			begin
 				nxt_state = ARB;
 			end
 		end
 		ARB: 
 		begin	
-			if(ccif.dWEN[~snooping])
+			if (ccif.dWEN[~snooping])
 			begin
-				if(ccif.ccwrite[~snooping])
-				begin
-					nxt_state = WB1;
-				end
-				else if(ccif.cctrans[snooping] && ccif.ccwrite[snooping])
 				nxt_state = WB1;
 			end
-			else if(ccif.dREN[~snooping])
+			else if (ccif.dREN[~snooping])
 			begin
-				if(ccif.cctrans[snooping])
+				if (ccif.cctrans[snooping])
 				begin
 					nxt_state = CACHE2CACHE;
 				end
@@ -248,15 +243,9 @@ begin
 	ccif.ccwait[1] = 0;
 
   case(state)
-		SNOOP: 
-		begin
-			ccif.ccwait[snooping] = 1;
-			ccif.ccwait[~snooping] = 1;
-		end
 		ARB: 
 		begin
-			ccif.ccwait[nxt_snooping] = 1;
-			ccif.ccwait[~nxt_snooping] = 1;
+			ccif.ccwait[snooping] = 1;
 		end
 		MEM2CACHE: 
 		begin
@@ -269,7 +258,6 @@ begin
 		CACHE2CACHE: 
 		begin
 			ccif.ccwait[snooping] = 1;
-			end
 		end
 		READ: 
 		begin
@@ -312,12 +300,34 @@ begin
 	ccif.dload[0] = 0; 
 	ccif.dload[1] = 0;
 
+	ccif.iwait[0] = 1; 
+	ccif.iwait[1] = 1;
+	ccif.iload[0] = 0; 
+	ccif.iload[1] = 0;
+
 	ccif.ramREN = 0;
 	ccif.ramWEN = 0;
 	ccif.ramaddr = 0;
 	ccif.ramstore = 0;
 
   case(state)
+		FETCH: 
+		begin
+			if(ccif.iREN[1]) 
+			begin
+				ccif.iwait[1] = ccif.ramstate != ACCESS;
+				ccif.iload[1] = ccif.ramload;
+				ccif.ramREN = ccif.iREN[1];
+				ccif.ramaddr = ccif.iaddr[1];
+			end 
+			else if (ccif.iREN[0]) 
+			begin
+				ccif.iwait[0] = ccif.ramstate != ACCESS;
+				ccif.iload[0] = ccif.ramload;
+				ccif.ramREN = ccif.iREN[0];
+				ccif.ramaddr = ccif.iaddr[0];
+			end
+		end
 		MEM2CACHE: 
 		begin
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
@@ -332,44 +342,6 @@ begin
 			ccif.ramREN = ccif.dREN[~snooping];
 			ccif.ramaddr = ccif.daddr[~snooping];
 		end
-	  C2C_RD0: begin	    
-	      ccif.ccwait[1] = 1;
-	      if(ccif.cctrans[1] && ccif.ccwrite[1]) begin		 
-		    ccif.ramWEN = 1;
-		    daddr_m = ccif.ccsnoopaddr[1];
-		    ccif.ramstore = ccif.dstore[1];
-		    if(!dwait_m) begin		      
-			 n_state = WRITECA0;
-			 ccif.dwait[0] = 0;
-			 ccif.dload[0] = ccif.dstore[1];
-			 ccif.dwait[1] = 0;
-		   end
-	       end 
-	       else begin		 
-		    ccif.dwait[0] = 0;
-		    ccif.dload[0] = ccif.dstore[1];
-		    n_state = READCA0;
-	       end
-	  end
-	  WRITECA0: begin	    
-	       ccif.ccwait[1] = 1;
-	       ccif.ramWEN = 1;
-	       daddr_m = ccif.ccsnoopaddr[1];
-	       ccif.ramstore = ccif.dstore[1];
-	       if(!dwait_m) begin		 
-		    n_state = IDLE;
-		    ccif.dwait[1] = 0;
-		    ccif.dwait[0] = 0;
-		    ccif.dload[0] = ccif.dstore[1];
-	       end
-	  end 
-	  READCA0:begin 
-	       ccif.ccwait[1] = 1;
-	       ccif.dwait[0] = 0;
-	       ccif.dload[0] = ccif.dstore[1];
-	       n_state = IDLE;
-	       ccif.ccwait[1] = 0;
-	  end
 		CACHE2CACHE: 
 		begin
 			ccif.dwait[~snooping] = ccif.ramstate != ACCESS;
@@ -434,43 +406,10 @@ begin
 		end
 	endcase
 end
-	
-always_comb
-begin
-
-	ccif.iwait[0] = 1; 
-	ccif.iwait[1] = 1;
-	ccif.iload[0] = 0; 
-	ccif.iload[1] = 0;
-
-	ccif.ramREN = 0;
-	ccif.ramaddr = 0;
-
-	case(state)
-		FETCH: 
-		begin
-			if(ccif.iREN[1]) 
-			begin
-				ccif.iwait[1] = ccif.ramstate != ACCESS;
-				ccif.iload[1] = ccif.ramload;
-				ccif.ramREN = ccif.iREN[1];
-				ccif.ramaddr = ccif.iaddr[1];
-			end 
-			else if (ccif.iREN[0]) 
-			begin
-				ccif.iwait[0] = ccif.ramstate != ACCESS;
-				ccif.iload[0] = ccif.ramload;
-				ccif.ramREN = ccif.iREN[0];
-				ccif.ramaddr = ccif.iaddr[0];
-			end
-		end
-	endcase
-end
 
 assign ccif.ccsnoopaddr[0] = ccif.daddr[1];
 assign ccif.ccsnoopaddr[1] = ccif.daddr[0];
 assign ccif.ccinv[0] = ccif.ccwrite[1];
 assign ccif.ccinv[1] = ccif.ccwrite[0];
-end
 
 endmodule
