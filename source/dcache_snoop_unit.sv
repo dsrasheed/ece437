@@ -53,15 +53,7 @@ begin
         HIT_M_W2,
         HIT_S_W2:
         begin
-            if (dsuif.mem_ready && dsuif.ccinv)
-                nxt_state = TRANS_I_STATE;
-            else if (dsuif.mem_ready && !dsuif.ccinv)
-                nxt_state = TRANS_S_STATE;
-        end
-        TRANS_I_STATE,
-        TRANS_S_STATE:
-        begin
-            if (!dsuif.ccwait) nxt_state = IDLE;
+            if (dsuif.mem_ready) nxt_state = WAIT;
         end
         default:
         begin
@@ -74,32 +66,35 @@ always_comb
 begin
     dsuif.daddr = '0;
     dsuif.dstore = '0;
+    dsuif.clear_dirty = 0;
+    dsuif.clear_valid = 0;
     case (state)
         HIT_M_W1,
-        HIT_M_W2:
+        HIT_S_W1:
         begin
             dsuif.daddr = {dsuif.ccsnoopaddr.tag, dsuif.ccsnoopaddr.idx, 3'b000};
             dsuif.dstore = dsuif.snoop_frame.data[0];
         end
-        HIT_S_W1,
+        HIT_M_W2,
         HIT_S_W2:
         begin
             dsuif.daddr = {dsuif.ccsnoopaddr.tag, dsuif.ccsnoopaddr.idx, 3'b100};
             dsuif.dstore = dsuif.snoop_frame.data[1];
+            dsuif.clear_dirty = 1'b1;
+            dsuif.clear_valid = dsuif.ccinv;
         end
         default:
         begin
             dsuif.daddr = '0;
             dsuif.dstore = '0;
+            dsuif.clear_dirty = 0;
+            dsuif.clear_valid = 0;
         end
     endcase
 end
 
 assign dsuif.cctrans = state != IDLE && state != WAIT;
 assign dsuif.ccwrite = state == HIT_M_W1 || state == HIT_M_W2;
-
-assign dsuif.clear_dirty = state == TRANS_I_STATE || state == TRANS_S_STATE;
-assign dsuif.clear_valid = state == TRANS_I_STATE;
 
 assign dsuif.pr_stall = dsuif.cctrans;
 

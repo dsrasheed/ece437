@@ -28,7 +28,7 @@ interface dcache_snoop_unit_if;
   // dcache snoop unit device
   modport dsu (
     input snoop_hit, snoop_frame, ccwait, ccinv, ccsnoopaddr, mem_ready,
-    output cctrans, ccwrite, clear_dirty, clear_valid, daddr, dstore, pr_stall;
+    output cctrans, ccwrite, clear_dirty, clear_valid, daddr, dstore, pr_stall
   );
 
 endinterface

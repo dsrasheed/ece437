@@ -59,7 +59,6 @@ assign dcuif.hit_count = hit_count;
 assign dcuif.halt = dcif.halt;
 
 // frame 0 input assignments
-assign frame0if.addr = dcuif.cache_addr;
 assign frame0if.addr2 = cif.ccsnoopaddr;
 always_comb
 begin
@@ -69,8 +68,10 @@ begin
   frame0if.clear_dirty = 1'b0;
   frame0if.write_tag = 1'b0;
   frame0if.store = '0;
+  frame0if.addr = dcuif.cache_addr;
   if (dsuif.pr_stall)
   begin
+    frame0if.addr = cif.ccsnoopaddr;
     frame0if.clear_valid = frame0if.hit2 && dsuif.clear_valid;
     frame0if.clear_dirty = frame0if.hit2 && dsuif.clear_dirty;
   end
@@ -90,7 +91,6 @@ begin
 end
 
 // frame 1 input assignments
-assign frame1if.addr = dcuif.cache_addr;
 assign frame1if.addr2 = cif.ccsnoopaddr;
 always_comb
 begin
@@ -100,8 +100,10 @@ begin
   frame1if.clear_dirty = 1'b0;
   frame1if.write_tag = 1'b0;
   frame1if.store = '0;
+  frame1if.addr = dcuif.cache_addr;
   if (dsuif.pr_stall)
   begin
+    frame1if.addr = cif.ccsnoopaddr;
     frame1if.clear_valid = frame1if.hit2 && dsuif.clear_valid;
     frame1if.clear_dirty = frame1if.hit2 && dsuif.clear_dirty;
   end

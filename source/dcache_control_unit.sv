@@ -191,7 +191,7 @@ begin
             dcuif.dstore = '0;
             dcuif.dREN = 1'b0;
             dcuif.dWEN = 1'b0;
-            dcuif.cctrans 1'b0;
+            dcuif.cctrans = 1'b0;
             dcuif.ccwrite = 1'b0;
         end
     endcase

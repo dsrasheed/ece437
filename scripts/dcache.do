@@ -2,12 +2,22 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /dcache_tb/CLK
 add wave -noupdate /dcache_tb/nRST
-add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/FRAME0/frames
+add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/frame0if/store_data
+add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/frame0if/set_valid
+add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/frame0if/clear_valid
+add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/frame0if/clear_dirty
+add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/frame0if/write_tag
+add wave -noupdate -expand -group {DUT1 Frame 0} -expand /dcache_tb/DUT/FRAME0/frames
 add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/frame0if/out_frame
 add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/frame0if/hit
 add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/FRAME0/dfaif/out_frame2
 add wave -noupdate -expand -group {DUT1 Frame 0} /dcache_tb/DUT/frame0if/hit2
-add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/FRAME1/frames
+add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/store_data
+add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/set_valid
+add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/clear_valid
+add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/clear_dirty
+add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/write_tag
+add wave -noupdate -expand -group {DUT1 Frame 1} -expand /dcache_tb/DUT/FRAME1/frames
 add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/out_frame
 add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/hit
 add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/FRAME1/dfaif/out_frame2
@@ -37,11 +47,17 @@ add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/dWEN
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/dload
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/dstore
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/daddr
+add wave -noupdate -expand -group {Cache Control1} /dcache_tb/DUT/SNOOP_UNIT/state
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/ccwait
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/ccinv
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/ccwrite
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/cctrans
+add wave -noupdate -expand -group {Cache Control1} /dcache_tb/DUT/SNOOP_UNIT/dsuif/pr_stall
+add wave -noupdate -expand -group {Cache Control1} /dcache_tb/DUT/SNOOP_UNIT/dsuif/snoop_hit
+add wave -noupdate -expand -group {Cache Control1} /dcache_tb/DUT/SNOOP_UNIT/dsuif/snoop_frame
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/ccsnoopaddr
+add wave -noupdate -expand -group {Cache Control1} /dcache_tb/DUT/SNOOP_UNIT/dsuif/clear_dirty
+add wave -noupdate -expand -group {Cache Control1} /dcache_tb/DUT/SNOOP_UNIT/dsuif/clear_valid
 add wave -noupdate -expand -group Datapath1 /dcache_tb/dcif0/halt
 add wave -noupdate -expand -group Datapath1 /dcache_tb/dcif0/dhit
 add wave -noupdate -expand -group Datapath1 /dcache_tb/dcif0/datomic
@@ -51,11 +67,21 @@ add wave -noupdate -expand -group Datapath1 /dcache_tb/dcif0/flushed
 add wave -noupdate -expand -group Datapath1 /dcache_tb/dcif0/dmemload
 add wave -noupdate -expand -group Datapath1 /dcache_tb/dcif0/dmemstore
 add wave -noupdate -expand -group Datapath1 /dcache_tb/dcif0/dmemaddr
-add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/FRAME0/frames
+add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/frame0if/store_data
+add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/frame0if/set_valid
+add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/frame0if/clear_valid
+add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/frame0if/clear_dirty
+add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/frame0if/write_tag
+add wave -noupdate -expand -group {DUT2 Frame 1} -expand -subitemconfig {{/dcache_tb/DUT1/FRAME0/frames[0]} -expand} /dcache_tb/DUT1/FRAME0/frames
 add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/FRAME0/dfaif/out_frame
 add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/FRAME0/dfaif/hit
 add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/FRAME0/dfaif/out_frame2
 add wave -noupdate -expand -group {DUT2 Frame 1} /dcache_tb/DUT1/FRAME0/dfaif/hit2
+add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/frame1if/store_data
+add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/frame1if/set_valid
+add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/frame1if/clear_valid
+add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/frame1if/clear_dirty
+add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/frame1if/write_tag
 add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/FRAME1/frames
 add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/FRAME1/dfaif/out_frame2
 add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/FRAME1/dfaif/out_frame
@@ -85,11 +111,17 @@ add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/dWEN
 add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/dload
 add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/dstore
 add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/daddr
+add wave -noupdate -expand -group {Cache Control2} /dcache_tb/DUT1/SNOOP_UNIT/state
 add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/ccwait
 add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/ccinv
 add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/ccwrite
 add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/cctrans
 add wave -noupdate -expand -group {Cache Control2} /dcache_tb/cc1/ccsnoopaddr
+add wave -noupdate -expand -group {Cache Control2} /dcache_tb/DUT1/dsuif/snoop_hit
+add wave -noupdate -expand -group {Cache Control2} /dcache_tb/DUT1/dsuif/snoop_frame
+add wave -noupdate -expand -group {Cache Control2} /dcache_tb/DUT1/dsuif/pr_stall
+add wave -noupdate -expand -group {Cache Control2} /dcache_tb/DUT1/dsuif/clear_valid
+add wave -noupdate -expand -group {Cache Control2} /dcache_tb/DUT1/dsuif/clear_dirty
 add wave -noupdate -expand -group Datapath2 /dcache_tb/dcif1/halt
 add wave -noupdate -expand -group Datapath2 /dcache_tb/dcif1/dhit
 add wave -noupdate -expand -group Datapath2 /dcache_tb/dcif1/datomic
@@ -114,7 +146,7 @@ add wave -noupdate -expand -group Mem_Control /dcache_tb/MEM/nxt_state
 add wave -noupdate -expand -group Mem_Control /dcache_tb/MEM/snooping
 add wave -noupdate -expand -group Mem_Control /dcache_tb/MEM/nxt_snooping
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {220294 ps} 0}
+WaveRestoreCursors {{Cursor 1} {1850666 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -130,4 +162,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {250 ns}
+WaveRestoreZoom {1725666 ps} {1975666 ps}
