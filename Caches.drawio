@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-04-12T08:14:16.964Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36" etag="XPDi4Ym10BDjK6bZ1oCy" version="17.2.3" type="github" pages="3">
+<mxfile host="app.diagrams.net" modified="2022-04-12T11:33:38.006Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36" etag="mWWcyRIHU99LGbtbnhJl" version="17.2.3" type="github" pages="3">
   <diagram id="JrA7ryfGbsVBiMZWuKP9" name="Page-1">
     <mxGraphModel dx="2272" dy="829" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -1179,19 +1179,19 @@
             <mxPoint x="343" y="320" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xuupHciBFk7vKVRrjtsd-7" value="ccif.ccwait &amp;amp;&lt;br&gt;(frame0if.snoop_hit | frame1if.snoop_hit)&lt;br&gt;&amp;amp;&lt;br&gt;snoop_frame.dirty)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="xuupHciBFk7vKVRrjtsd-7" value="ccif.ccwait &amp;amp;&lt;br&gt;snoop_hit &amp;amp;&lt;br&gt;snoop_frame.dirty" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="213" y="410" width="140" height="90" as="geometry" />
         </mxCell>
         <mxCell id="xuupHciBFk7vKVRrjtsd-10" value="&lt;br&gt;ccif.ccwait &amp;amp;&lt;br&gt;~frame0if.snoop_hit &amp;amp; ~frame1if.snoop_hit" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="588" y="210" width="125" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="xuupHciBFk7vKVRrjtsd-15" value="ccif.ccwait &amp;amp;&lt;br&gt;(frame0if.snoop_hit | frame1if.snoop_hit)&lt;br&gt;&amp;amp;&lt;br&gt;~snoop_frame.dirty)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="xuupHciBFk7vKVRrjtsd-15" value="ccif.ccwait &amp;amp;&lt;br&gt;snoop_hit &amp;amp;&lt;br&gt;~snoop_frame.dirty)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="538" y="440" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="xuupHciBFk7vKVRrjtsd-16" value="HIT_M_W1&lt;br&gt;[stall_pr = 1]&lt;br&gt;[cctrans = 1]&lt;br&gt;[ccwrite = 1]&lt;br&gt;[daddr = {snoop_frame.tag, snoopaddr.idx, 000}]&lt;br&gt;[dstore = snoop_frame.data[0]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+        <mxCell id="xuupHciBFk7vKVRrjtsd-16" value="HIT_M_W1&lt;br&gt;[cctrans = 1]&lt;br&gt;[ccwrite = 1]&lt;br&gt;[daddr = {snoop_frame.tag, snoopaddr.idx, 000}]&lt;br&gt;[dstore = snoop_frame.data[0]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
           <mxGeometry x="213" y="520" width="180" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="xuupHciBFk7vKVRrjtsd-19" value="HIT_M_W2&lt;br&gt;[stall_pr = 1]&lt;br&gt;[cctrans = 1]&lt;br&gt;[ccwrite = 1]&lt;br&gt;[daddr = {snoop_frame.tag, snoopaddr.idx, 100}]&lt;br&gt;[dstore = snoop_frame.data[1]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+        <mxCell id="xuupHciBFk7vKVRrjtsd-19" value="HIT_M_W2&lt;br&gt;[cctrans = 1]&lt;br&gt;[ccwrite = 1]&lt;br&gt;[daddr = {snoop_frame.tag, snoopaddr.idx, 100}]&lt;br&gt;[dstore = snoop_frame.data[1]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
           <mxGeometry x="213" y="760" width="180" height="180" as="geometry" />
         </mxCell>
         <mxCell id="xuupHciBFk7vKVRrjtsd-20" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="xuupHciBFk7vKVRrjtsd-16" target="xuupHciBFk7vKVRrjtsd-19" edge="1">
@@ -1230,13 +1230,13 @@
         <mxCell id="xuupHciBFk7vKVRrjtsd-42" value="~ccif.ccwait" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="403" y="260" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ZUHTFlba5ih_-JzV5gB0-7" value="TRANS_I_STATE&lt;br&gt;[stall_pr = 1]&lt;br&gt;[cctrans = 1]&lt;br&gt;[clear_valid = 1]&lt;br&gt;[clear_dirty = 1]" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+        <mxCell id="ZUHTFlba5ih_-JzV5gB0-7" value="TRANS_I_STATE&lt;br&gt;[cctrans = 1]&lt;br&gt;[clear_valid = 1]&lt;br&gt;[clear_dirty = 1]" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="213" y="1010" width="180" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="ZUHTFlba5ih_-JzV5gB0-8" value="TRANS_S_STATE&lt;br&gt;[stall_pr = 1]&lt;br&gt;[cctrans = 1]&lt;br&gt;[set_valid = 1]&lt;br&gt;[clear_dirty = 1]" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+        <mxCell id="ZUHTFlba5ih_-JzV5gB0-8" value="TRANS_S_STATE&lt;br&gt;[cctrans = 1]&lt;br&gt;[clear_dirty = 1]" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="478" y="1010" width="180" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="ZUHTFlba5ih_-JzV5gB0-9" value="HIT_S_W1&lt;br&gt;[stall_pr = 1]&lt;br&gt;[cctrans = 1]&lt;br&gt;[daddr = {snoop_frame.tag, snoopaddr.idx, 000}]&lt;br&gt;[dstore = snoop_frame.data[0]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+        <mxCell id="ZUHTFlba5ih_-JzV5gB0-9" value="HIT_S_W1&lt;br&gt;[cctrans = 1]&lt;br&gt;[daddr = {snoop_frame.tag, snoopaddr.idx, 000}]&lt;br&gt;[dstore = snoop_frame.data[0]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="478" y="520" width="180" height="180" as="geometry" />
         </mxCell>
         <mxCell id="ZUHTFlba5ih_-JzV5gB0-10" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZUHTFlba5ih_-JzV5gB0-9" target="ZUHTFlba5ih_-JzV5gB0-11">
@@ -1245,7 +1245,7 @@
             <mxPoint x="458" y="660" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ZUHTFlba5ih_-JzV5gB0-11" value="HIT_S_W2&lt;br&gt;[stall_pr = 1]&lt;br&gt;[cctrans = 1]&lt;br&gt;[daddr = {snoop_frame.tag, snoopaddr.idx, 100}]&lt;br&gt;[dstore = snoop_frame.data[0]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+        <mxCell id="ZUHTFlba5ih_-JzV5gB0-11" value="HIT_S_W2&lt;br&gt;[cctrans = 1]&lt;br&gt;[daddr = {snoop_frame.tag, snoopaddr.idx, 100}]&lt;br&gt;[dstore = snoop_frame.data[0]}" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="478" y="760" width="180" height="180" as="geometry" />
         </mxCell>
         <mxCell id="ZUHTFlba5ih_-JzV5gB0-12" value="~ccif.dwait" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
