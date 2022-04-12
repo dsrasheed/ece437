@@ -12,13 +12,15 @@ module fetch_stage (
   fetch_stage_if.fs fsif
 );
 
+parameter PC_INIT = '0;
+
 import cpu_types_pkg::*;
 import datapath_types_pkg::*;
 
 cpu_tracker_t track;
 
 pc_if pcif();
-pc PC(CLK, nRST, pcif);
+pc #(.PC_INIT(PC_INIT)) PC(CLK, nRST, pcif);
 assign pcif.pc_en = fsif.ihit;
 assign pcif.pc_control = fsif.pc_control;
 assign pcif.pred_control = fsif.pred_control;

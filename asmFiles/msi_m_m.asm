@@ -7,9 +7,15 @@
 mainp0:
   ori $1, $0, 1
   ori $3, $0, 3
-  ori $2, $0, l1 
+  ori $2, $0, l1
   sw  $1, 0($2)
+  nop
+  nop
+  nop
+  nop
   sw  $3, 0($2)
+  nop
+  nop
   halt
 
 #----------------------------------------------------------
@@ -22,7 +28,11 @@ mainp1:
   ori $1, $0, 2
   ori $3, $0, 4
   ori $2, $0, l2
+  nop
+  nop
   sw  $1, 0($2)
+  nop
+  nop
   sw  $3, 0($2)
   halt
 

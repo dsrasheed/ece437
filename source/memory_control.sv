@@ -64,7 +64,7 @@ typedef enum logic[3:0] {
 } state_t;
 
 state_t state, nxt_state;
-logic snooping, nxt_snooping, rw_arb, nxt_rw_arb;
+logic snooping, nxt_snooping, working, nxt_working;
 
 always_ff @(posedge CLK, negedge nRST) 
 begin
@@ -72,13 +72,13 @@ begin
 	begin
 		state <= IDLE;
 		snooping <= 1;
-		rw_arb <= 1;
+		working <= 0;
 	end 
 	else 
 	begin
 		state <= nxt_state;
 		snooping <= nxt_snooping;
-		rw_arb <= nxt_rw_arb;
+		working <= nxt_working;
 	end
 end
 
@@ -86,7 +86,6 @@ always_comb
 begin
 	nxt_state = state;
 	nxt_snooping = snooping;
-	nxt_rw_arb = rw_arb;
 	case(state)
 		IDLE: 
 		begin
@@ -226,23 +225,16 @@ begin
 	ccif.ramaddr = 0;
 	ccif.ramstore = 0;
 
+	nxt_working = working;
+
 	case(state)
 		FETCH: 
 		begin
-			if(ccif.iREN[1]) 
-			begin
-				ccif.iwait[1] = ccif.ramstate != ACCESS;
-				ccif.iload[1] = ccif.ramload;
-				ccif.ramREN = ccif.iREN[1];
-				ccif.ramaddr = ccif.iaddr[1];
-			end 
-			else if (ccif.iREN[0]) 
-			begin
-				ccif.iwait[0] = ccif.ramstate != ACCESS;
-				ccif.iload[0] = ccif.ramload;
-				ccif.ramREN = ccif.iREN[0];
-				ccif.ramaddr = ccif.iaddr[0];
-			end
+			ccif.iwait[working] = ccif.ramstate != ACCESS;
+			ccif.iload[working] = ccif.ramload;
+			ccif.ramREN = ccif.iREN[working];
+			ccif.ramaddr = ccif.iaddr[working];
+			nxt_working = ccif.ramstate == ACCESS ? ~working : working;
 		end
 		MEM2CACHE_W1,
 		MEM2CACHE_W2:

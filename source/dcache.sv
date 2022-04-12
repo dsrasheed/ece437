@@ -15,11 +15,11 @@ import cpu_types_pkg::*;
 
 localparam N_SETS = 2**DIDX_W;
 
-word_t hit_count;
+//word_t hit_count;
 logic mem_ready;
 // unused signal connected to HIT_COUNTER's rollover_flag.
 // Synthesis screamed at us for having nothing connected to it.
-logic discard;
+//logic discard;
 logic [N_SETS-1:0] LRU;
 logic [N_SETS-1:0] nxt_LRU;
 
@@ -33,7 +33,7 @@ dcache_frame_array FRAME0 (CLK, nRST, frame0if.dfa);
 dcache_frame_array FRAME1 (CLK, nRST, frame1if.dfa);
 dcache_control_unit CONTROL_UNIT (CLK, nRST, dcuif.dcu);
 dcache_snoop_unit SNOOP_UNIT (CLK, nRST, dsuif.dsu);
-flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
+/*flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
   .clk(CLK),
   .n_rst(nRST),
   .clear(1'b0),
@@ -41,21 +41,23 @@ flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
   .rollover_val(32'hffffffff),
   .count_out(hit_count),
   .rollover_flag(discard)
-);
+);*/
 
 /* GLUEING INTERNAL MODULES TOGETHER */
 assign mem_ready = ~cif.dwait;
 
 // control unit input assignments
-assign dcuif.enable = (dcif.dmemREN | dcif.dmemWEN) & ~dsuif.pr_stall;
+assign dcuif.enable = (dcif.dmemREN | dcif.dmemWEN);
 assign dcuif.dmemaddr = dcif.dmemaddr;
 assign dcuif.will_modify = dcif.dmemWEN;
-assign dcuif.mem_ready = mem_ready;
+assign dcuif.mem_ready = mem_ready & ~dsuif.pr_stall;
 assign dcuif.frame0 = frame0if.out_frame;
 assign dcuif.frame1 = frame1if.out_frame;
 assign dcuif.frame_sel = LRU[dcuif.cache_addr.idx];
-assign dcuif.hit = dcif.dhit;
-assign dcuif.hit_count = hit_count;
+assign dcuif.hit = (frame0if.hit | frame1if.hit) & dcuif.enable;
+assign dcuif.hit0 = frame0if.hit && dcuif.enable;
+assign dcuif.hit1 = frame1if.hit && dcuif.enable;
+//assign dcuif.hit_count = hit_count;
 assign dcuif.halt = dcif.halt;
 
 // frame 0 input assignments
@@ -75,7 +77,12 @@ begin
     frame0if.clear_valid = frame0if.hit2 && dsuif.clear_valid;
     frame0if.clear_dirty = frame0if.hit2 && dsuif.clear_dirty;
   end
-  if (frame0if.hit && dcif.dmemWEN)
+  else if (dcuif.halt_frame0_ctrl)
+  begin
+      frame0if.clear_dirty = dcuif.clear_dirty;
+  end
+  else if ((frame0if.hit && dcif.dmemWEN && frame0if.out_frame.dirty) ||
+           (frame0if.hit && dcif.dmemWEN && !frame0if.out_frame.dirty && dcuif.inv_complete))
   begin
     frame0if.store_data = 1'b1;
     frame0if.store = dcif.dmemstore;
@@ -107,7 +114,12 @@ begin
     frame1if.clear_valid = frame1if.hit2 && dsuif.clear_valid;
     frame1if.clear_dirty = frame1if.hit2 && dsuif.clear_dirty;
   end
-  else if (frame1if.hit && dcif.dmemWEN)
+  else if (dcuif.halt_frame1_ctrl)
+  begin
+      frame1if.clear_dirty = dcuif.clear_dirty;
+  end
+  else if ((frame1if.hit && dcif.dmemWEN && frame1if.out_frame.dirty) ||
+           (frame1if.hit && dcif.dmemWEN && !frame1if.out_frame.dirty && dcuif.inv_complete))
   begin
     frame1if.store_data = 1'b1;
     frame1if.store = dcif.dmemstore;
@@ -150,11 +162,18 @@ end
 
 /* OUTPUTS */
 // Datapath
-assign dcif.dhit = (frame0if.hit | frame1if.hit) & dcuif.enable;
 always_comb begin
-  dcif.dmemload = frame0if.out_frame.data[dcuif.cache_addr.blkoff];
-  if (frame1if.hit)
+  dcif.dhit = 1'b0;
+  if (frame0if.hit)
+  begin
+    dcif.dhit = (~frame0if.out_frame.dirty & dcuif.will_modify) ? 1'b0 : dcuif.hit;
+    dcif.dmemload = frame0if.out_frame.data[dcuif.cache_addr.blkoff];
+  end
+  else if (frame1if.hit)
+  begin
+    dcif.dhit = (~frame1if.out_frame.dirty & dcuif.will_modify) ? 1'b0 : dcuif.hit;
     dcif.dmemload = frame1if.out_frame.data[dcuif.cache_addr.blkoff];
+  end
 end
 assign dcif.flushed = dcuif.flushed;
 // Memory Controller

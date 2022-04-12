@@ -197,7 +197,7 @@ initial begin
 	cc0.iREN = 1;
 	dcif0.datomic = 0;
 	set_dp_values0(0, 0, 32'h0, 32'h0, 0);
-	//set_dp_values1(0, 0, 32'h0, 32'h0, 0);
+	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 
 	nRST = 0;
 	#(3*PERIOD);
@@ -358,21 +358,21 @@ initial begin
 	instr_num += 1;
 	set_dp_values0(1, 0, {26'h10, 3'd0, 1'b0, 2'b00}, 32'h0, 0);
 	@(posedge dcif0.dhit);
-	check_values0(1, 32'h12345678);
+	check_values0(1, 32'habcdeff);
 	#(PERIOD);
 	set_dp_values0(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//load from 0xA2 miss
 	instr_num += 1;
-	set_dp_values1(1, 0, {26'h20, 3'd1, 1'b0, 2'b00}, 32'h0, 0);
-	@(posedge dcif0.dhit);
-	check_values0(1, 32'hBEEFDEAD);
+	set_dp_values1(1, 0, {26'h20, 3'd1, 1'b1, 2'b00}, 32'h0, 0);
+	#(4*PERIOD);
+	check_values1(1, 32'hDEADABE1);
 	#(PERIOD);
-	set_dp_values0(0, 0, 32'h0, 32'h0, 0);
+	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//load from 0xC4 miss
 	instr_num += 1;
-	set_dp_values0(1, 0, {26'h10, 3'd4, 1'b0, 2'b00}, 32'h0, 0);
+	set_dp_values0(1, 0, {26'h10, 3'd4, 1'b1, 2'b00}, 32'h0, 0);
 	@(posedge dcif0.dhit);
 	check_values0(1, 32'h12345678);
 	#(PERIOD);
@@ -381,14 +381,18 @@ initial begin
 	//load from 0x106 miss
 	instr_num += 1;
 	set_dp_values1(1, 0, {26'h30, 3'd0, 1'b0, 2'b00}, 32'h0, 0);
-	@(posedge dcif0.dhit);
-	check_values0(1, 32'h20224404);
+	#(4*PERIOD);
+	check_values1(1, 32'h30337707);
 	#(PERIOD);
-	set_dp_values0(0, 0, 32'h0, 32'h0, 0);
+	set_dp_values1(0, 0, 32'h0, 32'h0, 0);
 	#(PERIOD);
 	//load from 0x148 miss
 	
 	#(PERIOD*10);
+	set_dp_values0(0, 0, 32'h0, 32'h0, 1);
+	set_dp_values1(0, 0, 32'h0, 32'h0, 1);
+	@(posedge (dcif0.flushed & dcif1.flushed));
+	$finish;
 end
 
 endprogram

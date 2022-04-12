@@ -18,11 +18,14 @@ add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/clear_v
 add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/clear_dirty
 add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/write_tag
 add wave -noupdate -expand -group {DUT1 Frame 1} -expand /dcache_tb/DUT/FRAME1/frames
-add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/out_frame
+add wave -noupdate -expand -group {DUT1 Frame 1} -expand /dcache_tb/DUT/frame1if/out_frame
 add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/hit
 add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/FRAME1/dfaif/out_frame2
 add wave -noupdate -expand -group {DUT1 Frame 1} /dcache_tb/DUT/frame1if/hit2
 add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/state
+add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/counter_out
+add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/counter_incr
+add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/counter_rollover
 add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/mem_ready
 add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/selected_frame
 add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/dcuif/frame_sel
@@ -40,7 +43,6 @@ add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/dc
 add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/dcuif/daddr
 add wave -noupdate -expand -group {Control Unit1} /dcache_tb/DUT/CONTROL_UNIT/dcuif/dstore
 add wave -noupdate -group LRU /dcache_tb/DUT/LRU
-add wave -noupdate -group {Hit Count} /dcache_tb/DUT/hit_count
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/dwait
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/dREN
 add wave -noupdate -expand -group {Cache Control1} /dcache_tb/cc0/dWEN
@@ -88,6 +90,9 @@ add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/FRAME1/dfaif/ou
 add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/FRAME1/dfaif/hit2
 add wave -noupdate -expand -group {DUT2 Frame 2} /dcache_tb/DUT1/FRAME1/dfaif/hit
 add wave -noupdate -expand -group {Control Unit2} /dcache_tb/DUT1/CONTROL_UNIT/state
+add wave -noupdate -expand -group {Control Unit2} /dcache_tb/DUT1/CONTROL_UNIT/counter_out
+add wave -noupdate -expand -group {Control Unit2} /dcache_tb/DUT1/CONTROL_UNIT/counter_incr
+add wave -noupdate -expand -group {Control Unit2} /dcache_tb/DUT1/CONTROL_UNIT/counter_rollover
 add wave -noupdate -expand -group {Control Unit2} /dcache_tb/DUT1/CONTROL_UNIT/dcuif/write_tag
 add wave -noupdate -expand -group {Control Unit2} /dcache_tb/DUT1/CONTROL_UNIT/dcuif/set_valid
 add wave -noupdate -expand -group {Control Unit2} /dcache_tb/DUT1/CONTROL_UNIT/dcuif/mem_ready
@@ -146,7 +151,7 @@ add wave -noupdate -expand -group Mem_Control /dcache_tb/MEM/nxt_state
 add wave -noupdate -expand -group Mem_Control /dcache_tb/MEM/snooping
 add wave -noupdate -expand -group Mem_Control /dcache_tb/MEM/nxt_snooping
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1850666 ps} 0}
+WaveRestoreCursors {{Cursor 1} {3586632 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -162,4 +167,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {1725666 ps} {1975666 ps}
+WaveRestoreZoom {3512500 ps} {3762500 ps}

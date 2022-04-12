@@ -96,6 +96,6 @@ end
 assign dsuif.cctrans = state != IDLE && state != WAIT;
 assign dsuif.ccwrite = state == HIT_M_W1 || state == HIT_M_W2;
 
-assign dsuif.pr_stall = dsuif.cctrans;
+assign dsuif.pr_stall = dsuif.ccwait;
 
 endmodule

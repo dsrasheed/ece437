@@ -66,7 +66,7 @@ module datapath (
 
   assign mem_wait = (msif.dcache_dREN | msif.dcache_dWEN) & ~dpif.dhit;
 
-  fetch_stage FSTAGE(CLK, nRST, fsif);
+  fetch_stage #(.PC_INIT(PC_INIT)) FSTAGE (CLK, nRST, fsif);
   assign fsif.ihit = dpif.ihit & ~flif.stall;
   assign fsif.pc_control = msif.pc_control;
   assign fsif.pred_control = puif.pred_control;
