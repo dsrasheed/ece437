@@ -3,6 +3,7 @@
 `include "caches_if.vh"
 `include "dcache_frame_array_if.vh"
 `include "dcache_control_unit_if.vh"
+`include "dcache_snoop_unit_if.vh"
 
 module dcache (
   input logic CLK, nRST,
@@ -26,10 +27,12 @@ logic [N_SETS-1:0] nxt_LRU;
 dcache_frame_array_if frame0if ();
 dcache_frame_array_if frame1if ();
 dcache_control_unit_if dcuif ();
+dcache_snoop_unit_if dsuif ();
 
 dcache_frame_array FRAME0 (CLK, nRST, frame0if.dfa);
 dcache_frame_array FRAME1 (CLK, nRST, frame1if.dfa);
 dcache_control_unit CONTROL_UNIT (CLK, nRST, dcuif.dcu);
+dcache_snoop_unit SNOOP_UNIT (CLK, nRST, dsuif.dsu);
 flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
   .clk(CLK),
   .n_rst(nRST),
@@ -44,7 +47,7 @@ flex_counter #(.NUM_CNT_BITS(32)) HIT_COUNTER (
 assign mem_ready = ~cif.dwait;
 
 // control unit input assignments
-assign dcuif.enable = dcif.dmemREN | dcif.dmemWEN;
+assign dcuif.enable = (dcif.dmemREN | dcif.dmemWEN) & ~cif.cctrans;
 assign dcuif.dmemaddr = dcif.dmemaddr;
 assign dcuif.mem_ready = mem_ready;
 assign dcuif.frame0 = frame0if.out_frame;
@@ -56,13 +59,20 @@ assign dcuif.halt = dcif.halt;
 
 // frame 0 input assignments
 assign frame0if.addr = dcuif.cache_addr;
+assign frame0if.addr2 = cif.ccsnoopaddr;
 always_comb
 begin
   frame0if.store_data = 1'b0;
   frame0if.set_valid = 1'b0;
+  frame0if.clear_valid = 1'b0;
   frame0if.clear_dirty = 1'b0;
   frame0if.write_tag = 1'b0;
   frame0if.store = '0;
+  if (cif.cctrans)
+  begin
+    frame0if.clear_valid = frame0if.hit2 && dsuif.clear_valid;
+    frame0if.clear_dirty = frame0if.hit2 && dsuif.clear_dirty;
+  end
   if (frame0if.hit && dcif.dmemWEN)
   begin
     frame0if.store_data = 1'b1;
@@ -80,14 +90,21 @@ end
 
 // frame 1 input assignments
 assign frame1if.addr = dcuif.cache_addr;
+assign frame1if.addr2 = cif.ccsnoopaddr;
 always_comb
 begin
   frame1if.store_data = 1'b0;
   frame1if.set_valid = 1'b0;
+  frame1if.clear_valid = 1'b0;
   frame1if.clear_dirty = 1'b0;
   frame1if.write_tag = 1'b0;
   frame1if.store = '0;
-  if (frame1if.hit && dcif.dmemWEN)
+  if (cif.cctrans)
+  begin
+    frame1if.clear_valid = frame1if.hit2 && dsuif.clear_valid;
+    frame1if.clear_dirty = frame1if.hit2 && dsuif.clear_dirty;
+  end
+  else if (frame1if.hit && dcif.dmemWEN)
   begin
     frame1if.store_data = 1'b1;
     frame1if.store = dcif.dmemstore;
@@ -101,6 +118,14 @@ begin
     frame1if.store = cif.dload;
   end
 end
+
+// Snoop Control Input Assignments
+assign dsuif.ccwait = cif.ccwait;
+assign dsuif.ccinv = cif.ccinv;
+assign dsuif.ccsnoopaddr = cif.ccsnoopaddr;
+assign dsuif.snoop_hit = frame0if.hit2 | frame1if.hit2;
+assign dsuif.snoop_frame = frame0if.hit2 ? frame0if.out_frame2 : frame1if.out_frame2;
+assign dsuif.mem_ready = mem_ready;
 
 /* LRU Logic */
 always_ff @ (posedge CLK, negedge nRST)
@@ -132,7 +157,15 @@ assign dcif.flushed = dcuif.flushed;
 // Memory Controller
 assign cif.dREN = dcuif.dREN;
 assign cif.dWEN = dcuif.dWEN;
-assign cif.daddr = dcuif.daddr;
-assign cif.dstore = dcuif.dstore;
+always_comb begin
+  cif.daddr = dcuif.daddr;
+  cif.dstore = dcuif.dstore;
+  if (cif.cctrans) begin
+    cif.daddr = dsuif.daddr;
+    cif.dstore = dsuif.dstore;
+  end
+end
+assign cif.cctrans = dsuif.cctrans;
+assign cif.ccwrite = dsuif.ccwrite;
 
 endmodule

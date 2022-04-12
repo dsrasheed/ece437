@@ -25,11 +25,6 @@ logic counter_incr;
 logic [3:0] counter_out;
 logic counter_rollover;
 
-word_t nxt_miss_count;
-word_t miss_count;
-
-word_t nxt_access_count;
-word_t access_count;
 
 flex_counter #(.NUM_CNT_BITS(4)) INDEX_COUNTER(
     .clk(CLK),
@@ -43,16 +38,10 @@ flex_counter #(.NUM_CNT_BITS(4)) INDEX_COUNTER(
 
 always_ff @ (posedge CLK, negedge nRST)
 begin
-    if (nRST == 1'b0) begin
+    if (nRST == 1'b0)
         state <= IDLE;
-        miss_count <= 0;
-        access_count <= 0;
-    end
-    else begin
+    else
         state <= nxt_state;
-        miss_count <= nxt_miss_count;
-        access_count <= nxt_access_count;
-    end
 end
 
 dcache_frame selected_frame;
@@ -61,28 +50,23 @@ assign selected_frame = dcuif.frame_sel == 1 ? dcuif.frame1 : dcuif.frame0;
 always_comb
 begin
     nxt_state = state;
-    nxt_miss_count = miss_count;
-    nxt_access_count = access_count;
+    if (!dcuif.enable)
+        nxt_state = IDLE;
+    else
+    begin
     case (state) // synthesis full_case
         IDLE:
         begin
             if (dcuif.halt)
                 nxt_state = IS_FRAME0_DIRTY;
-            else if (!dcuif.enable)
-                nxt_state = IDLE;
             else if (!dcuif.hit && selected_frame.dirty)
             begin
                 nxt_state = WRITE1;
-                nxt_miss_count = miss_count + 1;
             end
             else if (!dcuif.hit && !selected_frame.dirty)
             begin
                 nxt_state = LOAD1;
-                nxt_miss_count = miss_count + 1;
             end
-
-            if (dcuif.enable)
-                nxt_access_count = access_count + 1;
         end
         WRITE1:
             if (dcuif.mem_ready) nxt_state = WRITE2;
@@ -126,9 +110,9 @@ begin
         default:
         begin
             nxt_state = IDLE;
-            nxt_miss_count = miss_count;
         end
     endcase
+    end
 end
 
 // STATE MACHINE MEMORY CONTROL

@@ -27,6 +27,8 @@ begin
 
   if (dfaif.set_valid)
     nxt_frames[dfaif.addr.idx].valid = 1'b1;
+  else if (dfaif.clear_valid)
+    nxt_frames[dfaif.addr.idx].valid = 1'b0;
 
   if (dfaif.clear_dirty)
     nxt_frames[dfaif.addr.idx].dirty = 1'b0;
@@ -41,7 +43,11 @@ begin
 
 end
 
-assign dfaif.hit = frames[dfaif.addr.idx].tag == dfaif.addr.tag;
+assign dfaif.hit = frames[dfaif.addr.idx].tag == dfaif.addr.tag && frames[dfaif.addr.idx].valid;
 assign dfaif.out_frame = frames[dfaif.addr.idx];
+
+assign dfaif.hit2 = frames[dfaif.addr2.idx].tag == dfaif.addr2.tag && 
+                         frames[dfaif.addr2.idx].valid;
+assign dfaif.out_frame2 = frames[dfaif.addr2.idx];
 
 endmodule

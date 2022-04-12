@@ -131,7 +131,7 @@ R13
 Ycache_control_if
 R1
 Z16 DXx4 work 13 cpu_types_pkg 0 22 JW?^GmlKDTB1SLiAhW;8F2
-Z17 !s110 1649006482
+Z17 !s110 1649532695
 !i10b 1
 !s100 ^jdLFBO;D6BoQd`j@YGKG2
 IO?205hR2NLj2^V:7DXG[h3
@@ -147,7 +147,7 @@ R8
 r1
 !s85 0
 31
-Z20 !s108 1649006481.000000
+Z20 !s108 1649532695.000000
 !s107 /home/ecegrid/a/mg216/ece437/processors/include/caches_if.vh|/home/ecegrid/a/mg216/ece437/processors/include/cpu_types_pkg.vh|/home/ecegrid/a/mg216/ece437/processors/include/cache_control_if.vh|
 Z21 !s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/include/cache_control_if.vh|
 !i113 0
@@ -350,7 +350,7 @@ R13
 Xdatapath_types_pkg
 R1
 R16
-!s110 1648788819
+!s110 1649532694
 !i10b 1
 !s100 0Q@:fkcj26Y_GaI8CU;RV0
 I_44Q;IK>NHb@@kAD8Bf]o0
@@ -365,7 +365,7 @@ R8
 r1
 !s85 0
 31
-!s108 1648788817.000000
+!s108 1649532692.000000
 R26
 R27
 !i113 0
@@ -842,6 +842,30 @@ R11
 !i113 0
 R12
 R13
+vmulticore
+R1
+!s110 1649006592
+!i10b 1
+!s100 P2?aY80VioLI[diz]G`GA1
+IN37^BH@1l8J`YbNoSVc?K1
+R3
+!s105 multicore_sv_unit
+S1
+R0
+w1648818027
+8/home/ecegrid/a/mg216/ece437/processors/source/multicore.sv
+F/home/ecegrid/a/mg216/ece437/processors/source/multicore.sv
+Z48 L0 10
+R8
+r1
+!s85 0
+31
+!s108 1649006592.000000
+!s107 /home/ecegrid/a/mg216/ece437/processors/source/multicore.sv|
+!s90 -nologo|-work|source|/home/ecegrid/a/mg216/ece437/processors/source/multicore.sv|
+!i113 0
+R12
+R13
 Ynpcl_if
 R1
 R16
@@ -929,7 +953,7 @@ R0
 w1644459626
 8/home/ecegrid/a/mg216/ece437/processors/source/pipeline.sv
 F/home/ecegrid/a/mg216/ece437/processors/source/pipeline.sv
-Z48 L0 10
+R48
 R8
 r1
 !s85 0
