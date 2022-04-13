@@ -164,6 +164,7 @@ end
 // Datapath
 always_comb begin
   dcif.dhit = 1'b0;
+  dcif.dmemload = '0;
   if (frame0if.hit)
   begin
     dcif.dhit = (~frame0if.out_frame.dirty & dcuif.will_modify) ? 1'b0 : dcuif.hit;
