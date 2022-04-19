@@ -243,11 +243,13 @@ begin
             dcuif.load_data = 1'b1;
             dcuif.set_valid = 1'b1;
             dcuif.write_tag = 1'b1;
+            dcuif.clear_dirty = 1'b1;
             if(just_inval)
             begin
                 dcuif.load_data = 1'b0;
                 dcuif.set_valid = 1'b0;
                 dcuif.write_tag = 1'b0;
+                dcuif.clear_dirty = 1'b0;
                 dcuif.inv_complete = dcuif.mem_ready;
             end
         end

@@ -81,8 +81,7 @@ begin
   begin
       frame0if.clear_dirty = dcuif.clear_dirty;
   end
-  else if ((frame0if.hit && dcif.dmemWEN && frame0if.out_frame.dirty) ||
-           (frame0if.hit && dcif.dmemWEN && !frame0if.out_frame.dirty && dcuif.inv_complete))
+  else if (frame0if.hit && dcif.dmemWEN && !frame0if.out_frame.dirty && dcuif.inv_complete)
   begin
     frame0if.store_data = 1'b1;
     frame0if.store = dcif.dmemstore;
@@ -118,8 +117,7 @@ begin
   begin
       frame1if.clear_dirty = dcuif.clear_dirty;
   end
-  else if ((frame1if.hit && dcif.dmemWEN && frame1if.out_frame.dirty) ||
-           (frame1if.hit && dcif.dmemWEN && !frame1if.out_frame.dirty && dcuif.inv_complete))
+  else if (frame1if.hit && dcif.dmemWEN && !frame1if.out_frame.dirty && dcuif.inv_complete)
   begin
     frame1if.store_data = 1'b1;
     frame1if.store = dcif.dmemstore;
@@ -167,12 +165,12 @@ always_comb begin
   dcif.dmemload = '0;
   if (frame0if.hit)
   begin
-    dcif.dhit = (~frame0if.out_frame.dirty & dcuif.will_modify) ? 1'b0 : dcuif.hit;
+    dcif.dhit = ((~frame0if.out_frame.dirty | dcuif.inv_complete) & dcuif.will_modify) ? 1'b0 : dcuif.hit;
     dcif.dmemload = frame0if.out_frame.data[dcuif.cache_addr.blkoff];
   end
   else if (frame1if.hit)
   begin
-    dcif.dhit = (~frame1if.out_frame.dirty & dcuif.will_modify) ? 1'b0 : dcuif.hit;
+    dcif.dhit = ((~frame1if.out_frame.dirty | dcuif.inv_complete) & dcuif.will_modify) ? 1'b0 : dcuif.hit;
     dcif.dmemload = frame1if.out_frame.data[dcuif.cache_addr.blkoff];
   end
 end
