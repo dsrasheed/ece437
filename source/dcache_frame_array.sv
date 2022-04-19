@@ -30,24 +30,24 @@ begin
   else if (dfaif.clear_valid)
     nxt_frames[dfaif.addr.idx].valid = 1'b0;
 
-  if (dfaif.clear_dirty)
-    nxt_frames[dfaif.addr.idx].dirty = 1'b0;
-  else if (dfaif.store_data)
+  if (dfaif.set_dirty)
     nxt_frames[dfaif.addr.idx].dirty = 1'b1;
+  else if (dfaif.clear_dirty)
+    nxt_frames[dfaif.addr.idx].dirty = 1'b0;
   
   if (dfaif.write_tag)
     nxt_frames[dfaif.addr.idx].tag = dfaif.addr.tag;
 
-  if (dfaif.store_data)
-    nxt_frames[dfaif.addr.idx].data[dfaif.addr.blkoff] = dfaif.store;
+  if (dfaif.wen)
+    nxt_frames[dfaif.addr.idx].data[dfaif.addr.blkoff] = dfaif.wdat;
 
 end
 
-assign dfaif.hit = frames[dfaif.addr.idx].tag == dfaif.addr.tag && frames[dfaif.addr.idx].valid;
-assign dfaif.out_frame = frames[dfaif.addr.idx];
+assign dfaif.hit = (frames[dfaif.addr.idx].tag == dfaif.addr.tag) && frames[dfaif.addr.idx].valid;
+assign dfaif.hitframe = frames[dfaif.addr.idx];
 
-assign dfaif.hit2 = frames[dfaif.addr2.idx].tag == dfaif.addr2.tag && 
-                         frames[dfaif.addr2.idx].valid;
-assign dfaif.out_frame2 = frames[dfaif.addr2.idx];
+assign dfaif.snoophit = (frames[dfaif.snoopaddr.idx].tag == dfaif.snoopaddr.tag) && 
+                         frames[dfaif.snoopaddr.idx].valid;
+assign dfaif.snoopframe = frames[dfaif.snoopaddr.idx];
 
 endmodule
