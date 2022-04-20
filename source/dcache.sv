@@ -13,7 +13,7 @@ import cpu_types_pkg::*;
 
 localparam N_SETS = 2**DIDX_W;
 
-logic [1:0] addr, snoopaddr;
+dcachef_t [1:0] addr, snoopaddr;
 logic [1:0] clear_valid, set_valid;
 logic [1:0] clear_dirty, set_dirty;
 logic [1:0] write_tag;
@@ -21,10 +21,6 @@ logic [1:0] wen;
 word_t [1:0] wdat;
 logic [1:0] hit, snoophit;
 dcache_frame [1:0] hitframe, snoopframe;
-
-logic saved_hitno, hitno;
-logic saved_evictno, evictno;
-logic saved_snoophitno, snoophitno;
 
 dcache_frame_array_if fa0if ();
 dcache_frame_array_if fa1if ();
@@ -64,19 +60,31 @@ end
 
 typedef enum logic[4:0] {
   IDLE,
-  CHECK_FRAME_DIRTY, FLUSH_WB1, FLUSH_WB2, FLUSH_INCR_COUNTER,
-  CHOOSE_EVICT, EVICT_WB1, EVICT_WB2, EVICT_UPDATE,
-  BUSRD1, BUSRD2, BUSRD_HIT,
-  BUSRDX1, BUSRDX2, BUSRDX_HIT,
+  CHECK_FRAME_DIRTY, FLUSH_WB1, FLUSH_WB2, FLUSHED,
+  CHOOSE_EVICT, EVICT_BUSWB1, EVICT_BUSWB2,
+  BUSRD1, BUSRD2,
+  BUSRDX1, BUSRDX2,
   QUICK_READ, QUICK_WRITE,
   SNOOP_MISS,
-  SNOOP_HIT_S1, SNOOP_HIT_S2,
   SNOOP_HIT_M1, SNOOP_HIT_M2,
-  SNOOP_TRANS_I, SNOOP_TRANS_S
+  SNOOP_HIT_S1, SNOOP_HIT_S2
 } dcache_state_t;
 
 logic mem_ready;
-dcache_state_t state, nxt_state;
+dcachef_t dmemaddr;
+
+dcache_state_t state, nxt_state, nxt_snoopstate;
+
+// needed in BUSRDX to determine if it should load or store
+logic valid_hitting, nxt_valid_hitting;
+
+logic hitting, nxt_hitting;
+logic evicting, nxt_evicting;
+logic snooping, nxt_snooping;
+logic busrdx_changing;
+
+logic [3:0] flush_counter, nxt_flush_counter;
+
 logic [N_SETS-1:0] LRU, nxt_LRU;
 
 always_ff @ (posedge CLK, negedge nRST)
@@ -84,18 +92,391 @@ begin
   if (nRST == 1'b0) begin
     LRU <= '0;
     state <= IDLE;
+    hitting <= 0;
+    snooping <= 0;
+    evicting <= 0;
+    valid_hitting <= 0;
+    flush_counter <= '0;
   end
   else begin
     LRU <= nxt_LRU;
     state <= nxt_state;
+    hitting <= nxt_hitting;
+    snooping <= nxt_snooping;
+    evicting <= nxt_evicting;
+    valid_hitting <= nxt_valid_hitting;
+    flush_counter <= nxt_flush_counter;
   end
 end
 
+assign dmemaddr = dcif.dmemaddr;
 assign mem_ready = ~cif.dwait;
 
+assign snoopaddr = {cif.ccsnoopaddr, cif.ccsnoopaddr};
 always_comb
 begin
+  nxt_snooping = snooping;
+  if (state != SNOOP_HIT_M1 && state != SNOOP_HIT_M2 &&
+      state != SNOOP_HIT_S1 && state != SNOOP_HIT_S2)
+    nxt_snooping = snoophit[0] ? 1'b0 : 1'b1;
+end
+always_comb
+begin
+  nxt_snoopstate = SNOOP_MISS;
+  if ((snoophit[0] && snoopframe[0].dirty) ||
+      (snoophit[1] && snoopframe[1].dirty))
+    nxt_snoopstate = SNOOP_HIT_M1;
+  else if ((snoophit[0] && !snoopframe[0].dirty) ||
+           (snoophit[1] && !snoopframe[1].dirty))
+    nxt_snoopstate = SNOOP_HIT_S1;
+end
 
+always_comb // State Transitions
+begin
+  nxt_state = state;
+  nxt_hitting = hitting;
+  nxt_valid_hitting = valid_hitting;
+  nxt_evicting = evicting;
+  nxt_flush_counter = flush_counter;
+  case (state)
+    IDLE:
+    begin
+      if (cif.ccwait)
+        nxt_state = nxt_snoopstate;
+
+      else if (dcif.halt)
+        nxt_state = CHECK_FRAME_DIRTY;
+
+      else if ((hit[0] || hit[1]) && (dcif.dmemWEN || dcif.dmemREN))
+      begin
+        nxt_hitting = hit[0] ? 0 : 1;
+        nxt_valid_hitting = 1'b1;
+
+        if (dcif.dmemWEN && !hitframe[nxt_hitting].dirty)
+          nxt_state = BUSRDX1;
+
+        else if (dcif.dmemWEN && hitframe[nxt_hitting].dirty)
+          nxt_state = QUICK_WRITE;
+
+        else if (dcif.dmemREN)
+          nxt_state = QUICK_READ;
+      end
+
+      else if (dcif.dmemWEN || dcif.dmemREN)
+        nxt_state = CHOOSE_EVICT;
+    end
+    CHOOSE_EVICT:
+    begin
+      if (cif.ccwait)
+        nxt_state = nxt_snoopstate;
+      else
+      begin
+        if (!hitframe[0].valid)
+          nxt_evicting = 1'b0;
+        else if (!hitframe[1].valid)
+          nxt_evicting = 1'b1;
+        else
+          nxt_evicting = LRU[dmemaddr.idx];
+
+        if (hitframe[nxt_evicting].dirty)
+          nxt_state = EVICT_BUSWB1;
+
+        else if (!hitframe[nxt_evicting].dirty && dcif.dmemREN)
+          nxt_state = BUSRD1;
+
+        else if (!hitframe[nxt_evicting].dirty && dcif.dmemWEN)
+          nxt_state = BUSRDX1;
+      end
+    end
+    EVICT_BUSWB1:
+    begin
+      if (cif.ccwait) nxt_state = nxt_snoopstate;
+      else if (mem_ready) nxt_state = EVICT_BUSWB2;
+    end
+    EVICT_BUSWB2:
+    begin
+      if (mem_ready) nxt_state = IDLE;
+    end
+    BUSRD1:
+    begin
+      if (cif.ccwait) nxt_state = nxt_snoopstate;
+      else if (mem_ready) nxt_state = BUSRD2;
+    end
+    BUSRD2:
+    begin
+      if (mem_ready) nxt_state = IDLE;
+    end
+    BUSRDX1:
+    begin
+      if (cif.ccwait)
+      begin 
+        nxt_state = nxt_snoopstate;
+        nxt_valid_hitting = 1'b0;
+      end
+      else if (mem_ready) nxt_state = BUSRDX2;
+    end
+    BUSRDX2:
+    begin
+      if (mem_ready) 
+      begin
+        nxt_state = IDLE;
+        nxt_valid_hitting = 1'b0;
+      end
+    end
+    QUICK_WRITE,
+    QUICK_READ:
+    begin
+      if (cif.ccwait) nxt_state = nxt_snoopstate;
+      else nxt_state = IDLE;
+      nxt_valid_hitting = 1'b0;
+    end
+    SNOOP_MISS:
+    begin
+      if (!cif.ccwait) nxt_state = IDLE;
+    end
+    SNOOP_HIT_M1:
+    begin
+      if (mem_ready) nxt_state = SNOOP_HIT_M2;
+    end
+    SNOOP_HIT_S1:
+    begin
+      if (mem_ready) nxt_state = SNOOP_HIT_S2;
+    end
+    SNOOP_HIT_S2,
+    SNOOP_HIT_M2:
+    begin
+      if (mem_ready) nxt_state = IDLE;
+    end
+    CHECK_FRAME_DIRTY:
+    begin
+      if (cif.ccwait) 
+        nxt_state = nxt_snoopstate;
+      else if ((flush_counter[0] == 0 && hitframe[0].dirty) ||
+               (flush_counter[0] == 1 && hitframe[1].dirty))
+      begin
+        nxt_state = FLUSH_WB1;
+      end
+      else if (flush_counter == 4'd15)
+        nxt_state = FLUSHED;
+      else
+        nxt_flush_counter = flush_counter + 1;
+    end
+    FLUSH_WB1:
+    begin
+      if (cif.ccwait) nxt_state = nxt_snoopstate;
+      else if (mem_ready) nxt_state = FLUSH_WB2;
+    end
+    FLUSH_WB2:
+    begin
+      if (mem_ready) nxt_state = IDLE;
+    end
+    default:
+    begin
+      nxt_state = state;
+      nxt_hitting = hitting;
+      nxt_valid_hitting = valid_hitting;
+      nxt_evicting = evicting;
+      nxt_flush_counter = flush_counter;
+    end
+  endcase
+end
+
+assign busrdx_changing = valid_hitting ? hitting : evicting;
+
+always_comb // Output Logic
+begin
+  dcif.dhit = 1'b0;
+  dcif.dmemload = '0;
+  dcif.flushed = 1'b0;
+  cif.dREN = 1'b0;
+  cif.dWEN = 1'b0;
+  cif.daddr = '0;
+  cif.dstore = '0;
+  cif.cctrans = 1'b0;
+  cif.ccwrite = 1'b0;
+  
+  addr = {dmemaddr, dmemaddr};
+  clear_dirty = '0;
+  clear_valid = '0;
+  set_valid = '0;
+  set_dirty = '0;
+  write_tag = '0;
+  wen = '0;
+  wdat = '0;
+  nxt_LRU = LRU;
+  case (state)
+    EVICT_BUSWB1:
+    begin
+      cif.cctrans = 1'b1;
+      cif.dWEN = 1'b1;
+      cif.daddr = {hitframe[evicting].tag, dmemaddr.idx, 3'b000};
+      cif.dstore = hitframe[evicting].data[0];
+    end
+    EVICT_BUSWB2:
+    begin
+      cif.cctrans = 1'b1;
+      cif.dWEN = 1'b1;
+      cif.daddr = {hitframe[evicting].tag, dmemaddr.idx, 3'b100};
+      cif.dstore = hitframe[evicting].data[1];
+      if (mem_ready)
+      begin
+        clear_dirty[evicting] = 1'b1;
+        clear_valid[evicting] = 1'b1;
+      end
+    end
+    BUSRD1:
+    begin
+      cif.cctrans = 1'b1;
+      cif.dREN = 1'b1;
+      cif.daddr = {dmemaddr.tag, dmemaddr.idx, 3'b000};
+      addr[evicting] = cif.daddr;
+      if (mem_ready)
+      begin
+        wen[evicting] = 1'b1;
+        wdat[evicting] = cif.dload;
+      end
+    end
+    BUSRD2:
+    begin
+      cif.cctrans = 1'b1;
+      cif.dREN = 1'b1;
+      cif.daddr = {dmemaddr.tag, dmemaddr.idx, 3'b100};
+      addr[evicting] = cif.daddr;
+      if (mem_ready)
+      begin
+        wen[evicting] = 1'b1;
+        wdat[evicting] = cif.dload;
+
+        write_tag[evicting] = 1'b1;
+        set_valid[evicting] = 1'b1;
+        clear_dirty[evicting] = 1'b1;
+
+        dcif.dhit = 1'b1;
+        dcif.dmemload = hitframe[evicting].data[0];
+        if (dmemaddr.blkoff == 1'b1)
+          dcif.dmemload = cif.dload;
+
+        nxt_LRU[dmemaddr.idx] = ~dmemaddr.blkoff;
+      end
+    end
+    BUSRDX1:
+    begin
+      cif.cctrans = 1'b1;
+      cif.ccwrite = 1'b1;
+      cif.dREN = 1'b1;
+      cif.daddr = {dmemaddr.tag, dmemaddr.idx, 3'b000};
+      addr[busrdx_changing] = cif.daddr;
+      if (mem_ready)
+      begin
+        wen[busrdx_changing] = 1'b1;
+        wdat[busrdx_changing] = cif.dload;
+        if (dmemaddr.blkoff == 1'b0)
+          wdat[busrdx_changing] = dcif.dmemstore;
+      end
+    end
+    BUSRDX2:
+    begin
+      cif.cctrans = 1'b1;
+      cif.ccwrite = 1'b1;
+      cif.dREN = 1'b1;
+      cif.daddr = {dmemaddr.tag, dmemaddr.idx, 3'b100};
+      addr[busrdx_changing] = cif.daddr;
+      if (mem_ready)
+      begin
+        wen[busrdx_changing] = 1'b1;
+        wdat[busrdx_changing] = cif.dload;
+        if (dmemaddr.blkoff == 1'b1)
+          wdat[busrdx_changing] = dcif.dmemstore;
+
+        write_tag[busrdx_changing] = 1'b1;
+        set_valid[busrdx_changing] = 1'b1;
+        set_dirty[busrdx_changing] = 1'b1;
+
+        dcif.dhit = 1'b1;
+
+        nxt_LRU[dmemaddr.idx] = ~dmemaddr.blkoff;
+      end
+    end
+    QUICK_READ:
+    begin
+      dcif.dhit = 1'b1;
+      dcif.dmemload = hitframe[hitting].data[dmemaddr.blkoff];
+      nxt_LRU[dmemaddr.idx] = ~dmemaddr.blkoff;
+    end
+    QUICK_WRITE:
+    begin
+      wen[hitting] = 1'b1;
+      wdat[hitting] = dcif.dmemstore;
+      dcif.dhit = 1'b1;
+      nxt_LRU[dmemaddr.idx] = ~dmemaddr.blkoff;
+    end
+    SNOOP_HIT_M1:
+    begin
+      cif.cctrans = 1'b1;
+      cif.ccwrite = 1'b1;
+      cif.daddr = {snoopaddr[snooping].tag, snoopaddr[snooping].idx, 3'b000};
+      cif.dstore = snoopframe[snooping].data[0];
+    end
+    SNOOP_HIT_M2:
+    begin
+      cif.cctrans = 1'b1;
+      cif.ccwrite = 1'b1;
+      cif.daddr =  {snoopaddr[snooping].tag, snoopaddr[snooping].idx, 3'b100};
+      cif.dstore = snoopframe[snooping].data[1];
+      if (mem_ready)
+      begin
+        addr[snooping] = cif.daddr;
+        clear_dirty[snooping] = 1'b1;
+        if (cif.ccinv)
+          clear_valid[snooping] = 1'b1;
+      end
+    end
+    SNOOP_HIT_S1:
+    begin
+      cif.cctrans = 1'b1;
+      cif.daddr = {snoopaddr[snooping].tag, snoopaddr[snooping].idx, 3'b000};
+      cif.dstore = snoopframe[snooping].data[0];
+    end
+    SNOOP_HIT_S2:
+    begin
+      cif.cctrans = 1'b1;
+      cif.daddr = {snoopaddr[snooping].tag, snoopaddr[snooping].idx, 3'b100};
+      cif.dstore = snoopframe[snooping].data[1];
+      if (mem_ready)
+      begin
+        addr[snooping] = cif.daddr;
+        clear_dirty[snooping] = 1'b1;
+        if (cif.ccinv)
+          clear_valid[snooping] = 1'b1;
+      end
+    end
+    CHECK_FRAME_DIRTY:
+    begin
+      addr[flush_counter[0]].idx = flush_counter[3:1];
+    end
+    FLUSH_WB1:
+    begin
+      cif.cctrans = 1'b1;
+      cif.dWEN = 1'b1;
+      cif.daddr = {hitframe[flush_counter[0]].tag, flush_counter[3:1], 3'b000};
+      cif.dstore = hitframe[flush_counter[0]].data[0];
+      addr[flush_counter[0]].idx = flush_counter[3:1];
+    end
+    FLUSH_WB2:
+    begin
+      cif.cctrans = 1'b1;
+      cif.dWEN = 1'b1;
+      cif.daddr = {hitframe[flush_counter[0]].tag, flush_counter[3:1], 3'b100};
+      cif.dstore = hitframe[flush_counter[0]].data[1];
+      addr[flush_counter[0]].idx = flush_counter[3:1];
+      if (mem_ready)
+        clear_dirty[flush_counter[0]] = 1'b1;
+    end
+    FLUSHED:
+    begin
+      dcif.flushed = 1'b1;
+    end
+  endcase
 end
 
 endmodule

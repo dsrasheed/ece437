@@ -61,6 +61,9 @@ mainp1:
   nop
   nop
   nop
+  nop
+  nop
+  nop
 
   lui $1, 0x1234
   sw  $1, 0($2)
