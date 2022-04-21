@@ -56,6 +56,7 @@ assign msif.out.dmemload = msif.dmemload;
 assign msif.dcache_store = msif.in.rdat2;
 assign msif.dcache_dWEN = msif.in.MemWr;
 assign msif.dcache_dREN = msif.in.MemRd;
+assign msif.dcache_datomic = msif.in.Atomic;
 assign msif.dcache_daddr = msif.in.aluOut;
 
 endmodule

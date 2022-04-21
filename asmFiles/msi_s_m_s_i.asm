@@ -51,10 +51,6 @@ mainp1:
   nop
   nop
   nop
-  nop
-  nop
-  nop
-  nop
 
   ori $2, $0, l1
   lw  $1, 0($2)

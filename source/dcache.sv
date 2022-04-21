@@ -61,6 +61,7 @@ end
 typedef enum logic[4:0] {
   IDLE,
   CHECK_FRAME_DIRTY, FLUSH_WB1, FLUSH_WB2, FLUSHED,
+  CHECK_LR,
   CHOOSE_EVICT, EVICT_BUSWB1, EVICT_BUSWB2,
   BUSRD1, BUSRD2,
   BUSRDX1, BUSRDX2,
@@ -87,6 +88,9 @@ logic [3:0] flush_counter, nxt_flush_counter;
 
 logic [N_SETS-1:0] LRU, nxt_LRU;
 
+word_t lr, nxt_lr;
+logic  lr_valid, nxt_lr_valid;
+
 always_ff @ (posedge CLK, negedge nRST)
 begin
   if (nRST == 1'b0) begin
@@ -97,6 +101,8 @@ begin
     evicting <= 0;
     valid_hitting <= 0;
     flush_counter <= '0;
+    lr <= '0;
+    lr_valid <= 0;
   end
   else begin
     LRU <= nxt_LRU;
@@ -106,6 +112,8 @@ begin
     evicting <= nxt_evicting;
     valid_hitting <= nxt_valid_hitting;
     flush_counter <= nxt_flush_counter;
+    lr <= nxt_lr;
+    lr_valid <= nxt_lr_valid;
   end
 end
 
@@ -138,6 +146,8 @@ begin
   nxt_valid_hitting = valid_hitting;
   nxt_evicting = evicting;
   nxt_flush_counter = flush_counter;
+  nxt_lr = lr;
+  nxt_lr_valid = lr_valid;
   case (state)
     IDLE:
     begin
@@ -146,6 +156,9 @@ begin
 
       else if (dcif.halt)
         nxt_state = CHECK_FRAME_DIRTY;
+
+      else if (dcif.dmemWEN && dcif.datomic)
+        nxt_state = CHECK_LR;
 
       else if ((hit[0] || hit[1]) && (dcif.dmemWEN || dcif.dmemREN))
       begin
@@ -163,7 +176,27 @@ begin
       end
 
       else if (dcif.dmemWEN || dcif.dmemREN)
-        nxt_state = CHOOSE_EVICT;
+          nxt_state = CHOOSE_EVICT;
+    end
+    CHECK_LR:
+    begin
+      if (cif.ccwait) nxt_state = nxt_snoopstate;
+      else if (lr == dcif.dmemaddr && lr_valid)
+      begin
+        if (hit[0] || hit[1])
+        begin
+          nxt_hitting = hit[0] ? 0 : 1;
+          nxt_valid_hitting = 1'b1;
+          if (hitframe[nxt_hitting].dirty)
+            nxt_state = QUICK_WRITE;
+          else
+            nxt_state = BUSRDX1;
+        end
+        else
+          nxt_state = CHOOSE_EVICT;
+      end
+      else
+        nxt_state = IDLE;
     end
     CHOOSE_EVICT:
     begin
@@ -204,7 +237,14 @@ begin
     end
     BUSRD2:
     begin
-      if (mem_ready) nxt_state = IDLE;
+      if (mem_ready) 
+        nxt_state = IDLE;
+
+      if (dcif.datomic)
+      begin
+          nxt_lr = dcif.dmemaddr;
+          nxt_lr_valid = 1'b1;
+      end
     end
     BUSRDX1:
     begin
@@ -222,13 +262,28 @@ begin
         nxt_state = IDLE;
         nxt_valid_hitting = 1'b0;
       end
+      if (dcif.dmemaddr == lr)
+        nxt_lr_valid = 0;
     end
-    QUICK_WRITE,
+    QUICK_WRITE:
+    begin
+      if (cif.ccwait) nxt_state = nxt_snoopstate;
+      else nxt_state = IDLE;
+      nxt_valid_hitting = 1'b0;
+      if (dcif.dmemaddr == lr)
+        nxt_lr_valid = 0;
+    end
     QUICK_READ:
     begin
       if (cif.ccwait) nxt_state = nxt_snoopstate;
       else nxt_state = IDLE;
       nxt_valid_hitting = 1'b0;
+
+      if (dcif.datomic)
+      begin
+        nxt_lr_valid = 1'b1;
+        nxt_lr = dcif.dmemaddr;
+      end
     end
     SNOOP_MISS:
     begin
@@ -242,8 +297,13 @@ begin
     begin
       if (mem_ready) nxt_state = SNOOP_HIT_S2;
     end
-    SNOOP_HIT_S2,
     SNOOP_HIT_M2:
+    begin
+      if (mem_ready) nxt_state = IDLE;
+      if (cif.ccsnoopaddr == lr)
+        nxt_lr_valid = 1'b0;
+    end
+    SNOOP_HIT_S2:
     begin
       if (mem_ready) nxt_state = IDLE;
     end
@@ -305,6 +365,14 @@ begin
   wdat = '0;
   nxt_LRU = LRU;
   case (state)
+    CHECK_LR:
+    begin
+      if (!(lr == dcif.dmemaddr && lr_valid))
+      begin
+        dcif.dhit = 1'b1;
+        dcif.dmemload = '0;
+      end
+    end
     EVICT_BUSWB1:
     begin
       cif.cctrans = 1'b1;
@@ -393,6 +461,8 @@ begin
         set_dirty[busrdx_changing] = 1'b1;
 
         dcif.dhit = 1'b1;
+        // Only used by SC, ignored by regular SW
+        dcif.dmemload = 32'd1;
 
         nxt_LRU[dmemaddr.idx] = ~dmemaddr.blkoff;
       end
@@ -407,7 +477,11 @@ begin
     begin
       wen[hitting] = 1'b1;
       wdat[hitting] = dcif.dmemstore;
+
       dcif.dhit = 1'b1;
+      // Only used by SC, ignored by regular SW
+      dcif.dmemload = 32'd1;
+
       nxt_LRU[dmemaddr.idx] = ~dmemaddr.blkoff;
     end
     SNOOP_HIT_M1:

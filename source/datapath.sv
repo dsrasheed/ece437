@@ -135,6 +135,7 @@ module datapath (
   assign dpif.dmemstore = msif.dcache_store;
   assign dpif.dmemREN = msif.dcache_dREN;
   assign dpif.dmemWEN = msif.dcache_dWEN;
+  assign dpif.datomic = msif.dcache_datomic;
   assign msif.dmemload = dpif.dmemload;
   assign mlif.track_in = msif.track_out;
   assign mlif.in = msif.out;

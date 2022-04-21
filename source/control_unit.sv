@@ -121,6 +121,22 @@ always_comb begin
             cuif.ALUSrc = 1'b1;
             cuif.ExtOp = 1'b1;
         end
+        LL: begin
+            ALUg = ALUG_ADD;
+            cuif.MemRd = 1'b1;
+            cuif.RegWr = 1'b1;
+            cuif.ALUSrc = 1'b1;
+            cuif.MemToReg = 1'b1;
+            cuif.ExtOp = 1'b1;
+            cuif.Atomic = 1'b1;
+        end
+        SC: begin
+            ALUg = ALUG_ADD;
+            cuif.MemWr = 1'b1;
+            cuif.ALUSrc = 1'b1;
+            cuif.ExtOp = 1'b1;
+            cuif.Atomic = 1'b1;
+        end
         HALT: begin
             cuif.halt = 1'b1;
             cuif.PCSrc = KEEP;
