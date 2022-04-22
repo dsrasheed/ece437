@@ -17,10 +17,7 @@ logic nxt_valid;
 logic [25:0] nxt_tag;
 logic [31:0] nxt_data; 
 
-
-assign addr.tag = dcif.imemaddr[31:6];
-assign addr.idx = dcif.imemaddr[5:2];
-assign addr.bytoff = dcif.imemaddr[1:0];
+assign addr = dcif.imemaddr;
 
 always_ff @(posedge CLK, negedge nRST) 
 begin
@@ -58,12 +55,12 @@ end
 always_comb
 begin
 	nxt_data = cache[addr.idx].data;
-	nxt_tag = cif.iload;
+	nxt_tag = cache[addr.idx].tag;
 	nxt_valid = cache[addr.idx].valid;
 	if(cif.iwait == 0)
 	begin 
 		nxt_data = cif.iload;
-		nxt_tag = dcif.imemaddr[31:6];
+		nxt_tag = addr.tag;
 		nxt_valid = 1;
 	end
 end

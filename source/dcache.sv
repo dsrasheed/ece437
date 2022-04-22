@@ -300,12 +300,14 @@ begin
     SNOOP_HIT_M2:
     begin
       if (mem_ready) nxt_state = IDLE;
-      if (cif.ccsnoopaddr == lr)
+      if (cif.ccinv && cif.ccsnoopaddr[31:3] == lr[31:3])
         nxt_lr_valid = 1'b0;
     end
     SNOOP_HIT_S2:
     begin
       if (mem_ready) nxt_state = IDLE;
+      if (cif.ccinv && cif.ccsnoopaddr[31:3] == lr[31:3])
+        nxt_lr_valid = 1'b0;
     end
     CHECK_FRAME_DIRTY:
     begin
@@ -329,6 +331,10 @@ begin
     FLUSH_WB2:
     begin
       if (mem_ready) nxt_state = IDLE;
+    end
+    FLUSHED:
+    begin
+        nxt_lr_valid = 1'b0;
     end
     default:
     begin
@@ -549,6 +555,7 @@ begin
     FLUSHED:
     begin
       dcif.flushed = 1'b1;
+
     end
   endcase
 end

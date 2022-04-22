@@ -12,13 +12,13 @@ add wave -noupdate -group {Fetch Stage 0} /system_tb/DUT/CPU/DP0/FSTAGE/fsif/nxt
 add wave -noupdate -group {Fetch Stage 0} /system_tb/DUT/CPU/DP0/FSTAGE/fsif/instr
 add wave -noupdate -group {Fetch Stage 0} /system_tb/DUT/CPU/DP0/FSTAGE/fsif/pred_branch
 add wave -noupdate -group {Fetch Stage 0} /system_tb/DUT/CPU/DP0/FSTAGE/fsif/out
-add wave -noupdate -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/pc_control
-add wave -noupdate -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/pc_en
-add wave -noupdate -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/pred_control
-add wave -noupdate -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/flush
-add wave -noupdate -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/iaddr
-add wave -noupdate -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/nxt_pc
-add wave -noupdate -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/pred_branch
+add wave -noupdate -expand -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/pc_control
+add wave -noupdate -expand -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/pc_en
+add wave -noupdate -expand -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/pred_control
+add wave -noupdate -expand -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/flush
+add wave -noupdate -expand -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/iaddr
+add wave -noupdate -expand -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/nxt_pc
+add wave -noupdate -expand -group {PC 0} /system_tb/DUT/CPU/DP0/FSTAGE/pcif/pred_branch
 add wave -noupdate -group {Fetch Latch 0} /system_tb/DUT/CPU/DP0/FLATCH/flif/in
 add wave -noupdate -group {Fetch Latch 0} /system_tb/DUT/CPU/DP0/FLATCH/flif/out
 add wave -noupdate -group {Fetch Latch 0} /system_tb/DUT/CPU/DP0/FLATCH/flif/stall
@@ -134,7 +134,7 @@ add wave -noupdate -group {Mem Latch 0} /system_tb/DUT/CPU/DP0/MLATCH/mlif/track
 add wave -noupdate -group {Mem Latch 0} /system_tb/DUT/CPU/DP0/MLATCH/mlif/track_out
 add wave -noupdate -group {Mem Latch 0} /system_tb/DUT/CPU/DP0/MLATCH/mlif/stall
 add wave -noupdate -group {Frame 0} -label {Frame 0} -expand -subitemconfig {{/system_tb/DUT/CPU/CM0/DCACHE/FRAME0/frames[0]} -expand} /system_tb/DUT/CPU/CM0/DCACHE/FRAME0/frames
-add wave -noupdate -group {Frame 0} -label {Frame 1} /system_tb/DUT/CPU/CM0/DCACHE/FRAME1/frames
+add wave -noupdate -group {Frame 0} -label {Frame 1} -expand /system_tb/DUT/CPU/CM0/DCACHE/FRAME1/frames
 add wave -noupdate -expand -group {Dcache Control 0} /system_tb/DUT/CPU/CM0/DCACHE/addr
 add wave -noupdate -expand -group {Dcache Control 0} /system_tb/DUT/CPU/CM0/DCACHE/snoopaddr
 add wave -noupdate -expand -group {Dcache Control 0} /system_tb/DUT/CPU/CM0/DCACHE/clear_valid
@@ -192,13 +192,13 @@ add wave -noupdate -group {Fetch Stage 1} /system_tb/DUT/CPU/DP1/FSTAGE/fsif/nxt
 add wave -noupdate -group {Fetch Stage 1} /system_tb/DUT/CPU/DP1/FSTAGE/fsif/instr
 add wave -noupdate -group {Fetch Stage 1} /system_tb/DUT/CPU/DP1/FSTAGE/fsif/pred_branch
 add wave -noupdate -group {Fetch Stage 1} /system_tb/DUT/CPU/DP1/FSTAGE/fsif/track_out
-add wave -noupdate -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/pc_control
-add wave -noupdate -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/pc_en
-add wave -noupdate -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/pred_control
-add wave -noupdate -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/flush
-add wave -noupdate -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/iaddr
-add wave -noupdate -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/nxt_pc
-add wave -noupdate -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/pred_branch
+add wave -noupdate -expand -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/pc_control
+add wave -noupdate -expand -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/pc_en
+add wave -noupdate -expand -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/pred_control
+add wave -noupdate -expand -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/flush
+add wave -noupdate -expand -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/iaddr
+add wave -noupdate -expand -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/nxt_pc
+add wave -noupdate -expand -group {PC 1} /system_tb/DUT/CPU/DP1/FSTAGE/PC/pcif/pred_branch
 add wave -noupdate -group {Fetch Latch 1} /system_tb/DUT/CPU/DP1/FLATCH/flif/in
 add wave -noupdate -group {Fetch Latch 1} /system_tb/DUT/CPU/DP1/FLATCH/flif/out
 add wave -noupdate -group {Fetch Latch 1} /system_tb/DUT/CPU/DP1/FLATCH/flif/stall
@@ -229,14 +229,14 @@ add wave -noupdate -group {Control Unit 1} /system_tb/DUT/CPU/DP1/DSTAGE/cuif/Me
 add wave -noupdate -group {Control Unit 1} /system_tb/DUT/CPU/DP1/DSTAGE/cuif/RegWr
 add wave -noupdate -group {Control Unit 1} /system_tb/DUT/CPU/DP1/DSTAGE/cuif/RegDst
 add wave -noupdate -group {Control Unit 1} /system_tb/DUT/CPU/DP1/DSTAGE/cuif/halt
-add wave -noupdate -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/WEN
-add wave -noupdate -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/reg_file/registers
-add wave -noupdate -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/wsel
-add wave -noupdate -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/rsel1
-add wave -noupdate -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/rsel2
-add wave -noupdate -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/wdat
-add wave -noupdate -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/rdat1
-add wave -noupdate -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/rdat2
+add wave -noupdate -expand -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/WEN
+add wave -noupdate -expand -group {Reg File 1} -expand /system_tb/DUT/CPU/DP1/DSTAGE/reg_file/registers
+add wave -noupdate -expand -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/wsel
+add wave -noupdate -expand -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/rsel1
+add wave -noupdate -expand -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/rsel2
+add wave -noupdate -expand -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/wdat
+add wave -noupdate -expand -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/rdat1
+add wave -noupdate -expand -group {Reg File 1} /system_tb/DUT/CPU/DP1/DSTAGE/rfif/rdat2
 add wave -noupdate -group {Pred Unit 1} /system_tb/DUT/CPU/DP1/PRED_UNIT/puif/pred_branch
 add wave -noupdate -group {Pred Unit 1} /system_tb/DUT/CPU/DP1/PRED_UNIT/puif/pc_decode
 add wave -noupdate -group {Pred Unit 1} /system_tb/DUT/CPU/DP1/PRED_UNIT/puif/pc_mem
@@ -313,50 +313,51 @@ add wave -noupdate -group {Mem Latch 1} /system_tb/DUT/CPU/DP1/MLATCH/mlif/out
 add wave -noupdate -group {Mem Latch 1} /system_tb/DUT/CPU/DP1/MLATCH/mlif/track_in
 add wave -noupdate -group {Mem Latch 1} /system_tb/DUT/CPU/DP1/MLATCH/mlif/track_out
 add wave -noupdate -group {Mem Latch 1} /system_tb/DUT/CPU/DP1/MLATCH/mlif/stall
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/halt
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/ihit
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/imemREN
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/imemload
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/imemaddr
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dhit
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/datomic
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemREN
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemWEN
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/flushed
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemload
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemstore
-add wave -noupdate -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemaddr
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/addr
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/snoopaddr
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/clear_valid
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/set_valid
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/clear_dirty
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/set_dirty
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/write_tag
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/wen
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/wdat
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/hit
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/snoophit
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/hitframe
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/snoopframe
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/mem_ready
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/dmemaddr
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/state
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_state
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_snoopstate
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/valid_hitting
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_valid_hitting
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/hitting
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_hitting
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/evicting
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_evicting
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/snooping
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_snooping
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/busrdx_changing
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/flush_counter
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_flush_counter
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/LRU
-add wave -noupdate -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_LRU
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/halt
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/ihit
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/imemREN
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/imemload
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/imemaddr
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dhit
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/datomic
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemREN
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemWEN
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/flushed
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemload
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemstore
+add wave -noupdate -expand -group {Datapath 1} /system_tb/DUT/CPU/CM1/dcif/dmemaddr
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/addr
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/snoopaddr
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/clear_valid
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/set_valid
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/clear_dirty
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/set_dirty
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/write_tag
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/wen
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/wdat
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/hit
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/snoophit
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/hitframe
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/snoopframe
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/mem_ready
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/dmemaddr
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/state
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_state
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_snoopstate
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/valid_hitting
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_valid_hitting
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/hitting
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/lr_valid
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_hitting
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/evicting
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_evicting
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/snooping
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_snooping
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/busrdx_changing
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/flush_counter
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_flush_counter
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/LRU
+add wave -noupdate -expand -group {Dcache Control 1} /system_tb/DUT/CPU/CM1/DCACHE/nxt_LRU
 add wave -noupdate -group {Frame 1} -label {Frame 0} -expand /system_tb/DUT/CPU/CM1/DCACHE/FRAME0/frames
 add wave -noupdate -group {Frame 1} -label {Frame 1} /system_tb/DUT/CPU/CM1/DCACHE/FRAME1/frames
 add wave -noupdate -group {Frame 1} /system_tb/DUT/CPU/CM1/DCACHE/FRAME0/dfaif/set_valid
@@ -377,8 +378,9 @@ add wave -noupdate -expand -group Memory /system_tb/DUT/prif/ramaddr
 add wave -noupdate -expand -group Memory /system_tb/DUT/prif/ramstore
 add wave -noupdate -expand -group Memory /system_tb/DUT/prif/ramload
 add wave -noupdate -expand -group Memory /system_tb/DUT/prif/ramstate
+add wave -noupdate -expand /system_tb/DUT/RAM/altsyncram_component/mem_data
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {542648 ps} 0}
+WaveRestoreCursors {{Cursor 1} {5140000 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -394,4 +396,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {1311915349 ps} {1313099192 ps}
+WaveRestoreZoom {4498588 ps} {5682431 ps}
