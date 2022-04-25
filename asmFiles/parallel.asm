@@ -7,15 +7,15 @@
   halt
 
 mainp0:
-  push  $ra                 # save return address 
-  ori   $t6, $zero, 10     # set max rands to 256
+  push  $ra                 # save return address
+  ori   $t6, $zero, 256     # set max rands to 256
   ori   $t9, $zero, 7       # set seed to 7
   ori   $t7, $zero, 0   # initialize temp reg 8 to zero (this is our counter for number of randoms generated)
 genRand:
 
   # generate random number
   or   $a0, $zero, $t9    # set argument to previous value (or seed if first loop)
-  jal   crc32               # generate random 
+  jal   crc32               # generate random
   or   $t8, $zero, $v0     # set temp register to result of crc32
 
   # push result
@@ -31,7 +31,7 @@ genRand:
 
   # if not done, go to generate
   addi  $t7, $t7, 1
-  bne   $t7, $t6, genRand   # branch as long as counter is not equal to 256         
+  bne   $t7, $t6, genRand   # branch as long as counter is not equal to 256
 
   pop   $ra                 # get return address
   jr    $ra                 # return to caller
@@ -43,20 +43,20 @@ l1:
 #----------------------------------------------------------
 # Second Processor
 #----------------------------------------------------------
-  org   0x1000               # second processor p1
+  org   0x200               # second processor p1
   ori   $sp, $zero, 0x7ffc  # stack
   jal   mainp1              # go to program
   halt
 
 mainp1:
   push  $ra                 # save return address
-  ori   $t5, $zero, 10
+  ori   $t5, $zero, 256
   ori   $t6, $zero, 0   # initialize temp reg 6 to zero (this is our counter for number of randoms generated)
 
   #initialize results
   ori   $s0, $zero, 0xFFFFFFFF  # Min value
   ori   $s1, $zero, 0x00000000  # Max value
-  ori   $s2, $zero, 0           # sum of random values 
+  ori   $s2, $zero, 0           # sum of random values
 
 popNextVal:
   #verify there are values in the stack
@@ -79,7 +79,7 @@ popNextVal:
   andi   $a1, $t7, 0x0000FFFF
   jal  min
   or   $s0, $zero, $v0
-  
+
   # max calculation
   andi   $a0, $s1, 0x0000FFFF
   jal  max
@@ -89,7 +89,7 @@ popNextVal:
   andi $t7, $t7, 0x0000FFFF
   add $s2, $s2, $t7
 
-  
+
   # increment counter and branch
   addi  $t6, $t6, 1
   bne   $t6, $t5, popNextVal
@@ -101,7 +101,7 @@ popNextVal:
   or $s2, $zero, $v0
   or $s3, $zero, $v1
   # average is in $s2 and remainder in $s3
-  
+
   ori $t0, $zero, min_res
   sw $s0, 0($t0)
   ori $t0, $zero, max_res
@@ -113,7 +113,7 @@ popNextVal:
   jr    $ra                 # return to caller
 
 res:
-  cfw 0x0                   
+  cfw 0x0
 
 #---------------------------------------------------------
 # Lock and Unlock
@@ -151,7 +151,7 @@ checkStack:
 pushVal:
   ori $t0, $zero, gstackptr
   lw $t1, 0($t0)                      # load the offset
-  
+
   ori $t2, $zero, gstackbase
   lw $t3, 0($t2)                      # load the stack base
 
@@ -167,7 +167,7 @@ pushVal:
 popVal:
   ori $t0, $zero, gstackptr
   lw $t1, 0($t0)                      # load the offset
-  
+
   ori $t2, $zero, gstackbase
   lw $t3, 0($t2)                      # load the stack base
 

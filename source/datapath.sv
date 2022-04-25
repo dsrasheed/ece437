@@ -74,7 +74,7 @@ module datapath (
   assign fsif.pred_branch = puif.pred_branch;
   assign fsif.flush = huif.flush;
   assign dpif.imemaddr = fsif.out.pc;
-  assign dpif.imemREN = 1'b1;
+  assign dpif.imemREN = !dpif.halt && !elif.out.halt;
   assign fsif.instr = dpif.imemload;
   assign flif.track_in = fsif.track_out;
   always_comb

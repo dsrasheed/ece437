@@ -334,7 +334,7 @@ begin
     end
     FLUSHED:
     begin
-        nxt_lr_valid = 1'b0;
+      nxt_lr_valid = 1'b0;
     end
     default:
     begin
@@ -343,6 +343,8 @@ begin
       nxt_valid_hitting = valid_hitting;
       nxt_evicting = evicting;
       nxt_flush_counter = flush_counter;
+      nxt_lr = lr;
+      nxt_lr_valid = lr_valid;
     end
   endcase
 end

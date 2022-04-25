@@ -51,29 +51,48 @@ module memory_control (
   assign ccif.iload = ccif.ramload;
   assign ccif.dload = ccif.ramload;*/
 
-typedef enum logic[4:0] {
+typedef enum logic[5:0] {
   IDLE,
 	FETCH,
+	FETCH_RAMWAIT1,
+	FETCH_RAMWAIT2,
+
 	ARB,
+
 	SNOOP,
-	SNOOP_BUFFER1,
-	SNOOP_BUFFER2,
+	SNOOP_CCWAIT1,
+	SNOOP_CCWAIT2,
 	REACT2SNOOP,
-	WB1,
-	WB2,
-	MEM2CACHE_W1,
-	MEM2CACHE_BUFFER1,
-	MEM2CACHE_BUFFER2,
-	MEM2CACHE_W2,
+
 	CACHE2CACHE_W1,
-	CACHE2CACHE_BUFFER1,
-	CACHE2CACHE_BUFFER2,
+	CACHE2CACHE_W1_RAMWAIT1,
+	CACHE2CACHE_W1_RAMWAIT2,
+	CACHE2CACHE_W1_CCWAIT1,
+	CACHE2CACHE_W1_CCWAIT2,
 	CACHE2CACHE_W2,
-	SNOOP_BUFFER3,
-	SNOOP_BUFFER4,
-	SNOOP_BUFFER5,
-	WBBUFFER1,
-	WBBUFFER2
+	CACHE2CACHE_W2_RAMWAIT1,
+	CACHE2CACHE_W2_RAMWAIT2,
+
+	MEM2CACHE_W1,
+	MEM2CACHE_W1_RAMWAIT1,
+	MEM2CACHE_W1_RAMWAIT2,
+	MEM2CACHE_W1_CCWAIT1,
+	MEM2CACHE_W1_CCWAIT2,
+	MEM2CACHE_W2,
+	MEM2CACHE_W2_RAMWAIT1,
+	MEM2CACHE_W2_RAMWAIT2,
+
+	WB_W1,
+	WB_W1_RAMWAIT1,
+	WB_W1_RAMWAIT2,
+	WB_W1_CCWAIT1,
+	WB_W1_CCWAIT2,
+	WB_W2,
+	WB_W2_RAMWAIT1,
+	WB_W2_RAMWAIT2,
+
+	IDLE_WAIT1,
+	IDLE_WAIT2
 } state_t;
 
 state_t state, nxt_state;
@@ -191,11 +210,18 @@ begin
 		end
 		FETCH: 
 		begin
-			if (latched_ccif.ramstate == ACCESS)
-			begin
-				nxt_state = (latched_ccif.cctrans == 0) ? SNOOP_BUFFER4 : ARB;
-			end
+			nxt_state = FETCH_RAMWAIT1;
 		end
+		FETCH_RAMWAIT1:
+		begin
+			nxt_state = FETCH_RAMWAIT2;
+		end
+		FETCH_RAMWAIT2:
+		begin
+			if (latched_ccif.ramstate == ACCESS)
+				nxt_state = IDLE_WAIT2;
+		end
+
 		ARB:
 		begin
 			if (latched_ccif.cctrans[snooping])
@@ -208,119 +234,150 @@ begin
 				nxt_state = SNOOP;
 			end
 		end
+
 		SNOOP:
 		begin
 			if (latched_ccif.dWEN[~snooping])
 			begin
-				nxt_state = WB1;
+				nxt_state = WB_W1;
 			end
 			else if (latched_ccif.dREN[~snooping])
 			begin
-				nxt_state = SNOOP_BUFFER1;
+				nxt_state = SNOOP_CCWAIT1;
 			end
 		end
-		SNOOP_BUFFER1:
+		SNOOP_CCWAIT1:
 		begin
-			nxt_state = SNOOP_BUFFER2;
+			nxt_state = SNOOP_CCWAIT2;
 		end
-		SNOOP_BUFFER2:
+		SNOOP_CCWAIT2:
 		begin
 			nxt_state = REACT2SNOOP;
 		end
 		REACT2SNOOP:
 		begin
 			if (latched_ccif.cctrans[snooping])
-			begin
 				nxt_state = CACHE2CACHE_W1;
-			end
 			else
-			begin
 				nxt_state = MEM2CACHE_W1;
-			end
 		end
+
 		CACHE2CACHE_W1: 
 		begin
-			if (latched_ccif.ccwrite[snooping] && latched_ccif.ramstate == ACCESS) 
-			begin
-				nxt_state = CACHE2CACHE_BUFFER1;
-			end
+			if (latched_ccif.ccwrite[snooping])
+				nxt_state = CACHE2CACHE_W1_RAMWAIT1;
 			else if (!latched_ccif.ccwrite[snooping])
-			begin
-				nxt_state = CACHE2CACHE_BUFFER1;
-			end
+				nxt_state = CACHE2CACHE_W1_CCWAIT1;
 		end
-		CACHE2CACHE_BUFFER1:
+		CACHE2CACHE_W1_RAMWAIT1:
 		begin
-			nxt_state = CACHE2CACHE_BUFFER2;
+			nxt_state = CACHE2CACHE_W1_RAMWAIT2;
 		end
-		CACHE2CACHE_BUFFER2:
+		CACHE2CACHE_W1_RAMWAIT2:
+		begin
+			if (latched_ccif.ramstate == ACCESS)
+				nxt_state = CACHE2CACHE_W1_CCWAIT1;
+		end
+		CACHE2CACHE_W1_CCWAIT1:
+		begin
+			nxt_state = CACHE2CACHE_W1_CCWAIT2;
+		end
+		CACHE2CACHE_W1_CCWAIT2:
 		begin
 			nxt_state = CACHE2CACHE_W2;
 		end
-		CACHE2CACHE_W2: 
+		CACHE2CACHE_W2:
 		begin
-			if (latched_ccif.ccwrite[snooping] && latched_ccif.ramstate == ACCESS) 
-			begin
-				nxt_state = SNOOP_BUFFER3;
-			end
+			if (latched_ccif.ccwrite[snooping])
+				nxt_state = CACHE2CACHE_W2_RAMWAIT1;
 			else if (!latched_ccif.ccwrite[snooping])
-			begin
-				nxt_state = SNOOP_BUFFER3;
-			end
+				nxt_state = IDLE_WAIT1;
 		end
+		CACHE2CACHE_W2_RAMWAIT1:
+		begin
+			nxt_state = CACHE2CACHE_W2_RAMWAIT2;
+		end
+		CACHE2CACHE_W2_RAMWAIT2:
+		begin
+			if (latched_ccif.ramstate == ACCESS)
+				nxt_state = IDLE_WAIT1;
+		end
+
 		MEM2CACHE_W1: 
 		begin
-			if (latched_ccif.ramstate == ACCESS) 
-			begin 
-				nxt_state = MEM2CACHE_BUFFER1;
-			end
+			nxt_state = MEM2CACHE_W1_RAMWAIT1;
 		end
-		MEM2CACHE_BUFFER1:
+		MEM2CACHE_W1_RAMWAIT1:
 		begin
-			nxt_state = MEM2CACHE_BUFFER2;
+			nxt_state = MEM2CACHE_W1_RAMWAIT2;
 		end
-		MEM2CACHE_BUFFER2:
+		MEM2CACHE_W1_RAMWAIT2:
+		begin
+			if (latched_ccif.ramstate == ACCESS)
+				nxt_state = MEM2CACHE_W1_CCWAIT1;
+		end
+		MEM2CACHE_W1_CCWAIT1:
+		begin
+			nxt_state = MEM2CACHE_W1_CCWAIT2;
+		end
+		MEM2CACHE_W1_CCWAIT2:
 		begin
 			nxt_state = MEM2CACHE_W2;
 		end
 		MEM2CACHE_W2: 
 		begin
+			nxt_state = MEM2CACHE_W2_RAMWAIT1;
+		end
+		MEM2CACHE_W2_RAMWAIT1:
+		begin
+			nxt_state = MEM2CACHE_W2_RAMWAIT2;
+		end
+		MEM2CACHE_W2_RAMWAIT2:
+		begin
 			if (latched_ccif.ramstate == ACCESS)
-			begin
-				nxt_state = SNOOP_BUFFER3;
-			end
+				nxt_state = IDLE_WAIT1;
 		end
-		WB1: 
+
+		WB_W1:
 		begin
-			if (latched_ccif.ramstate == ACCESS) 
-			begin
-				nxt_state = WBBUFFER1;
-			end
+			nxt_state = WB_W1_RAMWAIT1;
 		end
-		WBBUFFER1:
+		WB_W1_RAMWAIT1:
 		begin
-			nxt_state = WBBUFFER2;
+			nxt_state = WB_W1_RAMWAIT2;
 		end
-		WBBUFFER2:
+		WB_W1_RAMWAIT2:
 		begin
-			nxt_state = WB2;
+			if (latched_ccif.ramstate == ACCESS)
+				nxt_state = WB_W1_CCWAIT1;
 		end
-		WB2: 
+		WB_W1_CCWAIT1:
 		begin
-			if (latched_ccif.ramstate == ACCESS) 
-			begin
-				nxt_state = SNOOP_BUFFER3;
-			end
+			nxt_state = WB_W1_CCWAIT2;
 		end
-		SNOOP_BUFFER3:
+		WB_W1_CCWAIT2:
 		begin
-			nxt_state = SNOOP_BUFFER4;
+			nxt_state = WB_W2;
 		end
-		SNOOP_BUFFER4:
+		WB_W2: 
 		begin
-			nxt_state = IDLE;
+			nxt_state = WB_W2_RAMWAIT1;
 		end
-		SNOOP_BUFFER5:
+		WB_W2_RAMWAIT1:
+		begin
+			nxt_state = WB_W2_RAMWAIT2;
+		end
+		WB_W2_RAMWAIT2:
+		begin
+			if (latched_ccif.ramstate == ACCESS)
+				nxt_state = IDLE_WAIT1;
+		end
+
+		IDLE_WAIT1:
+		begin
+			nxt_state = IDLE_WAIT2;
+		end
+		IDLE_WAIT2:
 		begin
 			nxt_state = IDLE;
 		end
@@ -333,15 +390,27 @@ begin
 	latched_ccif.ccwait[1] = 0;
 	case(state)
 		SNOOP,
+		SNOOP_CCWAIT1,
+		SNOOP_CCWAIT2,
 		REACT2SNOOP,
-		/*MEM2CACHE_W1,
-		MEM2CACHE_W2,*/
+
 		CACHE2CACHE_W1,
-		CACHE2CACHE_BUFFER1,
-		CACHE2CACHE_BUFFER2,
+		CACHE2CACHE_W1_RAMWAIT1,
+		CACHE2CACHE_W1_RAMWAIT2,
+		CACHE2CACHE_W1_CCWAIT1,
+		CACHE2CACHE_W1_CCWAIT2,
 		CACHE2CACHE_W2,
-		SNOOP_BUFFER1,
-		SNOOP_BUFFER2:
+		CACHE2CACHE_W2_RAMWAIT1,
+		CACHE2CACHE_W2_RAMWAIT2:
+
+		/*MEM2CACHE_W1,
+		MEM2CACHE_W1_RAMWAIT1,
+		MEM2CACHE_W1_RAMWAIT2,
+		MEM2CACHE_W1_CCWAIT1,
+		MEM2CACHE_W1_CCWAIT2,
+		MEM2CACHE_W2,
+		MEM2CACHE_W2_RAMWAIT1,
+		MEM2CACHE_W2_RAMWAIT2:*/
 			latched_ccif.ccwait[snooping] = 1;
 	endcase
 end
@@ -358,50 +427,94 @@ begin
 	latched_ccif.iwait[1] = 1;
 	latched_ccif.iload[0] = 0; 
 	latched_ccif.iload[1] = 0;
-
-	latched_ccif.ramREN = 0;
-	latched_ccif.ramWEN = 0;
-	latched_ccif.ramaddr = 0;
-	latched_ccif.ramstore = 0;
+ 
+	latched_ccif.ramREN = '0;
+	latched_ccif.ramWEN = '0;
+	latched_ccif.ramaddr = '0;
+	latched_ccif.ramstore = '0;
 
 	nxt_working = working;
 
 	case(state)
-		FETCH: 
+
+		FETCH,
+		FETCH_RAMWAIT1:
+		begin
+			latched_ccif.iwait[working] = 1'b1;
+			latched_ccif.iload[working] = latched_ccif.ramload;
+			latched_ccif.ramREN = 1'b1;
+			latched_ccif.ramaddr = latched_ccif.iaddr[working];
+		end
+		FETCH_RAMWAIT2:
 		begin
 			latched_ccif.iwait[working] = latched_ccif.ramstate != ACCESS;
 			latched_ccif.iload[working] = latched_ccif.ramload;
-			latched_ccif.ramREN = latched_ccif.iREN[working];
+			latched_ccif.ramREN = 1'b1;
 			latched_ccif.ramaddr = latched_ccif.iaddr[working];
 			nxt_working = latched_ccif.ramstate == ACCESS ? ~working : working;
 		end
 		MEM2CACHE_W1,
-		MEM2CACHE_W2:
+		MEM2CACHE_W1_RAMWAIT1,
+		MEM2CACHE_W2,
+		MEM2CACHE_W2_RAMWAIT1:
+		begin
+			latched_ccif.ramREN = 1'b1;
+			latched_ccif.ramaddr = latched_ccif.daddr[~snooping];
+		end
+		MEM2CACHE_W1_RAMWAIT2,
+		MEM2CACHE_W2_RAMWAIT2:
 		begin
 			latched_ccif.dwait[~snooping] = latched_ccif.ramstate != ACCESS;
 			latched_ccif.dload[~snooping] = latched_ccif.ramload;
-			latched_ccif.ramREN = latched_ccif.dREN[~snooping];
+			latched_ccif.ramREN = 1'b1;
 			latched_ccif.ramaddr = latched_ccif.daddr[~snooping];
 		end
 		CACHE2CACHE_W1,
 		CACHE2CACHE_W2:
 		begin
-			latched_ccif.dload[~snooping] = latched_ccif.dstore[snooping];
-
-			latched_ccif.dwait[snooping] = 1'b0;
-			latched_ccif.dwait[~snooping] = 1'b0;
 			if(latched_ccif.ccwrite[snooping])
 			begin
-				latched_ccif.dwait[~snooping] = latched_ccif.ramstate != ACCESS;
-				latched_ccif.dwait[snooping] = latched_ccif.ramstate != ACCESS;
-
 				latched_ccif.ramWEN = 1;
 				latched_ccif.ramaddr = latched_ccif.daddr[snooping];
 				latched_ccif.ramstore = latched_ccif.dstore[snooping];
 			end
+			else
+			begin
+				latched_ccif.dload[~snooping] = latched_ccif.dstore[snooping];
+				latched_ccif.dwait[snooping] = 1'b0;
+				latched_ccif.dwait[~snooping] = 1'b0;
+			end
 		end
-		WB1,
-		WB2:
+		CACHE2CACHE_W1_RAMWAIT1,
+		CACHE2CACHE_W2_RAMWAIT1:
+		begin
+			latched_ccif.ramWEN = 1;
+			latched_ccif.ramaddr = latched_ccif.daddr[snooping];
+			latched_ccif.ramstore = latched_ccif.dstore[snooping];
+		end
+		CACHE2CACHE_W1_RAMWAIT2,
+		CACHE2CACHE_W2_RAMWAIT2:
+		begin
+			latched_ccif.dwait[~snooping] = latched_ccif.ramstate != ACCESS;
+			latched_ccif.dwait[snooping] = latched_ccif.ramstate != ACCESS;
+			latched_ccif.dload[~snooping] = latched_ccif.dstore[snooping];
+
+			latched_ccif.ramWEN = 1;
+			latched_ccif.ramaddr = latched_ccif.daddr[snooping];
+			latched_ccif.ramstore = latched_ccif.dstore[snooping];
+		end
+		WB_W1,
+		WB_W1_RAMWAIT1,
+		WB_W2,
+		WB_W2_RAMWAIT1:
+		begin
+			latched_ccif.dwait[~snooping] = 1'b1;
+			latched_ccif.ramWEN = 1'b1;
+			latched_ccif.ramaddr = latched_ccif.daddr[~snooping];
+			latched_ccif.ramstore = latched_ccif.dstore[~snooping];
+		end
+		WB_W1_RAMWAIT2,
+		WB_W2_RAMWAIT2:
 		begin
 			latched_ccif.dwait[~snooping] = latched_ccif.ramstate != ACCESS;
 			latched_ccif.ramWEN = 1'b1;
