@@ -37,6 +37,7 @@ assign esif.out.WrLinkReg = esif.in.WrLinkReg;
 assign esif.out.MemRd = esif.in.MemRd;
 assign esif.out.MemWr = esif.in.MemWr;
 assign esif.out.PCSrc = esif.in.PCSrc;
+assign esif.out.Atomic = esif.in.Atomic;
 assign esif.out.aluOut = aluif.out;
 assign esif.out.zero = aluif.zero;
 assign esif.out.rdat1 = esif.in.rdat1;

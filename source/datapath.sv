@@ -66,7 +66,7 @@ module datapath (
 
   assign mem_wait = (msif.dcache_dREN | msif.dcache_dWEN) & ~dpif.dhit;
 
-  fetch_stage FSTAGE(CLK, nRST, fsif);
+  fetch_stage #(.PC_INIT(PC_INIT)) FSTAGE (CLK, nRST, fsif);
   assign fsif.ihit = dpif.ihit & ~flif.stall;
   assign fsif.pc_control = msif.pc_control;
   assign fsif.pred_control = puif.pred_control;
@@ -74,7 +74,7 @@ module datapath (
   assign fsif.pred_branch = puif.pred_branch;
   assign fsif.flush = huif.flush;
   assign dpif.imemaddr = fsif.out.pc;
-  assign dpif.imemREN = 1'b1;
+  assign dpif.imemREN = !dpif.halt && !elif.out.halt;
   assign fsif.instr = dpif.imemload;
   assign flif.track_in = fsif.track_out;
   always_comb
@@ -135,6 +135,7 @@ module datapath (
   assign dpif.dmemstore = msif.dcache_store;
   assign dpif.dmemREN = msif.dcache_dREN;
   assign dpif.dmemWEN = msif.dcache_dWEN;
+  assign dpif.datomic = msif.dcache_datomic;
   assign msif.dmemload = dpif.dmemload;
   assign mlif.track_in = msif.track_out;
   assign mlif.in = msif.out;

@@ -20,8 +20,15 @@ add wave -noupdate -expand -group Ram /memory_control_tb/DUT/ccif/ramaddr
 add wave -noupdate -expand -group Ram /memory_control_tb/DUT/ccif/ramstore
 add wave -noupdate -expand -group Ram /memory_control_tb/DUT/ccif/ramload
 add wave -noupdate /memory_control_tb/RAM/altsyncram_component/mem_data
+add wave -noupdate -expand -group Control /memory_control_tb/DUT/ccif/ccwrite
+add wave -noupdate -expand -group Control /memory_control_tb/DUT/ccif/ccwait
+add wave -noupdate -expand -group Control /memory_control_tb/DUT/ccif/cctrans
+add wave -noupdate -expand -group Control /memory_control_tb/DUT/ccif/ccsnoopaddr
+add wave -noupdate -expand -group Control /memory_control_tb/DUT/ccif/ccinv
+add wave -noupdate /memory_control_tb/DUT/snooping
+add wave -noupdate /memory_control_tb/DUT/state
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {131502 ps} 0}
+WaveRestoreCursors {{Cursor 1} {19903 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -37,4 +44,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {89757 ps} {164571 ps}
+WaveRestoreZoom {0 ps} {74814 ps}

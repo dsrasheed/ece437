@@ -7,20 +7,26 @@ interface dcache_frame_array_if;
   // import types
   import cpu_types_pkg::*;
   
-  // input
-  logic store_data, set_valid, clear_dirty, write_tag;
-  dcachef_t addr;
-  word_t store;
+  dcachef_t addr, snoopaddr;
+  logic clear_valid, set_valid;
+  logic clear_dirty, set_dirty;
+  logic write_tag;
+  logic wen;
+  word_t wdat;
 
-  // output to control unit
-  logic hit;
-  dcache_frame out_frame;
+  logic hit, snoophit;
+  dcache_frame hitframe, snoopframe;
 
-  // decode stage device
+  // dcache frame array
   modport dfa (
-    input store_data, set_valid, clear_dirty, write_tag,
-          addr, store,
-    output hit, out_frame
+    input addr, snoopaddr,
+          clear_valid, set_valid,
+          clear_dirty, set_dirty,
+          write_tag,
+          wen,
+          wdat,
+    output hit, snoophit, 
+           hitframe, snoopframe
   );
 
 endinterface

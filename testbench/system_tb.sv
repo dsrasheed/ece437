@@ -40,42 +40,79 @@ module system_tb;
   // to the write back stage and sampled in the WRITEBACK stage.
   // This means more signals that would normally be necessary
   // for correct execution must be passed along to help with debugging.
-  cpu_tracker                         cpu_track0 (
+  /*cpu_tracker                         cpu_track0 (
     // No need to change this
-    .CLK(DUT.CPU.DP.CLK),
+    .CLK(DUT.CPU.DP0.CLK),
     // This is the enable signal for the write back stage
-    .wb_enable(DUT.CPU.DP.track.RegWr),
+    .wb_enable(DUT.CPU.DP0.track.RegWr),
     // The 'funct' portion of an instruction. Must be of funct_t type
-    .funct(DUT.CPU.DP.track.funct),
+    .funct(DUT.CPU.DP0.track.funct),
     // The 'opcode' portion of an instruction. Must be of opcode_t type
-    .opcode(DUT.CPU.DP.track.opcode),
+    .opcode(DUT.CPU.DP0.track.opcode),
     // The 'rs' portion of an instruction
-    .rs(DUT.CPU.DP.track.rs),
+    .rs(DUT.CPU.DP0.track.rs),
     // The 'rt' portion of an instruction
-    .rt(DUT.CPU.DP.track.rt),
+    .rt(DUT.CPU.DP0.track.rt),
     // The final wsel
-    .wsel(DUT.CPU.DP.track.wsel),
+    .wsel(DUT.CPU.DP0.track.wsel),
     // The 32 bit instruction
-    .instr(DUT.CPU.DP.track.instr),
+    .instr(DUT.CPU.DP0.track.instr),
     // Connect the PC to this
-    .pc(DUT.CPU.DP.track.pc),
+    .pc(DUT.CPU.DP0.track.pc),
     // Connect the next PC value (the next registered value) here
-    .next_pc_val(DUT.CPU.DP.track.nxt_pc),
+    .next_pc_val(DUT.CPU.DP0.track.nxt_pc),
     // The final imm/shamt signals
     // This means it should already be extended 
-    .imm(DUT.CPU.DP.track.imm),
-    .shamt(DUT.CPU.DP.track.shamt),
+    .imm(DUT.CPU.DP0.track.imm),
+    .shamt(DUT.CPU.DP0.track.shamt),
     // the value for lui BEFORE being being shifted
-     .lui_pre_shift(DUT.CPU.DP.track.lui),
+     .lui_pre_shift(DUT.CPU.DP0.track.lui),
     // The branch target (aka offset added to npc)
-    .branch_addr(DUT.CPU.DP.track.branch),
+    .branch_addr(DUT.CPU.DP0.track.branch),
     // Port O of the ALU from the M/W register
-    .dat_addr(DUT.CPU.DP.track.daddr),
+    .dat_addr(DUT.CPU.DP0.track.daddr),
     // The value that was stored in memory during MEM stage
-    .store_dat(DUT.CPU.DP.track.dstore),
+    .store_dat(DUT.CPU.DP0.track.dstore),
     // The value selected to be written into register during WB stage
-    .reg_dat(DUT.CPU.DP.track.writeback)
+    .reg_dat(DUT.CPU.DP0.track.writeback)
   );
+
+  cpu_tracker                         cpu_track1 (
+    // No need to change this
+    .CLK(DUT.CPU.DP1.CLK),
+    // This is the enable signal for the write back stage
+    .wb_enable(DUT.CPU.DP1.track.RegWr),
+    // The 'funct' portion of an instruction. Must be of funct_t type
+    .funct(DUT.CPU.DP1.track.funct),
+    // The 'opcode' portion of an instruction. Must be of opcode_t type
+    .opcode(DUT.CPU.DP1.track.opcode),
+    // The 'rs' portion of an instruction
+    .rs(DUT.CPU.DP1.track.rs),
+    // The 'rt' portion of an instruction
+    .rt(DUT.CPU.DP1.track.rt),
+    // The final wsel
+    .wsel(DUT.CPU.DP1.track.wsel),
+    // The 32 bit instruction
+    .instr(DUT.CPU.DP1.track.instr),
+    // Connect the PC to this
+    .pc(DUT.CPU.DP1.track.pc),
+    // Connect the next PC value (the next registered value) here
+    .next_pc_val(DUT.CPU.DP1.track.nxt_pc),
+    // The final imm/shamt signals
+    // This means it should already be extended 
+    .imm(DUT.CPU.DP1.track.imm),
+    .shamt(DUT.CPU.DP1.track.shamt),
+    // the value for lui BEFORE being being shifted
+     .lui_pre_shift(DUT.CPU.DP1.track.lui),
+    // The branch target (aka offset added to npc)
+    .branch_addr(DUT.CPU.DP1.track.branch),
+    // Port O of the ALU from the M/W register
+    .dat_addr(DUT.CPU.DP1.track.daddr),
+    // The value that was stored in memory during MEM stage
+    .store_dat(DUT.CPU.DP1.track.dstore),
+    // The value selected to be written into register during WB stage
+    .reg_dat(DUT.CPU.DP1.track.writeback)
+  );*/
 
 `else
   system                              DUT (,,,,//for altera debug ports

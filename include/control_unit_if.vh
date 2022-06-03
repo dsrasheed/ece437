@@ -16,21 +16,21 @@ interface control_unit_if;
   aluop_t             ALUOp;
   logic               WrLinkReg, ShiftUp, MemRd,
                       ExtOp, ALUSrc, MemToReg, MemWr, RegWr,
-                      RegDst, halt;
+                      RegDst, halt, Atomic;
 
   // control unit device
   modport cu (
     input   opcode, funct,
     output  WrLinkReg, ShiftUp, MemRd, ExtOp, PCSrc,
             ALUSrc, MemToReg, MemWr, RegWr, RegDst,
-            halt, ALUOp
+            halt, ALUOp, Atomic
   );
 
   // testbench
   modport tb (
     input  WrLinkReg, ShiftUp, MemRd, ExtOp, PCSrc,
            ALUSrc, MemToReg, MemWr, RegWr, RegDst,
-           halt, ALUOp,
+           halt, ALUOp, Atomic,
     output opcode, funct
   );
 

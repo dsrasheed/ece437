@@ -90,6 +90,7 @@ assign dsif.out.MemWr = cuif.MemWr;
 assign dsif.out.PCSrc = cuif.PCSrc;
 assign dsif.out.ALUOp = cuif.ALUOp;
 assign dsif.out.ALUSrc = cuif.ALUSrc;
+assign dsif.out.Atomic = cuif.Atomic;
 assign dsif.out.extOut = extOut;
 assign dsif.out.rdat1 = rfif.rdat1;
 assign dsif.out.rdat2 = rfif.rdat2;

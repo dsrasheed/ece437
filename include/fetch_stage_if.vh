@@ -11,13 +11,13 @@ interface fetch_stage_if;
   import datapath_types_pkg::*;
 
   fetch_latch_t out;
-  logic stall, pc_control, ihit, pred_control, flush;
+  logic pc_control, ihit, pred_control, flush;
   word_t nxt_pc, instr, pred_branch;
   cpu_tracker_t track_out;
 
   // decode stage device
   modport fs (
-    input   stall, ihit, pc_control, nxt_pc, instr, pred_control, pred_branch, flush,
+    input   ihit, pc_control, nxt_pc, instr, pred_control, pred_branch, flush,
     output  out, track_out
   );
 

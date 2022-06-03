@@ -41,6 +41,7 @@ package datapath_types_pkg;
     pcsrc_t PCSrc;
     aluop_t ALUOp;
     logic ALUSrc;
+    logic Atomic; 
     // Extender Block Output
     word_t extOut;
     // Register File Output
@@ -66,6 +67,7 @@ package datapath_types_pkg;
     logic MemRd;
     logic MemWr;
     pcsrc_t PCSrc;
+    logic Atomic;
     // ALU Output
     word_t aluOut;
     logic zero;
